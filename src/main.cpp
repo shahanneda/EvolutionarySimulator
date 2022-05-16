@@ -12,3 +12,5 @@ int main()
 	Connection n3;
 	std::cout << "Hello World" << n.innovationNumber << n2.innovationNumber << n3.innovationNumber << std::endl;
 }
+
+

@@ -1,7 +1,8 @@
-#include "Gene.h"
+#ifndef __NEURON__
+#define __NEURON__
+
 #include "Connection.h"
 #include <vector>
-
 class Neuron : public Gene
 {
 public:
@@ -27,3 +28,4 @@ public:
 	*/
 	static float activationFunction(float value);
 };
+#endif
