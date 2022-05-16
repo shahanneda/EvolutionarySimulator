@@ -1,16 +1,19 @@
 #include "Gene.h"
+#include "Neuron.h"
+
 class Connection : public Gene
 {
 public:
 	/*
-		Innovation number of input neuron
+		Input neuron
 	*/
-	int in;
+	Neuron *in;
 	/*
-		Innovation number of output neuron
+		Output neuron
 	*/
-	int out;
+	Neuron *out;
 
 	float weight;
+
 	bool enabled;
 };
