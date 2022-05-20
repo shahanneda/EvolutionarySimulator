@@ -3,6 +3,7 @@
 		"*.html": "html",
 		"*.rkt": "racket",
 		"*.eta": "html",
-		"unordered_map": "cpp"
+		"unordered_map": "cpp",
+		"iostream": "cpp"
 	}
 }

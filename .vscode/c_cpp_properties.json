@@ -3,7 +3,10 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/Library/Frameworks",
+                "/Library/Frameworks/SDL2.framework/Versions/A/Headers",
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/**"
             ],
             "defines": [],
             "macFrameworkPath": [],

@@ -7,5 +7,12 @@ file(GLOB_RECURSE SOURCES
     src/*.h
     src/*.cpp
 )
-# add the executable
-add_executable(NEAT ${SOURCES})
+
+
+# SDL2
+find_package(SDL2 REQUIRED)
+include_directories(AnyNEAT ${SDL2_INCLUDE_DIRS})
+
+add_executable(AnyNEAT ${SOURCES})
+target_link_libraries(AnyNEAT ${SDL2_LIBRARIES})
+
