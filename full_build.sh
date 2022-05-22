@@ -2,5 +2,5 @@ rm -rf ./build
 mkdir build
 cd build
 cmake ../
-make
-./NEAT
+cd ../
+./run_make.sh
