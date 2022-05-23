@@ -1,10 +1,12 @@
 #include <algorithm>
 #include "Network.h"
 
-    Network::Network(const std::unordered_map<int, Connection> &innovationToConnectionMap,
-                     const std::unordered_map<int, Neuron> &innovationToNeuronMap, std::vector<int> inputs)
-            : innovationToConnectionMap(
-            innovationToConnectionMap), innovationToNeuronMap(innovationToNeuronMap), inputs(inputs) {}
+using namespace NeatSquared;
 
-    Network::~Network() {
-    }
+Network::Network(const std::unordered_map<int, Connection> &innovationToConnectionMap,
+                 const std::unordered_map<int, Neuron> &innovationToNeuronMap, std::vector<int> inputs)
+        : innovationToConnectionMap(
+        innovationToConnectionMap), innovationToNeuronMap(innovationToNeuronMap), inputs(inputs) {}
+
+Network::~Network() {
+}

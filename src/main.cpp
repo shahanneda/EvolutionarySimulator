@@ -3,6 +3,7 @@
 #include "network/Neuron.h"
 #include "network/Network.h"
 
+using namespace NeatSquared;
 int main(int, char **) {
     GraphicsManager::getInstance().startMainLoop();
 

@@ -5,22 +5,23 @@
 #include "Connection.h"
 #include <vector>
 #include <unordered_map>
+namespace NeatSquared{
+    class Network
+    {
+    public:
+        Network(const std::unordered_map<int, Connection> &innovationToConnectionMap,
+                const std::unordered_map<int, Neuron> &innovationToNeuronMap, std::vector<int> inputs);
 
-class Network
-{
-public:
-    Network(const std::unordered_map<int, Connection> &innovationToConnectionMap,
-            const std::unordered_map<int, Neuron> &innovationToNeuronMap, std::vector<int> inputs);
+        ~Network();
 
-    ~Network();
+        std::unordered_map<int, Connection> innovationToConnectionMap;
+        std::unordered_map<int, Neuron> innovationToNeuronMap;
 
-	std::unordered_map<int, Connection> innovationToConnectionMap;
-	std::unordered_map<int, Neuron> innovationToNeuronMap;
+        /*
+         * Innovation number of all neurons which are inputs
+         */
+        std::vector<int> inputs;
+    };
 
-    /*
-     * Innovation number of all neurons which are inputs
-     */
-    std::vector<int> inputs;
-};
-
+}
 #endif

@@ -4,24 +4,26 @@
 
 #include "Neuron.h"
 #include "Gene.h"
-class Neuron;
 
-class Connection : public Gene
-{
-public:
-    Connection(int innovationNumber, int in, int out, float weight, bool enabled);
+namespace NeatSquared {
+    class Neuron;
 
-    /*
-     * Innovation number of input neuron
-    */
-	int in;
+    class Connection : public Gene {
+    public:
+        Connection(int innovationNumber, int in, int out, float weight, bool enabled);
 
-	/*
-		Innovation number of output neuron
-	*/
-	int out;
+        /*
+         * Innovation number of input neuron
+        */
+        int in;
 
-	float weight;
-	bool enabled;
-};
+        /*
+            Innovation number of output neuron
+        */
+        int out;
+
+        float weight;
+        bool enabled;
+    };
+}
 #endif

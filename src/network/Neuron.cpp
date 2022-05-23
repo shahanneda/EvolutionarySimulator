@@ -4,6 +4,7 @@
 #include <cmath>
 
 
+using namespace NeatSquared;
 void Neuron::calculateValue()
 {
 //	float sum = 0;

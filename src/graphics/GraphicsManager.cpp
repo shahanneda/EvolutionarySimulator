@@ -14,6 +14,7 @@
 #include <emscripten/html5.h>
 #endif
 
+using namespace NeatSquared;
 GraphicsManager::GraphicsManager() {
     decideGLSLVersion();
     initSDL();

@@ -6,10 +6,10 @@
 #define INNOVATIONNUMBERMANAGER_H
 
 
-class InnovationNumberManager {
+namespace NeatSquared{
+    class InnovationNumberManager {
 
 
-};
-
-
+    };
+}
 #endif //INNOVATIONNUMBERMANAGER_H
