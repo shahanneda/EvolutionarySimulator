@@ -2,8 +2,8 @@
 // Created by Shahan Nedadahandeh on 2022-05-23.
 //
 
-#ifndef GUIMANAGER_H
-#define GUIMANAGER_H
+#ifndef GRAPHICSMANAGER_H
+#define GRAPHICSMANAGER_H
 
 static const int WINDOW_WIDTH = 1280;
 static const int WINDOW_HEIGHT = 720;
@@ -14,11 +14,11 @@ static const int WINDOW_HEIGHT = 720;
 #include "imgui_impl_opengl3.h"
 
 /*
- * GUIManager is completely responsible for all aspects of the rendering and GUI
- * In order for GUIManager to work well on with webassembly (emscripten compiler), it must pass a function pointer to a c style library, which is why this class is a singleton, to allow for an easy way
+ * GraphicsManager is completely responsible for all aspects of the rendering and GUI
+ * In order for GraphicsManager to work well on with webassembly (emscripten compiler), it must pass a function pointer to a c style library, which is why this class is a singleton, to allow for an easy way
  * to make a static main loop function that can be passed to the c api.
  */
-class GUIManager {
+class GraphicsManager {
 private:
     char *glslVersion;
     SDL_Window *window;
@@ -26,19 +26,19 @@ private:
     bool shouldCloseGui = false;
     SDL_GLContext glContext;
 
-    GUIManager();
+    GraphicsManager();
 
-    ~GUIManager();
+    ~GraphicsManager();
 
 public:
     void startMainLoop();
 
-    static GUIManager &getInstance();
+    static GraphicsManager &getInstance();
 
     // Because this class should not be instantiated from the outside, instead use getInstance
-    GUIManager(GUIManager const &) = delete;
+    GraphicsManager(GraphicsManager const &) = delete;
 
-    void operator=(GUIManager const &) = delete;
+    void operator=(GraphicsManager const &) = delete;
 
 private:
     void decideGLSLVersion();
@@ -60,4 +60,4 @@ private:
 };
 
 
-#endif //GUIMANAGER_H
+#endif //GRAPHICSMANAGER_H

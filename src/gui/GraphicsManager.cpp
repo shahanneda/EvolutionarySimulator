@@ -3,7 +3,7 @@
 //
 
 
-#include "GUIManager.h"
+#include "GraphicsManager.h"
 
 #include <SDL_opengl.h>
 #include <stdexcept>
@@ -14,13 +14,13 @@
 #include <emscripten/html5.h>
 #endif
 
-GUIManager::GUIManager() {
+GraphicsManager::GraphicsManager() {
     decideGLSLVersion();
     initSDL();
     initImGui();
 }
 
-void GUIManager::decideGLSLVersion() {
+void GraphicsManager::decideGLSLVersion() {
     // Decide GL+GLSL versions
 #if defined(IMGUI_IMPL_OPENGL_ES2)
     // GL ES 2.0 + GLSL 100
@@ -46,14 +46,14 @@ void GUIManager::decideGLSLVersion() {
 #endif
 }
 
-void GUIManager::mainGUILoop() {
+void GraphicsManager::mainGUILoop() {
     ImGuiIO &io = ImGui::GetIO();
     pollSTL();
     renderMainFrame(io);
     finishOpenGLRender(io);
 }
 
-void GUIManager::pollSTL() {
+void GraphicsManager::pollSTL() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         ImGui_ImplSDL2_ProcessEvent(&event);
@@ -65,7 +65,7 @@ void GUIManager::pollSTL() {
     }
 }
 
-void GUIManager::finishOpenGLRender(const ImGuiIO &io) const {
+void GraphicsManager::finishOpenGLRender(const ImGuiIO &io) const {
     glViewport(0, 0, (int) io.DisplaySize.x, (int) io.DisplaySize.y);
     glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w,
                  clear_color.w);
@@ -74,7 +74,7 @@ void GUIManager::finishOpenGLRender(const ImGuiIO &io) const {
     SDL_GL_SwapWindow(window);
 }
 
-void GUIManager::renderMainFrame(const ImGuiIO &io){
+void GraphicsManager::renderMainFrame(const ImGuiIO &io){
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
@@ -102,13 +102,13 @@ void GUIManager::renderMainFrame(const ImGuiIO &io){
 }
 
 
-void GUIManager::EmscriptenMainLoop() {
-    GUIManager::getInstance().mainGUILoop();
+void GraphicsManager::EmscriptenMainLoop() {
+    GraphicsManager::getInstance().mainGUILoop();
 }
 
-void GUIManager::startMainLoop(){
+void GraphicsManager::startMainLoop(){
 #ifdef __EMSCRIPTEN__
-    emscripten_set_main_loop(&GUIManager::EmscriptenMainLoop, 0, 1);
+    emscripten_set_main_loop(&GraphicsManager::EmscriptenMainLoop, 0, 1);
 #else
     while (!shouldCloseGui) {
         mainGUILoop();
@@ -116,7 +116,7 @@ void GUIManager::startMainLoop(){
 #endif
 }
 
-void GUIManager::initSDL() {
+void GraphicsManager::initSDL() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
         printf("Error: %s\n", SDL_GetError());
         throw std::runtime_error("SDL INIT FAILED");
@@ -136,7 +136,7 @@ void GUIManager::initSDL() {
     SDL_GL_SetSwapInterval(1); // Enable vsync
 }
 
-void GUIManager::initImGui() {
+void GraphicsManager::initImGui() {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
@@ -147,7 +147,7 @@ void GUIManager::initImGui() {
     ImGui_ImplOpenGL3_Init(glslVersion);
 }
 
-GUIManager::~GUIManager() {
+GraphicsManager::~GraphicsManager() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
@@ -156,8 +156,8 @@ GUIManager::~GUIManager() {
     SDL_Quit();
 }
 
-GUIManager &GUIManager::getInstance() {
-    static GUIManager instance;
+GraphicsManager &GraphicsManager::getInstance() {
+    static GraphicsManager instance;
     return instance;
 }
 

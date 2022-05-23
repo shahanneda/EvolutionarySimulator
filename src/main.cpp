@@ -1,7 +1,7 @@
-#include "gui/GUIManager.h"
+#include "gui/GraphicsManager.h"
 
 int main(int, char **) {
-    GUIManager::getInstance().startMainLoop();
+    GraphicsManager::getInstance().startMainLoop();
 
     return 0;
 }
