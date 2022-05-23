@@ -4,11 +4,6 @@
 #include <stdio.h>
 #include <SDL.h>
 
-//#if defined(IMGUI_IMPL_OPENGL_ES2)
-//#include <SDL_opengles2.h>
-//#else
-//#endif
-
 #ifdef __EMSCRIPTEN__
 #include <GLES3/gl3.h>
 #include <emscripten.h>
@@ -25,7 +20,7 @@ bool done = false;
 SDL_GLContext gl_context;
 
 void decideGlslVersion() {
-// Decide GL+GLSL versions
+    // Decide GL+GLSL versions
 #if defined(IMGUI_IMPL_OPENGL_ES2)
     // GL ES 2.0 + GLSL 100
     const char *glsl_version = "#version 100";
@@ -75,7 +70,7 @@ void mainLoop() {
         ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x, io.DisplaySize.y));
         ImGui::SetNextWindowPos(ImVec2(0, 0));
 
-        ImGui::Begin("Hello, world!", NULL, ImGuiWindowFlags_NoTitleBar);
+        ImGui::Begin(" ", NULL, ImGuiWindowFlags_NoTitleBar);
         auto drawList = ImGui::GetWindowDrawList();
         for (int i = 0; i < 10; i++) {
             drawList->AddCircleFilled(ImVec2(50 + 100 * i, 500), 10 + 5 * i, col, 0);
