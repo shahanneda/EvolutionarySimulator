@@ -12,8 +12,16 @@ file(GLOB_RECURSE SOURCES
 
 
 find_package(SDL2 REQUIRED)
-include_directories(AnyNEAT ${SDL2_INCLUDE_DIRS} imgui)
+find_package(OpenGL REQUIRED)
+
+include_directories(src)
+include_directories(${SDL2_INCLUDE_DIRS} imgui ${OPENGL_INCLUDE_DIRS} glm)
+
+
+source_group(src REGULAR_EXPRESSION src)
+source_group(imgui REGULAR_EXPRESSION imgui)
 
 add_executable(AnyNEAT ${SOURCES})
-target_link_libraries(AnyNEAT ${SDL2_LIBRARIES})
+
+target_link_libraries(AnyNEAT ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} )
 
