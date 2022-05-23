@@ -1,12 +1,10 @@
 #include <algorithm>
 #include "Network.h"
 
-Network::Network(std::unordered_map<int, Connection> *connections, std::unordered_map<int, Neuron> *neurons)
-{
-	// std::copy(connections->begin, connections->end, this->innovationConnectionsMap->begin());
-	// std::copy(neurons->begin, neurons->end, this->innovationNeuronMap->begin());
-}
+    Network::Network(const std::unordered_map<int, Connection> &innovationToConnectionMap,
+                     const std::unordered_map<int, Neuron> &innovationToNeuronMap, std::vector<int> inputs)
+            : innovationToConnectionMap(
+            innovationToConnectionMap), innovationToNeuronMap(innovationToNeuronMap), inputs(inputs) {}
 
-Network::~Network()
-{
-}
+    Network::~Network() {
+    }

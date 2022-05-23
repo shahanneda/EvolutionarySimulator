@@ -9,18 +9,19 @@ class Neuron;
 class Connection : public Gene
 {
 public:
+    Connection(int innovationNumber, int in, int out, float weight, bool enabled);
+
+    /*
+     * Innovation number of input neuron
+    */
+	int in;
+
 	/*
-		Input neuron
+		Innovation number of output neuron
 	*/
-    
-	Neuron *in;
-	/*
-		Output neuron
-	*/
-	Neuron *out;
+	int out;
 
 	float weight;
-
 	bool enabled;
 };
 #endif

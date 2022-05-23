@@ -9,14 +9,18 @@
 class Network
 {
 public:
-	Network(std::unordered_map<int, Connection> *connections, std::unordered_map<int, Neuron> *neurons);
-	~Network();
+    Network(const std::unordered_map<int, Connection> &innovationToConnectionMap,
+            const std::unordered_map<int, Neuron> &innovationToNeuronMap, std::vector<int> inputs);
 
-	std::vector<Neuron *> inputs;
-	std::vector<Neuron *> outputs;
+    ~Network();
 
 	std::unordered_map<int, Connection> innovationToConnectionMap;
 	std::unordered_map<int, Neuron> innovationToNeuronMap;
+
+    /*
+     * Innovation number of all neurons which are inputs
+     */
+    std::vector<int> inputs;
 };
 
 #endif

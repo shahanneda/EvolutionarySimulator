@@ -3,10 +3,21 @@
 
 #include "Connection.h"
 #include <vector>
+
+class Connection;
+
 class Neuron : public Gene
 {
 public:
-	Neuron();
+    Neuron(int innovationNumber);
+
+
+    /*
+     * Innovation number of all outgoing connections
+     */
+    std::vector<int> outgoingConnections;
+
+
 
 	/*
 		Calculates the neurans current value from all of its incoming connections
