@@ -24,7 +24,7 @@ void GUIManager::decideGLSLVersion() {
     // Decide GL+GLSL versions
 #if defined(IMGUI_IMPL_OPENGL_ES2)
     // GL ES 2.0 + GLSL 100
-    const char *glslVersion = "#version 100";
+    glslVersion = "#version 100";
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
@@ -38,7 +38,7 @@ void GUIManager::decideGLSLVersion() {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 #else
     // GL 3.0 + GLSL 130
-    const char *glslVersion = "#version 130";
+    glslVersion = "#version 130";
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -102,9 +102,13 @@ void GUIManager::renderMainFrame(const ImGuiIO &io){
 }
 
 
+void GUIManager::EmscriptenMainLoop() {
+    GUIManager::getInstance().mainGUILoop();
+}
+
 void GUIManager::startMainLoop(){
 #ifdef __EMSCRIPTEN__
-    emscripten_set_main_loop(mainLoop, 0, 1);
+    emscripten_set_main_loop(&GUIManager::EmscriptenMainLoop, 0, 1);
 #else
     while (!shouldCloseGui) {
         mainGUILoop();
@@ -150,6 +154,11 @@ GUIManager::~GUIManager() {
     SDL_GL_DeleteContext(glContext);
     SDL_DestroyWindow(window);
     SDL_Quit();
+}
+
+GUIManager &GUIManager::getInstance() {
+    static GUIManager instance;
+    return instance;
 }
 
 

@@ -1,8 +1,7 @@
 #include "gui/GUIManager.h"
 
 int main(int, char **) {
-    GUIManager guiManager;
-    guiManager.startMainLoop();
+    GUIManager::getInstance().startMainLoop();
 
     return 0;
 }
