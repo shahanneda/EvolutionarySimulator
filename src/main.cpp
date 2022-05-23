@@ -4,18 +4,19 @@
 #include <stdio.h>
 #include <SDL.h>
 
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-#include <SDL_opengles2.h>
-#else
+//#if defined(IMGUI_IMPL_OPENGL_ES2)
+//#include <SDL_opengles2.h>
+//#else
+//#endif
 
 #ifdef __EMSCRIPTEN__
-#include <emscripten.h>
 #include <GLES3/gl3.h>
+#include <emscripten.h>
+#include <emscripten/html5.h>
 #endif
 
 #include <SDL_opengl.h>
 
-#endif
 
 char *glsl_version;
 SDL_Window *window;
@@ -145,6 +146,7 @@ int main(int, char **) {
         mainLoop();
     }
     #endif
+
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
