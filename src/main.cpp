@@ -1,11 +1,20 @@
 #include <unordered_map>
+#include <thread>
+#include <iostream>
 #include "graphics/GraphicsManager.h"
 #include "network/Neuron.h"
 #include "network/Network.h"
 
 using namespace NeatSquared;
-int main(int, char **) {
+void startGraphics()
+{
     GraphicsManager::getInstance().startMainLoop();
+    std::cout << "hello" << std::endl;
+}
+
+void NEATThread(){
+    // just for testing threading
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
     Neuron in1(0);
     Neuron in2(1);
@@ -27,8 +36,13 @@ int main(int, char **) {
     std::vector<int> inputs = {0, 1};
 
     Network n1(connectionMap, neuronMap, inputs);
+    GraphicsManager::getInstance().networkRenderer.currentNetwork = &n1;
+}
 
+int main(int, char **) {
+    std::thread t1(NEATThread);
 
+    startGraphics();
 
     return 0;
 }

@@ -5,9 +5,9 @@
 #include "Connection.h"
 #include <vector>
 #include <unordered_map>
-namespace NeatSquared{
-    class Network
-    {
+
+namespace NeatSquared {
+    class Network {
     public:
         Network(const std::unordered_map<int, Connection> &innovationToConnectionMap,
                 const std::unordered_map<int, Neuron> &innovationToNeuronMap, std::vector<int> inputs);

@@ -15,7 +15,7 @@
 #endif
 
 using namespace NeatSquared;
-GraphicsManager::GraphicsManager() {
+GraphicsManager::GraphicsManager() : networkRenderer() {
     decideGLSLVersion();
     initSDL();
     initImGui();
@@ -84,20 +84,16 @@ void GraphicsManager::renderMainFrame(const ImGuiIO &io){
         ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x, io.DisplaySize.y));
         ImGui::SetNextWindowPos(ImVec2(0, 0));
 
+
         ImGui::Begin(" ", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoBringToFrontOnFocus);
         {
-            auto drawList = ImGui::GetWindowDrawList();
-            for (int i = 0; i < 10; i++) {
-                drawList->AddCircleFilled(ImVec2(50 + 100 * i, 500), 10 + 5 * i, col, 0);
-            }
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
                         ImGui::GetIO().Framerate);
         }
         ImGui::End();
 
-        ImGui::Begin("New Window");
-        ImGui::Text("New window testing!!");
-        ImGui::End();
+        networkRenderer.renderNetwork();
+
     }
     ImGui::Render();
 }
