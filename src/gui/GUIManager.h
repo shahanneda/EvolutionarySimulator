@@ -5,6 +5,9 @@
 #ifndef GUIMANAGER_H
 #define GUIMANAGER_H
 
+static const int WINDOW_WIDTH = 1280;
+static const int WINDOW_HEIGHT = 720;
+
 #include <SDL.h>
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
@@ -31,6 +34,12 @@ private:
     void mainGUILoop();
 
 
+
+    void finishOpenGLRender(const ImGuiIO &io) const;
+
+    void renderMainFrame(const ImGuiIO &io);
+
+    void pollSTL();
 };
 
 
