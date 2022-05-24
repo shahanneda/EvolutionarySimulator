@@ -13,8 +13,9 @@ void startGraphics()
 }
 
 void NEATThread(){
+    printf("Trying to start thread\n");
     // just for testing threading
-//    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
     Neuron in1(0);
     Neuron in2(1);
@@ -43,11 +44,15 @@ void NEATThread(){
     NeatSquared::Network n1(connectionMap, neuronMap, inputs, outputs);
     GraphicsManager::getInstance().networkRenderer.currentNetwork = &n1;
 
+    printf("got to end of starting thread\n");
     // Halt NEAT Thread so networks do not get destroyed yet until main gui thread is done
-    while(1){}
+    while(1){
+        ;
+    }
 }
 
 int main(int, char **) {
+//    printf("in main\n");
     std::thread t1(NEATThread);
 
     startGraphics();
