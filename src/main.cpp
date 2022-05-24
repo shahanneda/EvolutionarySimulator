@@ -14,14 +14,18 @@ void startGraphics()
 
 void NEATThread(){
     // just for testing threading
-    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+//    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
     Neuron in1(0);
     Neuron in2(1);
+
     Neuron out1(2);
+
 
     Connection con1(3, in1.innovationNumber, out1.innovationNumber, 1.0f, true);
     Connection con2(4, in2.innovationNumber, out1.innovationNumber, 1.0f, true);
+    out1.incomingConnections.push_back(3);
+    out1.incomingConnections.push_back(4);
 
     std::unordered_map<int, Neuron> neuronMap = {
             {in1.innovationNumber, in1},
@@ -34,9 +38,13 @@ void NEATThread(){
             {con2.innovationNumber, con2},
     };
     std::vector<int> inputs = {0, 1};
+    std::vector<int> outputs = {2};
 
-    Network n1(connectionMap, neuronMap, inputs);
+    NeatSquared::Network n1(connectionMap, neuronMap, inputs, outputs);
     GraphicsManager::getInstance().networkRenderer.currentNetwork = &n1;
+
+    // Halt NEAT Thread so networks do not get destroyed yet until main gui thread is done
+    while(1){}
 }
 
 int main(int, char **) {

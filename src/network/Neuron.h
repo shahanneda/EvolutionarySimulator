@@ -19,6 +19,11 @@ namespace NeatSquared{
          */
         std::vector<int> outgoingConnections;
 
+        /*
+         * Innovation number of all incoming connections.
+         */
+        std::vector<int> incomingConnections;
+
 
 
         /*
