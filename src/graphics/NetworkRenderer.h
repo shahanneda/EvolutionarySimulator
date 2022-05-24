@@ -24,10 +24,6 @@ namespace NeatSquared {
 
         void renderNetwork();
 
-        /*
-         * Render a neuron. Pos is relative to current window.
-         */
-        void renderNeuronAtPosition(ImVec2 pos);
 
         NeatSquared::Network *currentNetwork;
 
@@ -47,7 +43,18 @@ namespace NeatSquared {
                       int spacing,
                       int startY, int startX, std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap);
 
+        /*
+         * Convert ImVec2 position from local to global.
+         */
         ImVec2 convertLocalToWindowPos(ImVec2 pos);
+
+        /*
+         * Render a neuron. Pos is relative to current window.
+         */
+        void renderNeuronAtPosition(ImVec2 pos, std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap, Neuron * neuron );
+
+        void renderInputs(int spacing, int inputStartX, int inputStartY,
+                                                      std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap);
     };
 };
 
