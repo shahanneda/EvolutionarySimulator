@@ -9,6 +9,8 @@ file(GLOB_RECURSE SOURCES
   src/*.cpp
   imgui/*.h
   imgui/*.cpp
+  src/network/*.cpp
+  src/network/*.h
   )
 
 if(${EMSCRIPTEN})
@@ -20,8 +22,7 @@ else()
   find_package(OpenGL REQUIRED)
 endif()
 
-include_directories(src)
-include_directories(${SDL2_INCLUDE_DIRS} imgui ${OPENGL_INCLUDE_DIRS} glm)
+include_directories(${SDL2_INCLUDE_DIRS} imgui ${OPENGL_INCLUDE_DIRS} glm ./src/network src)
 
 
 source_group(src REGULAR_EXPRESSION src)

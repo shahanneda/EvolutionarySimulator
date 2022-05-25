@@ -8,9 +8,9 @@
 
 
 #include "imgui.h"
-#include "network/Network.h"
 #include "network/Connection.h"
 #include "network/Neuron.h"
+#include "network/NetworkInstance.h"
 
 #include <deque>
 #include <unordered_map>
@@ -25,7 +25,7 @@ namespace NeatSquared {
         void renderNetwork();
 
 
-        NeatSquared::Network *currentNetwork;
+        NeatSquared::NetworkInstance *currentNetwork;
 
 
     private:

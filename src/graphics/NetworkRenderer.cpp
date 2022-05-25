@@ -9,7 +9,7 @@
 using namespace NeatSquared;
 
 #include "network/Neuron.h"
-#include "network/Network.h"
+#include "network/NetworkInstance.h"
 #include <iostream>
 
 #include "imgui.h"

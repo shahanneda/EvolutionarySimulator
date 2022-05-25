@@ -1,17 +1,17 @@
 #include <algorithm>
-#include "Network.h"
+#include "network/NetworkInstance.h"
 
 using namespace NeatSquared;
 
-Network::Network(const std::unordered_map<int, Connection> &innovationToConnectionMap,
+NetworkInstance::NetworkInstance(const std::unordered_map<int, Connection> &innovationToConnectionMap,
                  const std::unordered_map<int, Neuron> &innovationToNeuronMap, std::vector<int> inputs, std::vector<int> outputs)
         : innovationToConnectionMap(
         innovationToConnectionMap), innovationToNeuronMap(innovationToNeuronMap), inputs(inputs), outputs(outputs) {}
 
-Network::~Network() {
+NetworkInstance::~NetworkInstance() {
 }
 
-Neuron *Network::getNeuronWithInnovationNumber(int innovationNumber) {
+Neuron *NetworkInstance::getNeuronWithInnovationNumber(int innovationNumber) {
     auto it = innovationToNeuronMap.find(innovationNumber);
     if (it == innovationToNeuronMap.end()) {
         return nullptr;
@@ -19,7 +19,7 @@ Neuron *Network::getNeuronWithInnovationNumber(int innovationNumber) {
     return &it->second;
 }
 
-Connection *Network::getConnectionWithInnovationNumber(int innovationNumber) {
+Connection *NetworkInstance::getConnectionWithInnovationNumber(int innovationNumber) {
     auto it = innovationToConnectionMap.find(innovationNumber);
     if (it == innovationToConnectionMap.end()) {
         return nullptr;

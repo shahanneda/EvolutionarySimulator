@@ -3,7 +3,8 @@
 #include <iostream>
 #include "graphics/GraphicsManager.h"
 #include "network/Neuron.h"
-#include "network/Network.h"
+#include "network/NetworkInstance.h"
+
 
 using namespace NeatSquared;
 void startGraphics()
@@ -22,7 +23,6 @@ void NEATThread(){
 
     Neuron h1(2);
     Neuron out1(5);
-
 
     Connection con1(3, in1.innovationNumber, h1.innovationNumber, 1.0f, true);
     Connection con2(4, in2.innovationNumber, h1.innovationNumber, 1.0f, true);
@@ -53,7 +53,7 @@ void NEATThread(){
     std::vector<int> inputs = {in1.innovationNumber, in2.innovationNumber};
     std::vector<int> outputs = {out1.innovationNumber};
 
-    NeatSquared::Network n1(connectionMap, neuronMap, inputs, outputs);
+    NetworkInstance n1(connectionMap, neuronMap, inputs, outputs);
     GraphicsManager::getInstance().networkRenderer.currentNetwork = &n1;
 
     printf("got to end of starting thread\n");

@@ -2,14 +2,14 @@
 #define __NEURON__
 
 #include "Connection.h"
+#include "Gene.h"
 #include <vector>
 
 namespace NeatSquared{
 
     class Connection;
 
-    class Neuron : public Gene
-    {
+    class Neuron : public Gene {
     public:
         Neuron(int innovationNumber);
 
