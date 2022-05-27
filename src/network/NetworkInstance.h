@@ -18,6 +18,7 @@ namespace NeatSquared {
                 const std::unordered_map<int, Neuron> &innovationToNeuronMap, std::vector<int> inputs,
                 std::vector<int> outputs);
 
+        NetworkInstance( const std::vector<Neuron> &neurons, const std::vector<Connection>&connections, std::vector<int> inputs, std::vector<int> outputs);
         ~NetworkInstance();
 
         std::unordered_map<int, Connection> innovationToConnectionMap;

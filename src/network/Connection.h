@@ -10,17 +10,17 @@ namespace NeatSquared {
 
     class Connection : public Gene {
     public:
-        Connection(int innovationNumber, int in, int out, float weight, bool enabled);
+        Connection(int innovationNumber, int from, int to, float weight, bool enabled);
 
         /*
-         * Innovation number of input neuron
+         * Innovation number of input neuron, where this connection starts
         */
-        int in;
+        int from;
 
         /*
-            Innovation number of output neuron
+            Innovation number of output neuron, where this connection ends
         */
-        int out;
+        int to;
 
         float weight;
         bool enabled;

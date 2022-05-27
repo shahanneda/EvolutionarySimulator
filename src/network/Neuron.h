@@ -25,6 +25,8 @@ namespace NeatSquared{
         std::vector<int> incomingConnections;
 
 
+        void addConnection(Connection* connection);
+        void removeConnection(Connection* connection);
 
         /*
             Calculates the neurans current value from all of its incoming connections

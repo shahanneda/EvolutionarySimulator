@@ -117,7 +117,7 @@ NetworkRenderer::renderNeurons(std::deque<Neuron *> &neuronsToRender, std::vecto
                 if(c == nullptr) {
                     throw std::runtime_error("Innovation number of connection not found in innovationToConnectionap!!");
                 }
-                neuronsToRender.push_back(currentNetwork->getNeuronWithInnovationNumber(c->in));
+                neuronsToRender.push_back(currentNetwork->getNeuronWithInnovationNumber(c->from));
                 connectionsToRender.push_back(c);
             }
 
@@ -131,7 +131,7 @@ void NetworkRenderer::renderConnections(std::unordered_map<int, ImVec2> &innovat
     for(Connection* c : connectionsToRender){
         float thickness = (c->weight + 2) * 1;
 
-        drawList->AddLine(convertLocalToWindowPos(innovationNumberToNeuronPositionMap[c->in]), convertLocalToWindowPos(innovationNumberToNeuronPositionMap[c->out]), connectionColor, thickness);
+        drawList->AddLine(convertLocalToWindowPos(innovationNumberToNeuronPositionMap[c->from]), convertLocalToWindowPos(innovationNumberToNeuronPositionMap[c->to]), connectionColor, thickness);
     }
 
 }

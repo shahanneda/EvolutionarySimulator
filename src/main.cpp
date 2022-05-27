@@ -20,7 +20,6 @@ void NEATThread(){
 
     Neuron in1(0);
     Neuron in2(1);
-
     Neuron h1(2);
     Neuron out1(5);
 
@@ -29,33 +28,19 @@ void NEATThread(){
     Connection con3(6, h1.innovationNumber, out1.innovationNumber, 2.0f, true);
     Connection con4(7, in1.innovationNumber, out1.innovationNumber, 0.1f, true);
 
-    h1.incomingConnections.push_back(con1.innovationNumber);
-    h1.incomingConnections.push_back(con2.innovationNumber);
-
-    out1.incomingConnections.push_back(con4.innovationNumber);
-    out1.incomingConnections.push_back(con3.innovationNumber);
-
+    h1.addConnection(&con1);
+    h1.addConnection(&con2);
+    out1.addConnection(&con4);
+    out1.addConnection(&con3);
 
 
-    std::unordered_map<int, Neuron> neuronMap = {
-            {in1.innovationNumber, in1},
-            {in2.innovationNumber, in2},
-            {h1.innovationNumber, h1},
-            {out1.innovationNumber, out1}
-    };
 
-    std::unordered_map<int, Connection> connectionMap = {
-            {con1.innovationNumber, con1},
-            {con2.innovationNumber, con2},
-            {con3.innovationNumber, con3},
-            {con4.innovationNumber, con4},
-    };
     std::vector<int> inputs = {in1.innovationNumber, in2.innovationNumber};
     std::vector<int> outputs = {out1.innovationNumber};
 
-    NetworkInstance n1(connectionMap, neuronMap, inputs, outputs);
-    GraphicsManager::getInstance().networkRenderer.currentNetwork = &n1;
+    NetworkInstance n1({in1, in2, h1, out1}, {con1, con2, con3, con4}, inputs, outputs);
 
+    GraphicsManager::getInstance().networkRenderer.currentNetwork = &n1;
     printf("got to end of starting thread\n");
     // Halt NEAT Thread so networks do not get destroyed yet until main gui thread is done
     while(1){

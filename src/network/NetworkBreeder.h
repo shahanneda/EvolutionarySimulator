@@ -14,7 +14,7 @@ namespace NeatSquared{
         /*
          * Breeds two networks and produces a new child network.
          */
-        static std::unique_ptr<NetworkInstance> Crossover(NetworkInstance* network1, NetworkInstance* network2, float n1Fitness, float n2Fitness);
+        static std::unique_ptr<NetworkInstance> Crossover(NetworkInstance* moreFitParent, NetworkInstance* lessFitParent);
 
         /*
          * Mutates a network

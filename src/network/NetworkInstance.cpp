@@ -3,10 +3,20 @@
 
 using namespace NeatSquared;
 
+using std::pair;
 NetworkInstance::NetworkInstance(const std::unordered_map<int, Connection> &innovationToConnectionMap,
                  const std::unordered_map<int, Neuron> &innovationToNeuronMap, std::vector<int> inputs, std::vector<int> outputs)
         : innovationToConnectionMap(
         innovationToConnectionMap), innovationToNeuronMap(innovationToNeuronMap), inputs(inputs), outputs(outputs) {}
+
+NetworkInstance::NetworkInstance( const std::vector<Neuron> &neurons, const std::vector<Connection>&connections, std::vector<int> inputs, std::vector<int> outputs): inputs(inputs), outputs(outputs){
+    for(auto c : connections){
+        innovationToConnectionMap.insert(pair<int, Connection>(c.innovationNumber, c));
+    }
+    for(auto n : neurons){
+        innovationToNeuronMap.insert(pair<int, Neuron>(n.innovationNumber, n));
+    }
+}
 
 NetworkInstance::~NetworkInstance() {
 }
@@ -26,3 +36,4 @@ Connection *NetworkInstance::getConnectionWithInnovationNumber(int innovationNum
     }
     return &it->second;
 }
+
