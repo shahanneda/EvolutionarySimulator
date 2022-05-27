@@ -19,6 +19,8 @@ namespace NeatSquared {
                 std::vector<int> outputs);
 
         NetworkInstance( const std::vector<Neuron> &neurons, const std::vector<Connection>&connections, std::vector<int> inputs, std::vector<int> outputs);
+        NetworkInstance( const std::vector<Neuron> &neurons, const std::vector<Connection>&connections);
+
         ~NetworkInstance();
 
         std::unordered_map<int, Connection> innovationToConnectionMap;
@@ -43,6 +45,10 @@ namespace NeatSquared {
          * Get a connection in this NetworkInstance with its innovation number
          */
         Connection *getConnectionWithInnovationNumber(int i);
+
+        static std::vector<int> DEFAULT_INPUTS;
+        static std::vector<int> DEFAULT_OUTPUTS;
+
     };
 
 }

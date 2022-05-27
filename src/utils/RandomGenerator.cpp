@@ -9,12 +9,6 @@ float RandomGenerator::getRandom() {
 }
 
 
-void RandomGenerator::init() {
-    std::random_device dev;
-    std::mt19937 rng(dev());
-
-    std::uniform_int_distribution<std::mt19937::result_type> dist(1,100);
-
-    RandomGenerator::rngGen = rng;
-    RandomGenerator::random1to100 = dist;
-}
+std::random_device dev;
+std::mt19937 RandomGenerator::rngGen(dev());
+std::uniform_int_distribution<std::mt19937::result_type> RandomGenerator::random1to100(1,100);

@@ -9,8 +9,11 @@
 
 class RandomGenerator {
 public:
-    static void init();
+    /*
+     * Generates a random float between 0 and 1
+     */
     static float getRandom();
+
 private:
     static std::uniform_int_distribution<std::mt19937::result_type> random1to100;
     static std::mt19937 rngGen;
