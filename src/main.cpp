@@ -4,7 +4,10 @@
 #include "graphics/GraphicsManager.h"
 #include "network/Neuron.h"
 #include "network/NetworkInstance.h"
+#include "utils/RandomGenerator.h"
 
+
+class Neuron;
 
 using namespace NeatSquared;
 void startGraphics()
@@ -15,6 +18,9 @@ void startGraphics()
 
 void NEATThread(){
     printf("Trying to start thread\n");
+
+    RandomGenerator::init();
+
     // just for testing threading
 //    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
