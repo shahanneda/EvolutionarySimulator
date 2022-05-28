@@ -1,9 +1,9 @@
 #include <unordered_map>
 #include <thread>
 #include <iostream>
+#include "network/Connection.h"
 #include "network/Neuron.h"
 #include "graphics/GraphicsManager.h"
-#include "network/Connection.h"
 #include "network/NetworkInstance.h"
 #include "utils/RandomGenerator.h"
 #include "network/NetworkBreeder.h"
@@ -27,51 +27,47 @@ void NEATThread(){
     Neuron in1(0);
     Neuron in2(1);
     Neuron out1(2);
-    Neuron h1(3);
 
+    Neuron h1(3);
     Neuron h2(100);
     Neuron h3(101);
 
-    Connection con1(4, in1.innovationNumber, h1.innovationNumber, 1.0f, true);
-    Connection con2(5, in2.innovationNumber, h1.innovationNumber, 1.0f, true);
-    Connection con3(6, h1.innovationNumber, out1.innovationNumber, 2.0f, true);
-    Connection con4(7, in1.innovationNumber, out1.innovationNumber, 0.1f, true);
+    Connection con1(4, in1, h1, 1.0f, true);
+    Connection con2(5, in2, h1, 1.0f, true);
+    Connection con3(6, h1 ,out1, 2.0f, true);
+    NetworkInstance n1({in1, in2, h1, out1}, {con1, con2, con3});
 
+    con1.weight = 0.1f;
+    con2.weight = 0.1f;
+    con3.weight = 0.1f;
+    Connection con4(7, in2, h2, 0.1f, true);
+    Connection con5(8, h2, out1, 0.1f, true);
+    NetworkInstance n2({in1, in2, h1,h2, out1}, {con1, con2, con3, con4, con5});
 
-//    in1.addConnection(&con1);
-//    in2.addConnection(&con2);
-//
-//    h1.addConnection(&con1);
-//    h1.addConnection(&con2);
-//    h1.addConnection(&con3);
-//
-//    out1.addConnection(&con4);
-//    out1.addConnection(&con3);
-
-
-    NetworkInstance n1({in1, in2, h1, out1}, {con1, con2, con3, con4});
-
-//    Connection con5(8, in1.innovationNumber, h2.innovationNumber, 0.1f, true);
+    n1.recalculateConnections();
+    n2.recalculateConnections();
 
 
 
-    NetworkInstance n2({in1, in2, h1, out1}, {con1, con2, con3, con4});
+    GraphicsManager::getInstance().networkRenderer.currentNetwork = &n1;
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
-    std::unique_ptr<NetworkInstance> breed1 = NetworkBreeder::Crossover(&n1, &n2);
-
-
-    GraphicsManager::getInstance().networkRenderer.currentNetwork = breed1.get();
+    GraphicsManager::getInstance().networkRenderer.currentNetwork = &n2;
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
     printf("got to end of starting thread\n");
 
-    // Halt NEAT Thread so networks do not get destroyed yet until main gui thread is done
     while(1){
-        ;
+        printf("doing new breed\n");
+        std::unique_ptr<NetworkInstance> breed = NetworkBreeder::Crossover(&n2, &n1);
+        GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 }
 
 int main(int, char **) {
 //    printf("in main\n");
     std::thread t1(NEATThread);
+//    NEATThread();
 
     startGraphics();
 

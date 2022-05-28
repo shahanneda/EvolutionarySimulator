@@ -1,5 +1,6 @@
 #include <algorithm>
 #include "network/NetworkInstance.h"
+#include <iostream>
 
 using namespace NeatSquared;
 
@@ -20,6 +21,7 @@ NetworkInstance::NetworkInstance( const std::vector<Neuron> &neurons, const std:
     for(auto n : neurons){
         innovationToNeuronMap.insert(pair<int, Neuron>(n.innovationNumber, n));
     }
+    // TODO: write function here which goes through all the connections, and calls the right thing on the neuron.
 }
 
 NetworkInstance::NetworkInstance( const std::vector<Neuron> &neurons, const std::vector<Connection>&connections) : NetworkInstance(neurons, connections, DEFAULT_INPUTS, DEFAULT_OUTPUTS){}
@@ -30,6 +32,7 @@ NetworkInstance::~NetworkInstance() {
 Neuron *NetworkInstance::getNeuronWithInnovationNumber(int innovationNumber) {
     auto it = innovationToNeuronMap.find(innovationNumber);
     if (it == innovationToNeuronMap.end()) {
+        std::cout << "tried to get newuron with innovation number " << innovationNumber << " returing nullptr not found";
         return nullptr;
     }
     return &it->second;
@@ -41,5 +44,18 @@ Connection *NetworkInstance::getConnectionWithInnovationNumber(int innovationNum
         return nullptr;
     }
     return &it->second;
+}
+
+void NetworkInstance::recalculateConnections() {
+    for (auto &it : innovationToNeuronMap) {
+        it.second.incomingConnections.clear();
+        it.second.outgoingConnections.clear();
+    }
+
+    for(auto &it : innovationToConnectionMap){
+         Connection& c = it.second;
+        getNeuronWithInnovationNumber(c.to)->addConnection(&c);
+        getNeuronWithInnovationNumber(c.from)->addConnection(&c);
+    }
 }
 

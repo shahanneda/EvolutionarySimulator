@@ -55,5 +55,8 @@ std::unique_ptr<NetworkInstance> NetworkBreeder::Crossover(NetworkInstance *more
         }
     }
 
-    return std::unique_ptr<NetworkInstance >(new NetworkInstance(newN, newC));
+    auto network = std::unique_ptr<NetworkInstance >(new NetworkInstance(newN, newC));
+    network->recalculateConnections();
+
+    return network;
 }

@@ -1,9 +1,9 @@
+#include "Gene.h"
+#include <vector>
+
 #ifndef __NEURON__
 #define __NEURON__
 
-#include "Connection.h"
-#include "Gene.h"
-#include <vector>
 
 namespace NeatSquared{
 

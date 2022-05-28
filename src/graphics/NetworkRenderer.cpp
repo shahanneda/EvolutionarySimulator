@@ -97,11 +97,17 @@ NetworkRenderer::renderNeurons(std::deque<Neuron *> &neuronsToRender, std::vecto
     int layerNumber = 5;
     while(!neuronsToRender.empty()){
         auto layerCount = neuronsToRender.size();
+
         for(std::deque<Neuron *>::size_type i = 0; i < layerCount; i++){
             Neuron* n = neuronsToRender.front();
+            if(n == nullptr){
+                std::runtime_error("trying to render neuron which is not in newtork!! ");
+            }
+
             neuronsToRender.pop_front();
 
 
+            // accesign neuron which is expired
             if(innovationNumberToNeuronPositionMap.find(n->innovationNumber) != innovationNumberToNeuronPositionMap.end()){
                 continue;
             }
@@ -115,7 +121,7 @@ NetworkRenderer::renderNeurons(std::deque<Neuron *> &neuronsToRender, std::vecto
                 Connection* c = currentNetwork->getConnectionWithInnovationNumber(innovationNumber);
 
                 if(c == nullptr) {
-                    throw std::runtime_error("Innovation number of connection not found in innovationToConnectionap!!");
+                    throw std::runtime_error("NetworkRenderer: Innovation number of connection not found in innovationToConnection map!! #: " + std::to_string(innovationNumber));
                 }
                 neuronsToRender.push_back(currentNetwork->getNeuronWithInnovationNumber(c->from));
                 connectionsToRender.push_back(c);
@@ -131,7 +137,15 @@ void NetworkRenderer::renderConnections(std::unordered_map<int, ImVec2> &innovat
     for(Connection* c : connectionsToRender){
         float thickness = (c->weight + 2) * 1;
 
-        drawList->AddLine(convertLocalToWindowPos(innovationNumberToNeuronPositionMap[c->from]), convertLocalToWindowPos(innovationNumberToNeuronPositionMap[c->to]), connectionColor, thickness);
+        // just for debugging weight breeding, not actual color system
+        ImColor color;
+        if(c->weight > 0.5){
+            color = ImColor(ImVec4(1, 0, 0, 1));
+        }else{
+            color = ImColor(ImVec4(0, 1, 0, 1));
+        }
+
+        drawList->AddLine(convertLocalToWindowPos(innovationNumberToNeuronPositionMap[c->from]), convertLocalToWindowPos(innovationNumberToNeuronPositionMap[c->to]), color, thickness);
     }
 
 }

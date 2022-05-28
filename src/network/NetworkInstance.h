@@ -21,6 +21,12 @@ namespace NeatSquared {
         NetworkInstance( const std::vector<Neuron> &neurons, const std::vector<Connection>&connections, std::vector<int> inputs, std::vector<int> outputs);
         NetworkInstance( const std::vector<Neuron> &neurons, const std::vector<Connection>&connections);
 
+
+        /*
+         * Resets and recalculates the incomingConnections and outgoingConnections fields on all it's neurons
+         */
+        void recalculateConnections();
+
         ~NetworkInstance();
 
         std::unordered_map<int, Connection> innovationToConnectionMap;

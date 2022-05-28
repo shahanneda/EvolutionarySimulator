@@ -23,7 +23,7 @@ float Neuron::activationFunction(float input)
 	return input / (1 + abs(input));
 }
 
-Neuron::Neuron(int innovationNumber) : Gene(innovationNumber) {}
+Neuron::Neuron(int innovationNumber) : Gene(innovationNumber), currentValue(0) {}
 
 void Neuron::removeConnection(Connection* con) {
     if(this->innovationNumber == con->from){
