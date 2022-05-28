@@ -12,7 +12,7 @@ const float NetworkBreeder::SAME_GENE_BOTH_PARENT_MORE_FIT_PROB = 0.5f;
 using std::vector;
 using std::vector;
 
-std::unique_ptr<NetworkInstance> NetworkBreeder::Crossover(NetworkInstance *moreFitParent, NetworkInstance *lessFitParent) {
+std::unique_ptr<NetworkInstance> NetworkBreeder::Crossover(NetworkInstance &moreFitParent, NetworkInstance &lessFitParent) {
     /*
      * for gene in moreFitParent, if it is also in the lessFitParent, do 50/50 chance
      * if it is not in lessFitParent, just add it to the current geonome
@@ -21,11 +21,11 @@ std::unique_ptr<NetworkInstance> NetworkBreeder::Crossover(NetworkInstance *more
     vector<Neuron> newN;
     vector<Connection> newC;
 
-    for(const auto &it : moreFitParent->innovationToNeuronMap){
+    for(const auto &it : moreFitParent.innovationToNeuronMap){
         Neuron neuron = it.second;
 
-        auto lessFitIt = lessFitParent->innovationToNeuronMap.find(neuron.innovationNumber);
-        if(lessFitIt == lessFitParent->innovationToNeuronMap.end()){
+        auto lessFitIt = lessFitParent.innovationToNeuronMap.find(neuron.innovationNumber);
+        if(lessFitIt == lessFitParent.innovationToNeuronMap.end()){
             // found on more fit parent only, keep
             newN.push_back(neuron);
         }else{
@@ -38,11 +38,11 @@ std::unique_ptr<NetworkInstance> NetworkBreeder::Crossover(NetworkInstance *more
         }
     }
 
-    for(const auto &it : moreFitParent->innovationToConnectionMap){
+    for(const auto &it : moreFitParent.innovationToConnectionMap){
         Connection connection = it.second;
 
-        auto lessFitIt = lessFitParent->innovationToConnectionMap.find(connection.innovationNumber);
-        if(lessFitIt == lessFitParent->innovationToConnectionMap.end()){
+        auto lessFitIt = lessFitParent.innovationToConnectionMap.find(connection.innovationNumber);
+        if(lessFitIt == lessFitParent.innovationToConnectionMap.end()){
             // found on more fit parent only, keep
             newC.push_back(connection);
         }else{
@@ -57,6 +57,10 @@ std::unique_ptr<NetworkInstance> NetworkBreeder::Crossover(NetworkInstance *more
 
     auto network = std::unique_ptr<NetworkInstance >(new NetworkInstance(newN, newC));
     network->recalculateConnections();
-
     return network;
+}
+
+
+void NetworkBreeder::MutateNetwork(NetworkInstance &network) {
+    
 }

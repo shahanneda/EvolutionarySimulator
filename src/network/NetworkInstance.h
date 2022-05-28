@@ -47,10 +47,23 @@ namespace NeatSquared {
          */
         Neuron* getNeuronWithInnovationNumber(int i);
 
+
+        /*
+         * Gets a random neuron in this network
+         */
+        Neuron& getRandomNeuron();
+
         /*
          * Get a connection in this NetworkInstance with its innovation number
          */
         Connection *getConnectionWithInnovationNumber(int i);
+
+
+        /*
+         * Gets a random connection in this network
+         */
+        Connection &getRandomConnection();
+
 
         static std::vector<int> DEFAULT_INPUTS;
         static std::vector<int> DEFAULT_OUTPUTS;

@@ -1,10 +1,12 @@
 #include <algorithm>
 #include "network/NetworkInstance.h"
 #include <iostream>
+#include "utils/RandomGenerator.h"
 
 using namespace NeatSquared;
 
 using std::pair;
+
 std::vector<int> NetworkInstance::DEFAULT_INPUTS = {0, 1};
 std::vector<int> NetworkInstance::DEFAULT_OUTPUTS = {2};
 
@@ -32,7 +34,7 @@ NetworkInstance::~NetworkInstance() {
 Neuron *NetworkInstance::getNeuronWithInnovationNumber(int innovationNumber) {
     auto it = innovationToNeuronMap.find(innovationNumber);
     if (it == innovationToNeuronMap.end()) {
-        std::cout << "tried to get newuron with innovation number " << innovationNumber << " returing nullptr not found";
+        std::cout << "warning: tried to get neuron with innovation number " << innovationNumber << " returning nullptr since not found";
         return nullptr;
     }
     return &it->second;
@@ -59,3 +61,14 @@ void NetworkInstance::recalculateConnections() {
     }
 }
 
+Neuron &NetworkInstance::getRandomNeuron() {
+    // Area for optimization: this function is very slow, instead we could keep track of neurons separately in a vector if needed
+    const auto &it = std::next(std::begin(innovationToNeuronMap), RandomGenerator::getRandomInRange(0, innovationToNeuronMap.size()));
+    return it->second;
+}
+
+Connection &NetworkInstance::getRandomConnection(){
+    // Area for optimization: this function is very slow, instead we could keep track of connections separately in a vector if needed
+    const auto &it = std::next(std::begin(innovationToConnectionMap), RandomGenerator::getRandomInRange(0, innovationToConnectionMap.size()));
+    return it->second;
+}

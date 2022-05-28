@@ -57,10 +57,10 @@ void NEATThread(){
     printf("got to end of starting thread\n");
 
     while(1){
-        printf("doing new breed\n");
-        std::unique_ptr<NetworkInstance> breed = NetworkBreeder::Crossover(&n2, &n1);
+//        printf("doing new breed\n");
+        std::unique_ptr<NetworkInstance> breed = NetworkBreeder::Crossover(n2, n1);
         GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 }
 

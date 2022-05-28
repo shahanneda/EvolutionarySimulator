@@ -14,6 +14,11 @@ public:
      */
     static float getRandom();
 
+    /*
+     * Returns a random integer in a range, inclusive of both start and end.
+     */
+    static int getRandomInRange(int start, int end);
+
 private:
     static std::uniform_int_distribution<std::mt19937::result_type> random1to100;
     static std::mt19937 rngGen;
