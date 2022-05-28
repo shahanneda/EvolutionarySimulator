@@ -1,14 +1,14 @@
 #include <unordered_map>
 #include <thread>
 #include <iostream>
+#include <mutex>
+
 #include "network/Connection.h"
 #include "network/Neuron.h"
 #include "graphics/GraphicsManager.h"
 #include "network/NetworkInstance.h"
 #include "utils/RandomGenerator.h"
 #include "network/NetworkBreeder.h"
-
-
 
 using namespace NeatSquared;
 void startGraphics()
@@ -55,20 +55,24 @@ void NEATThread(){
     GraphicsManager::getInstance().networkRenderer.currentNetwork = &n2;
     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
     printf("got to end of starting thread\n");
+    std::unique_ptr<NetworkInstance> breed = NetworkBreeder::Crossover(n2, n1);
+    while(true){
+        GraphicsManager::getInstance().networkRenderer.currentNetworkMutex.lock();
 
-    while(1){
-//        printf("doing new breed\n");
-        std::unique_ptr<NetworkInstance> breed = NetworkBreeder::Crossover(n2, n1);
+        breed = NetworkBreeder::Crossover(n2, n1);
         GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+        GraphicsManager::getInstance().networkRenderer.currentNetworkMutex.unlock();
+
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 }
 
 int main(int, char **) {
-//    printf("in main\n");
     std::thread t1(NEATThread);
-//    NEATThread();
 
+//    NEATThread();
     startGraphics();
 
     return 0;

@@ -10,9 +10,11 @@ using namespace NeatSquared;
 
 #include "network/Neuron.h"
 #include "network/NetworkInstance.h"
-#include <iostream>
-
 #include "imgui.h"
+
+#include <iostream>
+#include <mutex>
+
 
 NetworkRenderer::NetworkRenderer() : currentNetwork(nullptr) {
 
@@ -31,6 +33,7 @@ void NetworkRenderer::renderNetwork() {
         return;
     }
 
+    std::lock_guard<std::mutex> lock(currentNetworkMutex);
 
     std::deque<Neuron *> neuronsToRender;
     for (int innovationNumber: currentNetwork->outputs) {

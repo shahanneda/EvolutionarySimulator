@@ -13,6 +13,7 @@
 #include "network/NetworkInstance.h"
 
 #include <deque>
+#include <mutex>
 #include <unordered_map>
 
 
@@ -25,7 +26,9 @@ namespace NeatSquared {
         void renderNetwork();
 
 
+
         NeatSquared::NetworkInstance *currentNetwork;
+        std::mutex currentNetworkMutex;
 
 
     private:
