@@ -174,8 +174,20 @@ void NetworkRenderer::renderConnections(std::unordered_map<int, ImVec2> &innovat
             color = ImColor(ImVec4(0, 1, 0, 1));
         }
 
-        drawList->AddLine(convertLocalToWindowPos(innovationNumberToNeuronPositionMap[c->from]),
-                          convertLocalToWindowPos(innovationNumberToNeuronPositionMap[c->to]), color, thickness);
+        ImVec2 p1 = innovationNumberToNeuronPositionMap[c->from];
+        ImVec2 p2 = innovationNumberToNeuronPositionMap[c->to];
+
+        drawList->AddLine(convertLocalToWindowPos(p1),
+                          convertLocalToWindowPos(p2), color, thickness);
+
+
+        int xTextOffset = -4;
+        int yTextOffset = -8;
+        ImVec2 textPos = ImVec2((p1.x + p2.x) / 2 + xTextOffset, (p1.y + p2.y) / 2 + yTextOffset);
+        const ImU32 textColor = ImColor(ImVec4(1, 1, 1, 1));
+
+        drawList->AddText(NULL, 15.0f, convertLocalToWindowPos(textPos), textColor,
+                          std::to_string(c->innovationNumber).c_str());
     }
 
 }
@@ -197,6 +209,7 @@ void NetworkRenderer::renderNeuronAtPosition(ImVec2 pos,
     ImVec2 textPos = ImVec2(pos.x - 3, pos.y - 8);
 
     const ImU32 textColor = ImColor(ImVec4(0, 0, 0, 1));
+
     drawList->AddCircleFilled(convertLocalToWindowPos(pos), nodeRadius, nodeColor, 0);
     drawList->AddText(NULL, 15.0f, convertLocalToWindowPos(textPos), textColor,
                       std::to_string(neuron->innovationNumber).c_str());
