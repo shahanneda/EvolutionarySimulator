@@ -17,7 +17,7 @@ void startGraphics()
     std::cout << "hello" << std::endl;
 }
 
-void NEATThread(){
+[[noreturn]] void NEATThread(){
     printf("Trying to start thread\n");
 
 
@@ -54,8 +54,11 @@ void NEATThread(){
 
     GraphicsManager::getInstance().networkRenderer.currentNetwork = &n2;
     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-    printf("got to end of starting thread\n");
+
     std::unique_ptr<NetworkInstance> breed = NetworkBreeder::Crossover(n2, n1);
+
+
+
     while(true){
         GraphicsManager::getInstance().networkRenderer.currentNetworkMutex.lock();
 
@@ -69,7 +72,7 @@ void NEATThread(){
     }
 }
 
-int main(int, char **) {
+int main() {
     std::thread t1(NEATThread);
 
 //    NEATThread();

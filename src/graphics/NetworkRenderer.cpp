@@ -71,6 +71,10 @@ void NetworkRenderer::renderNetwork() {
 
         renderConnections(innovationNumberToNeuronPositionMap,connectionsToRender);
 
+        innovationNumberToNeuronPositionMap.clear();
+        renderNeurons(neuronsToRender, connectionsToRender, spacing, outputStartX, outputStartY,
+                      innovationNumberToNeuronPositionMap);
+
 
     }
 
@@ -104,13 +108,11 @@ NetworkRenderer::renderNeurons(std::deque<Neuron *> &neuronsToRender, std::vecto
         for(std::deque<Neuron *>::size_type i = 0; i < layerCount; i++){
             Neuron* n = neuronsToRender.front();
             if(n == nullptr){
-                std::runtime_error("trying to render neuron which is not in newtork!! ");
+                throw std::runtime_error("trying to render neuron which is not in newtork!! ");
             }
 
             neuronsToRender.pop_front();
 
-
-            // accesign neuron which is expired
             if(innovationNumberToNeuronPositionMap.find(n->innovationNumber) != innovationNumberToNeuronPositionMap.end()){
                 continue;
             }

@@ -19,3 +19,17 @@ Connection::Connection(int innovationNumber, Neuron &from, Neuron &to, float wei
     from.addConnection(this);
     to.addConnection(this);
 }
+
+Connection::Connection(int innovationNumber, int from, int to)  : Connection(innovationNumber, from, to, STARTING_WEIGHT, STARTING_ENABLED){}
+
+std::size_t ConnectionHasher::operator()(const Connection &connection) const {
+    int x = std::min(connection.from, connection.to);
+    int y = std::max(connection.from, connection.to);
+
+    // cantor pairing function
+    return ((x + y)*(x + y + 1)/2) + y;
+}
+
+bool ConnectionEqual::operator()(const Connection &lhs, const Connection &rhs) const {
+    return lhs.from == rhs.from && lhs.to == rhs.to;
+}
