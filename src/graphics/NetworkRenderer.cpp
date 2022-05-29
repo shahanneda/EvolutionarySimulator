@@ -14,6 +14,7 @@ using namespace NeatSquared;
 
 #include <iostream>
 #include <mutex>
+#include <string>
 #include <unordered_set>
 
 
@@ -193,7 +194,12 @@ void NetworkRenderer::renderNeurons(std::unordered_map<int, ImVec2> &innovationN
 void NetworkRenderer::renderNeuronAtPosition(ImVec2 pos,
                                              Neuron *neuron) {
     const int nodeRadius = 10;
+    ImVec2 textPos = ImVec2(pos.x - 3, pos.y - 8);
+
+    const ImU32 textColor = ImColor(ImVec4(0, 0, 0, 1));
     drawList->AddCircleFilled(convertLocalToWindowPos(pos), nodeRadius, nodeColor, 0);
+    drawList->AddText(NULL, 15.0f, convertLocalToWindowPos(textPos), textColor,
+                      std::to_string(neuron->innovationNumber).c_str());
 }
 
 ImVec2 NetworkRenderer::convertLocalToWindowPos(ImVec2 pos) {
