@@ -9,12 +9,12 @@ using namespace NeatSquared;
 
 
 Connection NeatSquared::NewGeneCreator::getNewConnection(int from, int to) {
-    printf("calling new connection\n");
+
     Connection possibleNew(nextFreeInnovationNumber, from, to);
 
     //check if connection already exists with same from and too.
     auto it = connections.find(possibleNew);
-    if(it == connections.end()){
+    if (it == connections.end()) {
         // does not exist, so return a new one
         connections[possibleNew] = possibleNew.innovationNumber;
         nextFreeInnovationNumber++;
@@ -26,9 +26,8 @@ Connection NeatSquared::NewGeneCreator::getNewConnection(int from, int to) {
 }
 
 
-
 NewGeneCreator::NewGeneCreator()
-        : nextFreeInnovationNumber(3){}
+        : nextFreeInnovationNumber(3) {}
 
 Neuron NewGeneCreator::getNewNeuron() {
     return Neuron(nextFreeInnovationNumber++);

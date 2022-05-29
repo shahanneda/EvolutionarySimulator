@@ -37,14 +37,6 @@ namespace NeatSquared {
         ImVec2 windowPos;
 
 
-        void renderConnections(std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap,
-                               std::vector<Connection *> &connectionsToRender);
-
-        void
-        renderNeurons(std::deque<Neuron *> &neuronsToRender, std::vector<Connection *> &connectionsToRender,
-                      int spacing,
-                      int startY, int startX, std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap);
-
         /*
          * Convert ImVec2 position from local to global.
          */
@@ -53,14 +45,46 @@ namespace NeatSquared {
         /*
          * Render a neuron. Pos is relative to current window.
          */
-        void renderNeuronAtPosition(ImVec2 pos, std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap,
-                                    Neuron *neuron);
+        void renderNeuronAtPosition(ImVec2 pos, Neuron *neuron);
 
-        void renderInputs(int spacing, int inputStartX, int inputStartY,
-                          std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap,
-                          std::vector<Connection *> &connectionsToRender);
+
+        /*
+         * Render neurons to the screen
+         */
+        void renderNeurons(std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap);
+
+        /*
+         * Render connections to the screen
+         */
+        void renderConnections(std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap,
+                               std::unordered_map<int, Connection *> &connectionsToRender);
+
+
+        /*
+         * Precalculate the positions of the neurons
+         */
+        void calculateNeuronPositions(int spacing, int startX, int startY,
+                                      std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap,
+                                      std::deque<Neuron *> &neuronsToRender,
+                                      std::unordered_map<int, Connection *> &connectionsToRender);
+
+        /*
+         * Calcualte the position of the input neurons
+         */
+        void calculateInputPositions(int spacing, int inputStartX, int inputStartY,
+                                     std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap,
+                                     std::unordered_map<int, Connection *> &connectionsToRender);
+
+
+        /*
+         * Populate all connections in the vector into the connections to render map
+         */
+        void addConnectionsToRender(std::vector<int> &connectionInnovationNumbers,
+                                    std::unordered_map<int, Connection *> &connectionsToRender) const;
+
+
     };
-};
 
+}
 
 #endif //NETWORKRENDERER_H

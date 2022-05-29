@@ -32,10 +32,10 @@ void startGraphics() {
 //    Neuron h1(3);
 //    Neuron h2(100);
 //    Neuron h3(101);
-
+//
 //    Connection con1(4, in1, h1, 1.0f, true);
 //    Connection con2(5, in2, h1, 1.0f, true);
-//    Connection con3(6, h1 ,out1, 2.0f, true);
+//    Connection con3(6, h1, out1, 2.0f, true);
 
 //    Connection c1(3, 0, 1, 1.0f, true);
 //    Connection c2(4, 2, 0, 1.0f, true);
@@ -49,9 +49,9 @@ void startGraphics() {
 //    con3.weight = 0.1f;
 //    Connection con4(7, in2, h2, 0.1f, true);
 //    Connection con5(8, h2, out1, 0.1f, true);
-//    NetworkInstance n2({in1, in2, h1,h2, out1}, {});
+//    NetworkInstance n2({in1, in2, h1, h2, out1}, {});
 
-//    n1.recalculateConnections();
+//    n2.recalculateConnections();
     n1.recalculateConnections();
 
 
@@ -59,7 +59,7 @@ void startGraphics() {
 //    std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
     GraphicsManager::getInstance().networkRenderer.currentNetwork = &n1;
-//    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
     std::unique_ptr<NetworkInstance> breed = breeder.crossover(n1, n1);
     GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();

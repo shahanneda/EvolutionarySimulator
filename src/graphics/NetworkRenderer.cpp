@@ -14,7 +14,10 @@ using namespace NeatSquared;
 
 #include <iostream>
 #include <mutex>
+#include <unordered_set>
 
+
+using std::vector;
 
 NetworkRenderer::NetworkRenderer() : currentNetwork(nullptr) {
 
@@ -58,26 +61,25 @@ void NetworkRenderer::renderNetwork() {
         const int inputStartY = 50;
 
 
-        std::vector<Connection *> connectionsToRender;
         std::unordered_map<int, ImVec2> innovationNumberToNeuronPositionMap;
+        std::unordered_map<int, Connection *> connectionsToRender;
 
-        renderInputs(spacing, inputStartX, inputStartY,
-                     innovationNumberToNeuronPositionMap, connectionsToRender);
+        calculateInputPositions(spacing, inputStartX, inputStartY, innovationNumberToNeuronPositionMap,
+                                connectionsToRender);
 
-
-        renderNeurons(neuronsToRender, connectionsToRender, spacing, outputStartX, outputStartY,
-                      innovationNumberToNeuronPositionMap);
-
+        calculateNeuronPositions(spacing, inputStartX, inputStartY, innovationNumberToNeuronPositionMap,
+                                 neuronsToRender, connectionsToRender);
         renderConnections(innovationNumberToNeuronPositionMap, connectionsToRender);
-
+        renderNeurons(innovationNumberToNeuronPositionMap);
     }
 
     ImGui::End();
 }
 
-void NetworkRenderer::renderInputs(int spacing, int inputStartX, int inputStartY,
-                                   std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap,
-                                   std::vector<Connection *> &connectionsToRender) {
+void NetworkRenderer::calculateInputPositions(int spacing, int inputStartX, int inputStartY,
+                                              std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap,
+                                              std::unordered_map<int, Connection *> &connectionsToRender) {
+
     int inputCount = 0;
     for (int innovationNumber: currentNetwork->inputs) {
         Neuron *n = currentNetwork->getNeuronWithInnovationNumber(innovationNumber);
@@ -85,29 +87,37 @@ void NetworkRenderer::renderInputs(int spacing, int inputStartX, int inputStartY
             throw std::runtime_error("Innovation number of output neuron not found in innovationToNeuronMap!!");
         }
 
-        renderNeuronAtPosition(ImVec2(inputStartX, inputStartY + inputCount * spacing),
-                               innovationNumberToNeuronPositionMap, n);
+        innovationNumberToNeuronPositionMap[n->innovationNumber] = ImVec2(inputStartX,
+                                                                          inputStartY + inputCount * spacing);
         inputCount++;
-
-        // render any remaining outgoing connections so we dont miss any loops
-        for (int innovationNumber: n->outgoingConnections) {
-            Connection *c = currentNetwork->getConnectionWithInnovationNumber(innovationNumber);
-            if (c == nullptr) {
-                throw std::runtime_error(
-                        "NetworkRenderer: Innovation number of connection not found in innovationToConnection map!! #: " +
-                        std::to_string(innovationNumber));
-            }
-            connectionsToRender.push_back(c);
-        }
+        addConnectionsToRender(n->outgoingConnections, connectionsToRender);
+        addConnectionsToRender(n->incomingConnections, connectionsToRender);
     }
+}
 
+void NetworkRenderer::addConnectionsToRender(vector<int> &connectionInnovationNumbers,
+                                             std::unordered_map<int, Connection *> &connectionsToRender) const {
+    for (int innovationNumber: connectionInnovationNumbers) {
+        if (connectionsToRender.count(innovationNumber) > 0) {
+            continue;
+        }
+
+        Connection *c = currentNetwork->getConnectionWithInnovationNumber(innovationNumber);
+        if (c == nullptr) {
+            throw std::runtime_error(
+                    "NetworkRenderer: Innovation number of connection not found in innovationToConnection map!! #: " +
+                    std::to_string(innovationNumber));
+        }
+
+        connectionsToRender.insert({innovationNumber, c});
+    }
 }
 
 
-void
-NetworkRenderer::renderNeurons(std::deque<Neuron *> &neuronsToRender, std::vector<Connection *> &connectionsToRender,
-                               int spacing, int startX, int startY,
-                               std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap) {
+void NetworkRenderer::calculateNeuronPositions(int spacing, int startX, int startY,
+                                               std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap,
+                                               std::deque<Neuron *> &neuronsToRender,
+                                               std::unordered_map<int, Connection *> &connectionsToRender) {
     // bfs
     int layerNumber = 5;
     while (!neuronsToRender.empty()) {
@@ -127,7 +137,7 @@ NetworkRenderer::renderNeurons(std::deque<Neuron *> &neuronsToRender, std::vecto
             }
 
             ImVec2 pos = ImVec2(startX + layerNumber * spacing, startY + i * spacing);
-            renderNeuronAtPosition(pos, innovationNumberToNeuronPositionMap, n);
+            innovationNumberToNeuronPositionMap[n->innovationNumber] = pos;
 
 
             // add next layers neurons
@@ -140,29 +150,19 @@ NetworkRenderer::renderNeurons(std::deque<Neuron *> &neuronsToRender, std::vecto
                             std::to_string(innovationNumber));
                 }
                 neuronsToRender.push_back(currentNetwork->getNeuronWithInnovationNumber(c->from));
-                connectionsToRender.push_back(c);
             }
 
-            // render any remaining outgoing connections so we dont miss any loops
-            for (int innovationNumber: n->outgoingConnections) {
-                Connection *c = currentNetwork->getConnectionWithInnovationNumber(innovationNumber);
-                if (c == nullptr) {
-                    throw std::runtime_error(
-                            "NetworkRenderer: Innovation number of connection not found in innovationToConnection map!! #: " +
-                            std::to_string(innovationNumber));
-                }
-                connectionsToRender.push_back(c);
-            }
-
-
+            addConnectionsToRender(n->incomingConnections, connectionsToRender);
+            addConnectionsToRender(n->outgoingConnections, connectionsToRender);
         }
         layerNumber--;
     }
 }
 
 void NetworkRenderer::renderConnections(std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap,
-                                        std::vector<Connection *> &connectionsToRender) {
-    for (Connection *c: connectionsToRender) {
+                                        std::unordered_map<int, Connection *> &connectionsToRender) {
+    for (auto it: connectionsToRender) {
+        Connection *c = it.second;
         float thickness = (c->weight + 2) * 1;
 
         // just for debugging weight breeding, not actual color system
@@ -179,12 +179,21 @@ void NetworkRenderer::renderConnections(std::unordered_map<int, ImVec2> &innovat
 
 }
 
+void NetworkRenderer::renderNeurons(std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap) {
+    for (const auto &it: innovationNumberToNeuronPositionMap) {
+        Neuron *n = currentNetwork->getNeuronWithInnovationNumber(it.first);
+        if (n == nullptr) {
+            throw std::runtime_error("Innovation number of neuron not found in innovationToNeuronMap!!");
+        }
+
+        renderNeuronAtPosition(it.second, n);
+    }
+}
+
 void NetworkRenderer::renderNeuronAtPosition(ImVec2 pos,
-                                             std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap,
                                              Neuron *neuron) {
     const int nodeRadius = 10;
     drawList->AddCircleFilled(convertLocalToWindowPos(pos), nodeRadius, nodeColor, 0);
-    innovationNumberToNeuronPositionMap[neuron->innovationNumber] = pos;
 }
 
 ImVec2 NetworkRenderer::convertLocalToWindowPos(ImVec2 pos) {
