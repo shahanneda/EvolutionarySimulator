@@ -4,6 +4,7 @@
 
 #ifndef RANDOMGENERATOR_H
 #define RANDOMGENERATOR_H
+
 #include <random>
 
 
@@ -19,9 +20,15 @@ public:
      */
     static int getRandomInRange(int start, int end);
 
+    /*
+     * Returns a random float in a range, inclusive of both start and end
+     */
+    static float getRandomFloatInRange(float start, float end);
+
 private:
     static std::uniform_int_distribution<std::mt19937::result_type> random1to100;
     static std::mt19937 rngGen;
+
 };
 
 

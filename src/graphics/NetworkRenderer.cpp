@@ -22,7 +22,7 @@ using namespace NeatSquared;
 
 using std::vector;
 
-NetworkRenderer::NetworkRenderer() : currentNetwork(nullptr) {
+NetworkRenderer::NetworkRenderer() : currentNetwork(nullptr), displayOffset(0, 0) {
 
 }
 
@@ -81,6 +81,22 @@ void NetworkRenderer::renderNetwork() {
     }
 
     ImGui::End();
+}
+
+void NetworkRenderer::handleInput() {
+    const float speed = 5.0f;
+    if (ImGui::IsKeyPressed(ImGuiKey_RightArrow)) {
+        displayOffset = ImVec2(displayOffset.x - speed, displayOffset.y);
+    }
+    if (ImGui::IsKeyPressed(ImGuiKey_LeftArrow)) {
+        displayOffset = ImVec2(displayOffset.x + speed, displayOffset.y);
+    }
+    if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)) {
+        displayOffset = ImVec2(displayOffset.x, displayOffset.y + speed);
+    }
+    if (ImGui::IsKeyPressed(ImGuiKey_DownArrow)) {
+        displayOffset = ImVec2(displayOffset.x, displayOffset.y - speed);
+    }
 }
 
 void NetworkRenderer::calculateInputPositions(int spacing, int inputStartX, int inputStartY,
@@ -249,7 +265,7 @@ void NetworkRenderer::renderConnectionTriangle(ImVec2 conStart, ImVec2 conEnd, I
 }
 
 ImVec2 NetworkRenderer::convertLocalToWindowPos(ImVec2 pos) {
-    return ImVec2(windowPos.x + pos.x, windowPos.y + pos.y);
+    return ImVec2(windowPos.x + pos.x + displayOffset.x, windowPos.y + pos.y + displayOffset.y);
 }
 
 

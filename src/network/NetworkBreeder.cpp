@@ -12,8 +12,13 @@ const float NetworkBreeder::SAME_GENE_BOTH_PARENT_MORE_FIT_PROB = 0.5f;
 
 
 // after the initial testing these two should be pretty low
-const float NetworkBreeder::NEW_NEURON_MUTATION_PROB = 0.5f;
-const float NetworkBreeder::NEW_CONNECTION_MUTATION_PROB = 0.5f;
+const float NetworkBreeder::NEW_NEURON_MUTATION_PROB = 0.05f;
+const float NetworkBreeder::NEW_CONNECTION_MUTATION_PROB = 0.1f;
+const float NetworkBreeder::TOGGLE_CONNECTION_MUTATION_PROB = 0.1f;
+const float NetworkBreeder::SCALE_WEIGHT_MUTATION_PROB = 0.1f;
+const float NetworkBreeder::SET_WEIGHT_MUTATION_PROB = 0.1f;
+const float NetworkBreeder::FLIP_CONNECTION_MUTATION_PROB = 0.5f;
+
 const int NetworkBreeder::MAX_NEW_GENE_MUTATION_RETRY_ATTEMPTS = 5;
 
 using std::vector;
@@ -83,6 +88,22 @@ void NetworkBreeder::mutateNetwork(NetworkInstance &network) {
     if (RandomGenerator::getRandom() < NEW_NEURON_MUTATION_PROB) {
         addNewNeuronMutation(network);
     }
+
+    if (RandomGenerator::getRandom() < TOGGLE_CONNECTION_MUTATION_PROB) {
+        toggleConnectionMutation(network);
+    }
+
+    if (RandomGenerator::getRandom() < SCALE_WEIGHT_MUTATION_PROB) {
+        scaleWeightMutation(network);
+    }
+
+    if (RandomGenerator::getRandom() < SET_WEIGHT_MUTATION_PROB) {
+        setWeightMutation(network);
+    }
+
+    if (RandomGenerator::getRandom() < FLIP_CONNECTION_MUTATION_PROB) {
+        flipConnectionMutation(network);
+    }
 }
 
 void NetworkBreeder::addNewNeuronMutation(NetworkInstance &network) {
@@ -129,16 +150,15 @@ void NetworkBreeder::addNewConnectionMutation(NetworkInstance &network) {
         if (!from ||
             !to ||
             from->innovationNumber == to->innovationNumber ||
-            std::find(network.outputs.begin(), network.outputs.end(), from->innovationNumber) !=
-            network.outputs.end() ||
-            std::find(network.inputs.begin(), network.inputs.end(), to->innovationNumber) != network.inputs.end()) {
-
+            network.isInnovationNumberOfInputNeuron(to->innovationNumber) ||
+            network.isInnovationNumberOfOutputNeuron(from->innovationNumber)) {
             attempts++;
             continue;
         }
 
 
         Connection connectionBetweenThese = geneCreator.getNewConnection(from->innovationNumber, to->innovationNumber);
+        connectionBetweenThese.weight = RandomGenerator::getRandomInRange(-2, 2);
 
         // maybe this connection is already in the network, in that case we should retry with two new nodes
         printf("trying to add connection between %d and %d\n", from->innovationNumber, to->innovationNumber);
@@ -152,6 +172,40 @@ void NetworkBreeder::addNewConnectionMutation(NetworkInstance &network) {
             // stop trying to add connection
             break;
         }
+    }
+}
+
+void NetworkBreeder::toggleConnectionMutation(NetworkInstance &network) {
+    Connection *c = network.getRandomConnection();
+    if (c) {
+        c->enabled = !c->enabled;
+    }
+}
+
+
+void NetworkBreeder::scaleWeightMutation(NetworkInstance &network) {
+    Connection *c = network.getRandomConnection();
+    float scale = RandomGenerator::getRandomFloatInRange(-1, 1.5f);
+    if (c) {
+        c->weight *= scale;
+    }
+}
+
+void NetworkBreeder::setWeightMutation(NetworkInstance &network) {
+    Connection *c = network.getRandomConnection();
+    float newW = RandomGenerator::getRandomFloatInRange(-2, 2);
+    if (c) {
+        c->weight = newW;
+    }
+}
+
+void NetworkBreeder::flipConnectionMutation(NetworkInstance &network) {
+    Connection *c = network.getRandomConnection();
+    // we do not want to create invalid connections going into an input, or from and output, so do not flip in those cases
+    if (c && !network.isInnovationNumberOfInputNeuron(c->from) && !network.isInnovationNumberOfOutputNeuron(c->to)) {
+        int old = c->from;
+        c->from = c->to;
+        c->to = old;
     }
 }
 

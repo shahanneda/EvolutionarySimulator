@@ -23,12 +23,15 @@ namespace NeatSquared {
     public:
         NetworkRenderer();
 
+        void handleInput();
+
         void renderNetwork();
 
 
         NeatSquared::NetworkInstance *currentNetwork;
         std::mutex currentNetworkMutex;
 
+        ImVec2 displayOffset;
 
     private:
         static const ImColor nodeColor;

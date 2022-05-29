@@ -123,3 +123,12 @@ void NetworkInstance::removeConnection(const Connection &c) {
 
     innovationToConnectionMap.erase(c.innovationNumber);
 }
+
+
+bool NetworkInstance::isInnovationNumberOfInputNeuron(int innovationNumber) {
+    return std::find(inputs.begin(), inputs.end(), innovationNumber) != inputs.end();
+}
+
+bool NetworkInstance::isInnovationNumberOfOutputNeuron(int innovationNumber) {
+    return std::find(outputs.begin(), outputs.end(), innovationNumber) != outputs.end();
+}

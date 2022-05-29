@@ -86,6 +86,10 @@ namespace NeatSquared {
 
         static std::vector<int> DEFAULT_INPUTS;
         static std::vector<int> DEFAULT_OUTPUTS;
+
+        bool isInnovationNumberOfInputNeuron(int innovationNumber);
+
+        bool isInnovationNumberOfOutputNeuron(int innovationNumber);
     };
 
 }

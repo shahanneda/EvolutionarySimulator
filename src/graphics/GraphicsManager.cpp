@@ -15,6 +15,7 @@
 #endif
 
 using namespace NeatSquared;
+
 GraphicsManager::GraphicsManager() : networkRenderer() {
     decideGLSLVersion();
     initSDL();
@@ -50,6 +51,7 @@ void GraphicsManager::decideGLSLVersion() {
 void GraphicsManager::mainGUILoop() {
     ImGuiIO &io = ImGui::GetIO();
     pollSTL();
+    networkRenderer.handleInput();
     renderMainFrame(io);
     finishOpenGLRender(io);
 }
@@ -75,7 +77,7 @@ void GraphicsManager::finishOpenGLRender(const ImGuiIO &io) const {
     SDL_GL_SwapWindow(window);
 }
 
-void GraphicsManager::renderMainFrame(const ImGuiIO &io){
+void GraphicsManager::renderMainFrame(const ImGuiIO &io) {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
@@ -103,7 +105,7 @@ void GraphicsManager::EmscriptenMainLoop() {
     GraphicsManager::getInstance().mainGUILoop();
 }
 
-void GraphicsManager::startMainLoop(){
+void GraphicsManager::startMainLoop() {
 #ifdef __EMSCRIPTEN__
     emscripten_set_main_loop(&GraphicsManager::EmscriptenMainLoop, 0, 1);
 #else

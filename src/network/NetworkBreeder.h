@@ -33,6 +33,14 @@ namespace NeatSquared {
         void addNewNeuronMutation(NetworkInstance &n);
 
 
+        void toggleConnectionMutation(NetworkInstance &network);
+
+        void scaleWeightMutation(NetworkInstance &network);
+
+        void setWeightMutation(NetworkInstance &network);
+
+        void flipConnectionMutation(NetworkInstance &network);
+
         NewGeneCreator geneCreator;
 
 
@@ -51,10 +59,20 @@ namespace NeatSquared {
          */
         static const float NEW_CONNECTION_MUTATION_PROB;
 
+
+        /*
+         * Probabilities for various mutations
+         */
+        static const float TOGGLE_CONNECTION_MUTATION_PROB;
+        static const float SCALE_WEIGHT_MUTATION_PROB;
+        static const float SET_WEIGHT_MUTATION_PROB;
+        static const float FLIP_CONNECTION_MUTATION_PROB;
+
         /*
          * Number of times an add new connection/neuron mutation will attempt to make before giving up.
          */
         static const int MAX_NEW_GENE_MUTATION_RETRY_ATTEMPTS;
+
     };
 }
 

@@ -14,7 +14,6 @@ using namespace NeatSquared;
 
 void startGraphics() {
     GraphicsManager::getInstance().startMainLoop();
-    std::cout << "hello" << std::endl;
 }
 
 [[noreturn]] void NEATThread() {
