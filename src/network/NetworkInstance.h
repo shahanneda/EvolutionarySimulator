@@ -50,7 +50,7 @@ namespace NeatSquared {
         /*
          * Gets a random neuron in this network
          */
-        Neuron &getRandomNeuron();
+        Neuron *getRandomNeuron();
 
         /*
          * Get a connection in this NetworkInstance with its innovation number
@@ -61,7 +61,13 @@ namespace NeatSquared {
         /*
          * Gets a random connection in this network
          */
-        Connection &getRandomConnection();
+        Connection *getRandomConnection();
+
+
+        /*
+         * Remove a connection from this network
+         */
+        void removeConnection(const Connection &c);
 
 
         std::unordered_map<int, Connection> innovationToConnectionMap;

@@ -13,7 +13,7 @@ const float NetworkBreeder::SAME_GENE_BOTH_PARENT_MORE_FIT_PROB = 0.5f;
 
 // after the initial testing these two should be pretty low
 const float NetworkBreeder::NEW_NEURON_MUTATION_PROB = 0.5f;
-const float NetworkBreeder::NEW_CONNECTION_MUTATION_PROB = 1.f;
+const float NetworkBreeder::NEW_CONNECTION_MUTATION_PROB = 0.5f;
 const int NetworkBreeder::MAX_NEW_GENE_MUTATION_RETRY_ATTEMPTS = 5;
 
 using std::vector;
@@ -86,7 +86,32 @@ void NetworkBreeder::mutateNetwork(NetworkInstance &network) {
 }
 
 void NetworkBreeder::addNewNeuronMutation(NetworkInstance &network) {
+    int attempts = 0;
 
+    while (attempts < MAX_NEW_GENE_MUTATION_RETRY_ATTEMPTS) {
+        Connection *c = network.getRandomConnection();
+        if (!c) {
+            attempts++;
+            continue;
+        }
+
+        Neuron n = geneCreator.getNewNeuron();
+
+        Connection from = geneCreator.getNewConnection(c->from, n.innovationNumber);
+        from.weight = 1;
+        from.enabled = true;
+
+        Connection to = geneCreator.getNewConnection(n.innovationNumber, c->to);
+        to.weight = c->weight;
+        to.enabled = c->enabled;
+
+        network.addNeuron(n);
+        network.addConnection(from);
+        network.addConnection(to);
+
+        network.removeConnection(*c);
+        break;
+    }
 }
 
 void NetworkBreeder::addNewConnectionMutation(NetworkInstance &network) {
@@ -97,19 +122,26 @@ void NetworkBreeder::addNewConnectionMutation(NetworkInstance &network) {
 
 
     while (attempts < MAX_NEW_GENE_MUTATION_RETRY_ATTEMPTS) {
-        Neuron &n1 = network.getRandomNeuron();
-        Neuron &n2 = network.getRandomNeuron();
+        Neuron *from = network.getRandomNeuron();
+        Neuron *to = network.getRandomNeuron();
 
-        if (n1.innovationNumber == n2.innovationNumber) {
+        //avoid bad connections for example, should not have connection starting from output, or connection going to inputs
+        if (!from ||
+            !to ||
+            from->innovationNumber == to->innovationNumber ||
+            std::find(network.outputs.begin(), network.outputs.end(), from->innovationNumber) !=
+            network.outputs.end() ||
+            std::find(network.inputs.begin(), network.inputs.end(), to->innovationNumber) != network.inputs.end()) {
+
             attempts++;
             continue;
         }
 
 
-        Connection connectionBetweenThese = geneCreator.getNewConnection(n1.innovationNumber, n2.innovationNumber);
+        Connection connectionBetweenThese = geneCreator.getNewConnection(from->innovationNumber, to->innovationNumber);
 
         // maybe this connection is already in the network, in that case we should retry with two new nodes
-        printf("trying to add connection between %d and %d\n", n1.innovationNumber, n2.innovationNumber);
+        printf("trying to add connection between %d and %d\n", from->innovationNumber, to->innovationNumber);
 
         if (network.innovationToConnectionMap.count(connectionBetweenThese.innovationNumber) > 0) {
             attempts++;

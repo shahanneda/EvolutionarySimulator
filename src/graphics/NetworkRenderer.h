@@ -63,7 +63,7 @@ namespace NeatSquared {
         /*
          * Precalculate the positions of the neurons
          */
-        void calculateNeuronPositions(int spacing, int startX, int startY,
+        void calculateNeuronPositions(int horizontalSpacing, int verticalSpacing, int startX, int startY,
                                       std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap,
                                       std::deque<Neuron *> &neuronsToRender,
                                       std::unordered_map<int, Connection *> &connectionsToRender);

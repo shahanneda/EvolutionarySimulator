@@ -56,8 +56,11 @@ void NetworkRenderer::renderNetwork() {
         windowPos = ImGui::GetWindowPos();
         drawList = ImGui::GetWindowDrawList();
 
-        const int spacing = 100;
-        const int outputStartX = 150;
+        const int verticalSpacing = 50;
+        const int horizontalSpacing = 50;
+
+//        printf("dith %.2f \n", ImGui::GetWindowWidth());
+        const int outputStartX = ImGui::GetWindowWidth() / 2;
         const int outputStartY = 100;
 
         const int inputStartX = 50;
@@ -67,10 +70,11 @@ void NetworkRenderer::renderNetwork() {
         std::unordered_map<int, ImVec2> innovationNumberToNeuronPositionMap;
         std::unordered_map<int, Connection *> connectionsToRender;
 
-        calculateInputPositions(spacing, inputStartX, inputStartY, innovationNumberToNeuronPositionMap,
+        calculateInputPositions(verticalSpacing, inputStartX, inputStartY, innovationNumberToNeuronPositionMap,
                                 connectionsToRender);
 
-        calculateNeuronPositions(spacing, outputStartX, outputStartY, innovationNumberToNeuronPositionMap,
+        calculateNeuronPositions(horizontalSpacing, verticalSpacing, outputStartX, outputStartY,
+                                 innovationNumberToNeuronPositionMap,
                                  neuronsToRender, connectionsToRender);
         renderConnections(innovationNumberToNeuronPositionMap, connectionsToRender);
         renderNeurons(innovationNumberToNeuronPositionMap);
@@ -117,12 +121,12 @@ void NetworkRenderer::addConnectionsToRender(vector<int> &connectionInnovationNu
 }
 
 
-void NetworkRenderer::calculateNeuronPositions(int spacing, int startX, int startY,
+void NetworkRenderer::calculateNeuronPositions(int horizontalSpacing, int verticalSpacing, int startX, int startY,
                                                std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap,
                                                std::deque<Neuron *> &neuronsToRender,
                                                std::unordered_map<int, Connection *> &connectionsToRender) {
     // bfs
-    int layerNumber = 5;
+    int layerNumber = 10;
     while (!neuronsToRender.empty()) {
         auto layerCount = neuronsToRender.size();
 
@@ -139,7 +143,7 @@ void NetworkRenderer::calculateNeuronPositions(int spacing, int startX, int star
                 continue;
             }
 
-            ImVec2 pos = ImVec2(startX + layerNumber * spacing, startY + i * spacing);
+            ImVec2 pos = ImVec2(startX + layerNumber * horizontalSpacing, startY + i * verticalSpacing);
             innovationNumberToNeuronPositionMap[n->innovationNumber] = pos;
 
 
