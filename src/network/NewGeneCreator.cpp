@@ -2,13 +2,14 @@
 // Created by Shahan Nedadahandeh on 2022-05-23.
 //
 
-#include "InnovationNumberManager.h"
+#include "NewGeneCreator.h"
 #include "Connection.h"
 
 using namespace NeatSquared;
 
 
-Connection NeatSquared::InnovationNumberManager::getNewConnection(int from, int to) {
+Connection NeatSquared::NewGeneCreator::getNewConnection(int from, int to) {
+    printf("calling new connection\n");
     Connection possibleNew(nextFreeInnovationNumber, from, to);
 
     //check if connection already exists with same from and too.
@@ -20,15 +21,15 @@ Connection NeatSquared::InnovationNumberManager::getNewConnection(int from, int 
         return possibleNew;
     }
 
-    // does not exist, so return that and dont increment the innovation number
+    // does exist already, so return that and don't increment the innovation number
     return it->first;
 }
 
 
 
-InnovationNumberManager::InnovationNumberManager()
-        : nextFreeInnovationNumber(0){}
+NewGeneCreator::NewGeneCreator()
+        : nextFreeInnovationNumber(3){}
 
-Neuron InnovationNumberManager::getNewNeuron() {
+Neuron NewGeneCreator::getNewNeuron() {
     return Neuron(nextFreeInnovationNumber++);
 }

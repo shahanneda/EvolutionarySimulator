@@ -26,7 +26,6 @@ namespace NeatSquared {
         void renderNetwork();
 
 
-
         NeatSquared::NetworkInstance *currentNetwork;
         std::mutex currentNetworkMutex;
 
@@ -54,10 +53,12 @@ namespace NeatSquared {
         /*
          * Render a neuron. Pos is relative to current window.
          */
-        void renderNeuronAtPosition(ImVec2 pos, std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap, Neuron * neuron );
+        void renderNeuronAtPosition(ImVec2 pos, std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap,
+                                    Neuron *neuron);
 
         void renderInputs(int spacing, int inputStartX, int inputStartY,
-                                                      std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap);
+                          std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap,
+                          std::vector<Connection *> &connectionsToRender);
     };
 };
 

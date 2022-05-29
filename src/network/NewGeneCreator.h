@@ -13,9 +13,9 @@
 
 
 namespace NeatSquared{
-    class InnovationNumberManager {
+    class NewGeneCreator {
     public:
-        InnovationNumberManager();
+        NewGeneCreator();
 
         /*
          * Gets a new connection from a neuron with from's innovation number to a neuron with to's innovation number

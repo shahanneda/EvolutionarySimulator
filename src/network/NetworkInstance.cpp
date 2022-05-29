@@ -63,12 +63,27 @@ void NetworkInstance::recalculateConnections() {
 
 Neuron &NetworkInstance::getRandomNeuron() {
     // Area for optimization: this function is very slow, instead we could keep track of neurons separately in a vector if needed
-    const auto &it = std::next(std::begin(innovationToNeuronMap), RandomGenerator::getRandomInRange(0, innovationToNeuronMap.size()));
+    const auto &it = std::next(std::begin(innovationToNeuronMap), RandomGenerator::getRandomInRange(0, innovationToNeuronMap.size()-1));
     return it->second;
 }
 
 Connection &NetworkInstance::getRandomConnection(){
     // Area for optimization: this function is very slow, instead we could keep track of connections separately in a vector if needed
-    const auto &it = std::next(std::begin(innovationToConnectionMap), RandomGenerator::getRandomInRange(0, innovationToConnectionMap.size()));
+    const auto &it = std::next(std::begin(innovationToConnectionMap), RandomGenerator::getRandomInRange(0, innovationToConnectionMap.size()-1));
     return it->second;
+}
+
+void NetworkInstance::addNeuron(const Neuron n) {
+    if(innovationToNeuronMap.count(n.innovationNumber) > 0){
+        throw std::runtime_error("NetworkInstance::addNeuron: TRYING TO ADD NEURON TO NETWORK WHICH ALREADY EXISTS IN NETWORK!!");
+    }
+    innovationToNeuronMap.insert(std::pair<int, Neuron>(n.innovationNumber, n));
+}
+
+void NetworkInstance::addConnection(const Connection c) {
+    if(innovationToConnectionMap.count(c.innovationNumber) > 0){
+        throw std::runtime_error("NetworkInstance::addNeuron: TRYING TO ADD Connection TO NETWORK WHICH ALREADY EXISTS IN NETWORK!!");
+    }
+
+    innovationToConnectionMap.insert(std::pair<int, Connection>(c.innovationNumber, c));
 }

@@ -1,6 +1,9 @@
 #include "Gene.h"
 
 
+#include <functional>
+
+
 using namespace NeatSquared;
 Gene::Gene(int innovationNumber) : innovationNumber(innovationNumber)
 {
@@ -16,3 +19,4 @@ bool Gene::operator!=(const Gene &rhs) const {
 
 Gene::Gene(const Gene &g): innovationNumber(g.innovationNumber) {
 }
+
