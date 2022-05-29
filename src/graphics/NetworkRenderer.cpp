@@ -17,6 +17,8 @@ using namespace NeatSquared;
 #include <string>
 #include <unordered_set>
 
+#include "glm/gtx/rotate_vector.hpp"
+#include <glm/glm.hpp>
 
 using std::vector;
 
@@ -68,7 +70,7 @@ void NetworkRenderer::renderNetwork() {
         calculateInputPositions(spacing, inputStartX, inputStartY, innovationNumberToNeuronPositionMap,
                                 connectionsToRender);
 
-        calculateNeuronPositions(spacing, inputStartX, inputStartY, innovationNumberToNeuronPositionMap,
+        calculateNeuronPositions(spacing, outputStartX, outputStartY, innovationNumberToNeuronPositionMap,
                                  neuronsToRender, connectionsToRender);
         renderConnections(innovationNumberToNeuronPositionMap, connectionsToRender);
         renderNeurons(innovationNumberToNeuronPositionMap);
@@ -167,11 +169,14 @@ void NetworkRenderer::renderConnections(std::unordered_map<int, ImVec2> &innovat
         float thickness = (c->weight + 2) * 1;
 
         // just for debugging weight breeding, not actual color system
+        ImColor arrowColor;
         ImColor color;
         if (c->weight > 0.5) {
             color = ImColor(ImVec4(1, 0, 0, 1));
+            arrowColor = ImColor(ImVec4(0.8, 0.1, 0, 1));
         } else {
             color = ImColor(ImVec4(0, 1, 0, 1));
+            arrowColor = ImColor(ImVec4(0.1, 0.8, 0, 1));
         }
 
         ImVec2 p1 = innovationNumberToNeuronPositionMap[c->from];
@@ -180,6 +185,7 @@ void NetworkRenderer::renderConnections(std::unordered_map<int, ImVec2> &innovat
         drawList->AddLine(convertLocalToWindowPos(p1),
                           convertLocalToWindowPos(p2), color, thickness);
 
+        renderConnectionTriangle(p1, p2, arrowColor);
 
         int xTextOffset = -4;
         int yTextOffset = -8;
@@ -213,6 +219,29 @@ void NetworkRenderer::renderNeuronAtPosition(ImVec2 pos,
     drawList->AddCircleFilled(convertLocalToWindowPos(pos), nodeRadius, nodeColor, 0);
     drawList->AddText(NULL, 15.0f, convertLocalToWindowPos(textPos), textColor,
                       std::to_string(neuron->innovationNumber).c_str());
+}
+
+void NetworkRenderer::renderConnectionTriangle(ImVec2 conStart, ImVec2 conEnd, ImU32 color) {
+    float rotationAngle = 25.0f;
+    float topDownDistance = 10.0f;
+    float sidesDownDistance = 15.0f;
+
+    glm::vec2 vec(conEnd.x - conStart.x, conEnd.y - conStart.y);
+    glm::vec2 norm = glm::normalize(vec);
+    vec = vec - norm * topDownDistance;
+
+
+    ImVec2 p1 = ImVec2(conStart.x + vec.x, conStart.y + vec.y);
+
+    glm::vec2 top = glm::rotate(-glm::normalize(vec), glm::radians(rotationAngle)) * sidesDownDistance;
+    ImVec2 p2(p1.x + top.x, p1.y + top.y);
+
+    glm::vec2 bottom = glm::rotate(-glm::normalize(vec), glm::radians(-rotationAngle)) * sidesDownDistance;
+    ImVec2 p3(p1.x + bottom.x, p1.y + bottom.y);
+
+
+    drawList->AddTriangleFilled(convertLocalToWindowPos(p1), convertLocalToWindowPos(p2),
+                                convertLocalToWindowPos(p3), color);
 }
 
 ImVec2 NetworkRenderer::convertLocalToWindowPos(ImVec2 pos) {

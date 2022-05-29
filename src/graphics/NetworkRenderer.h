@@ -83,6 +83,7 @@ namespace NeatSquared {
                                     std::unordered_map<int, Connection *> &connectionsToRender) const;
 
 
+        void renderConnectionTriangle(ImVec2 conStart, ImVec2 conEnd, ImU32 color);
     };
 
 }

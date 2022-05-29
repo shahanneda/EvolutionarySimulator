@@ -32,10 +32,10 @@ void startGraphics() {
 //    Neuron h1(3);
 //    Neuron h2(100);
 //    Neuron h3(101);
-//
-//    Connection con1(4, in1, h1, 1.0f, true);
-//    Connection con2(5, in2, h1, 1.0f, true);
-//    Connection con3(6, h1, out1, 2.0f, true);
+////
+//    Connection con1(4, in1, in2, 1.0f, true);
+//    Connection con2(5, in1, out1, 1.0f, true);
+//    Connection con3(6, out1, in2, 2.0f, true);
 
 //    Connection c1(3, 0, 1, 1.0f, true);
 //    Connection c2(4, 2, 0, 1.0f, true);
@@ -67,14 +67,10 @@ void startGraphics() {
 
     while (true) {
         GraphicsManager::getInstance().networkRenderer.currentNetworkMutex.lock();
-//
         breed = breeder.crossover(n1, n1);
         GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
-//
         GraphicsManager::getInstance().networkRenderer.currentNetworkMutex.unlock();
-//
-//
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        std::this_thread::sleep_for(std::chrono::milliseconds(3000));
     }
 }
 
