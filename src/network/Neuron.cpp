@@ -24,6 +24,9 @@ void Neuron::calculateValue(NetworkInstance &network) {
 
     for (int conInnovationNumber: this->incomingConnections) {
         Connection *c = network.getConnectionWithInnovationNumber(conInnovationNumber);
+        if (!c->enabled) {
+            continue;
+        }
 
         if (c->to != this->innovationNumber) {
             throw std::runtime_error(
