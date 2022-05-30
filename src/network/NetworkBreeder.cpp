@@ -13,11 +13,11 @@ const float NetworkBreeder::SAME_GENE_BOTH_PARENT_MORE_FIT_PROB = 0.5f;
 
 // after the initial testing these two should be pretty low
 const float NetworkBreeder::NEW_NEURON_MUTATION_PROB = 0.05f;
-const float NetworkBreeder::NEW_CONNECTION_MUTATION_PROB = 0.1f;
+const float NetworkBreeder::NEW_CONNECTION_MUTATION_PROB = 0.05f;
 const float NetworkBreeder::TOGGLE_CONNECTION_MUTATION_PROB = 0.1f;
 const float NetworkBreeder::SCALE_WEIGHT_MUTATION_PROB = 0.1f;
 const float NetworkBreeder::SET_WEIGHT_MUTATION_PROB = 0.1f;
-const float NetworkBreeder::FLIP_CONNECTION_MUTATION_PROB = 0.5f;
+const float NetworkBreeder::FLIP_CONNECTION_MUTATION_PROB = 0.1f;
 
 const int NetworkBreeder::MAX_NEW_GENE_MUTATION_RETRY_ATTEMPTS = 5;
 

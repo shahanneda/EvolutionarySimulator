@@ -175,6 +175,19 @@ void NetworkRenderer::calculateNeuronPositions(int horizontalSpacing, int vertic
                 neuronsToRender.push_back(currentNetwork->getNeuronWithInnovationNumber(c->from));
             }
 
+            // add previous layers as well, because of connections flips some are missed
+            for (int innovationNumber: n->outgoingConnections) {
+                Connection *c = currentNetwork->getConnectionWithInnovationNumber(innovationNumber);
+
+                if (c == nullptr) {
+                    throw std::runtime_error(
+                            "NetworkRenderer: Innovation number of connection not found in innovationToConnection map!! #: " +
+                            std::to_string(innovationNumber));
+                }
+                neuronsToRender.push_back(currentNetwork->getNeuronWithInnovationNumber(c->to));
+            }
+
+
             addConnectionsToRender(n->incomingConnections, connectionsToRender);
             addConnectionsToRender(n->outgoingConnections, connectionsToRender);
         }
