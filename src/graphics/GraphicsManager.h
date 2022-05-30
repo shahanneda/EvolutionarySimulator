@@ -65,6 +65,8 @@ namespace NeatSquared {
         void pollSTL();
 
         static void EmscriptenMainLoop();
+
+        void renderOptions();
     };
 }
 #endif //GRAPHICSMANAGER_H

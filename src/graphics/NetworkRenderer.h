@@ -30,6 +30,8 @@ namespace NeatSquared {
         std::mutex currentNetworkMutex;
 
         ImVec2 displayOffset;
+        bool displayNeuronInnovationNumber;
+        bool displayConnectionInnovationNumber;
 
     private:
         static const ImColor nodeColor;

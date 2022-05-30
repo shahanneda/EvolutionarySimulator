@@ -16,13 +16,17 @@ using namespace NeatSquared;
 #include <mutex>
 #include <string>
 #include <unordered_set>
+#include <string>
+#include <sstream>
+#include <iomanip>
 
 #include "glm/gtx/rotate_vector.hpp"
 #include <glm/glm.hpp>
 
 using std::vector;
 
-NetworkRenderer::NetworkRenderer() : currentNetwork(nullptr), displayOffset(0, 0) {
+NetworkRenderer::NetworkRenderer() : currentNetwork(nullptr), displayOffset(0, 0),
+                                     displayNeuronInnovationNumber(false), displayConnectionInnovationNumber(true) {
 
 }
 
@@ -51,7 +55,7 @@ void NetworkRenderer::renderNetwork() {
     }
 
 
-    ImGui::Begin("New Window");
+    ImGui::Begin("Network Renderer");
     {
         windowPos = ImGui::GetWindowPos();
         drawList = ImGui::GetWindowDrawList();
@@ -205,13 +209,15 @@ void NetworkRenderer::renderConnections(std::unordered_map<int, ImVec2> &innovat
 
         renderConnectionTriangle(p1, p2, arrowColor);
 
-        int xTextOffset = -4;
-        int yTextOffset = -8;
-        ImVec2 textPos = ImVec2((p1.x + p2.x) / 2 + xTextOffset, (p1.y + p2.y) / 2 + yTextOffset);
-        const ImU32 textColor = ImColor(ImVec4(1, 1, 1, 1));
 
-        drawList->AddText(NULL, 15.0f, convertLocalToWindowPos(textPos), textColor,
-                          std::to_string(c->innovationNumber).c_str());
+        if (displayConnectionInnovationNumber) {
+            int xTextOffset = -4;
+            int yTextOffset = -8;
+            ImVec2 textPos = ImVec2((p1.x + p2.x) / 2 + xTextOffset, (p1.y + p2.y) / 2 + yTextOffset);
+            const ImU32 textColor = ImColor(ImVec4(1, 1, 1, 1));
+            drawList->AddText(NULL, 15.0f, convertLocalToWindowPos(textPos), textColor,
+                              std::to_string(c->innovationNumber).c_str());
+        }
     }
 
 }
@@ -230,13 +236,26 @@ void NetworkRenderer::renderNeurons(std::unordered_map<int, ImVec2> &innovationN
 void NetworkRenderer::renderNeuronAtPosition(ImVec2 pos,
                                              Neuron *neuron) {
     const int nodeRadius = 10;
-    ImVec2 textPos = ImVec2(pos.x - 3, pos.y - 8);
-
-    const ImU32 textColor = ImColor(ImVec4(0, 0, 0, 1));
 
     drawList->AddCircleFilled(convertLocalToWindowPos(pos), nodeRadius, nodeColor, 0);
-    drawList->AddText(NULL, 15.0f, convertLocalToWindowPos(textPos), textColor,
-                      std::to_string(neuron->innovationNumber).c_str());
+    if (displayNeuronInnovationNumber) {
+        ImVec2 textPos = ImVec2(pos.x - 3, pos.y - 8);
+
+        const ImU32 textColor = ImColor(ImVec4(0, 0, 0, 1));
+        drawList->AddText(NULL, 15.0f, convertLocalToWindowPos(textPos), textColor,
+                          std::to_string(neuron->innovationNumber).c_str());
+    } else {
+        ImVec2 textPos = ImVec2(pos.x - 8, pos.y + 8);
+        const ImU32 textColor = ImColor(ImVec4(1, 1, 1, 1));
+
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(2) << neuron->currentValue;
+        std::string text = ss.str();
+
+        drawList->AddText(NULL, 15.0f, convertLocalToWindowPos(textPos), textColor,
+                          text.c_str());
+    }
+
 }
 
 void NetworkRenderer::renderConnectionTriangle(ImVec2 conStart, ImVec2 conEnd, ImU32 color) {

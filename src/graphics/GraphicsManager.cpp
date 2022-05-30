@@ -94,10 +94,26 @@ void GraphicsManager::renderMainFrame(const ImGuiIO &io) {
         }
         ImGui::End();
 
+
+        renderOptions();
         networkRenderer.renderNetwork();
 
     }
     ImGui::Render();
+}
+
+void GraphicsManager::renderOptions() {
+    ImGui::Begin("Options");
+    {
+        ImGui::Checkbox("Display Neuron innovation numbers (instead of current values)",
+                        &networkRenderer.displayNeuronInnovationNumber);
+
+        ImGui::Checkbox("Display Connection innovation numbers",
+                        &networkRenderer.displayConnectionInnovationNumber);
+
+    }
+    ImGui::End();
+
 }
 
 
