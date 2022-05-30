@@ -36,6 +36,10 @@ namespace NeatSquared {
     private:
         static const ImColor nodeColor;
         static const ImColor connectionColor;
+        static const ImColor grayColor;
+        static const ImColor activeColor;
+        static const ImColor negativeActiveColor;
+
         ImDrawList *drawList;
         ImVec2 windowPos;
 
@@ -87,6 +91,11 @@ namespace NeatSquared {
 
 
         void renderConnectionTriangle(ImVec2 conStart, ImVec2 conEnd, ImU32 color);
+
+        /*
+         * Get color from neuron activation value.
+         */
+        ImU32 getColorFromValue(float value);
     };
 
 }

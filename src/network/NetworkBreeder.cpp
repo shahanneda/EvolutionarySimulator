@@ -161,14 +161,10 @@ void NetworkBreeder::addNewConnectionMutation(NetworkInstance &network) {
         connectionBetweenThese.weight = RandomGenerator::getRandomInRange(-2, 2);
 
         // maybe this connection is already in the network, in that case we should retry with two new nodes
-        printf("trying to add connection between %d and %d\n", from->innovationNumber, to->innovationNumber);
-
         if (network.innovationToConnectionMap.count(connectionBetweenThese.innovationNumber) > 0) {
             attempts++;
-            printf("\tfailed\n");
         } else {
             network.addConnection(connectionBetweenThese);
-            printf("\tadded\n");
             // stop trying to add connection
             break;
         }

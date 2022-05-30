@@ -28,8 +28,14 @@ namespace NeatSquared {
         float weight;
         bool enabled;
 
+        /*
+         * Just used for display purposes;
+         */
+        float lastCalculatedValue;
+
         static const float STARTING_WEIGHT;
         static const bool STARTING_ENABLED;
+
     };
 
     class ConnectionHasher {

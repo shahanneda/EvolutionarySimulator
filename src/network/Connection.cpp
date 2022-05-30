@@ -14,10 +14,11 @@ const bool Connection::STARTING_ENABLED = true;
 Connection::Connection(int innovationNumber, int from, int to, float weight, bool enabled) : Gene(innovationNumber),
                                                                                              from(from), to(to),
                                                                                              weight(weight),
-                                                                                             enabled(enabled) {}
+                                                                                             enabled(enabled),
+                                                                                             lastCalculatedValue(0) {}
 
 Connection::Connection(int innovationNumber, Neuron &from, Neuron &to, float weight, bool enabled) : Gene(
-        innovationNumber), weight(weight), enabled(enabled) {
+        innovationNumber), weight(weight), enabled(enabled), lastCalculatedValue(0) {
     this->from = from.innovationNumber;
     this->to = to.innovationNumber;
 

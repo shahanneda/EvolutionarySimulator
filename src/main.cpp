@@ -64,22 +64,25 @@ void startGraphics() {
     GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
 
 
+    int count = 0;
     while (true) {
         {
             std::lock_guard<std::mutex> lock(GraphicsManager::getInstance().networkRenderer.currentNetworkMutex);
 
-            breed = breeder.crossover(*breed, *breed);
+            if (count < 500) {
+                breed = breeder.crossover(*breed, *breed);
+            }
             GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
             breed->evaluateNetwork();
+            count++;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
+
 }
 
 int main() {
     std::thread t1(NEATThread);
-
-//    NEATThread();
     startGraphics();
 
     return 0;

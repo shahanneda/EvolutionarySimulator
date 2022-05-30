@@ -41,7 +41,9 @@ void Neuron::calculateValue(NetworkInstance &network) {
         network.alreadyVisitedNeuronInnovationNumbersWhenEvaluating.insert({this->innovationNumber});
         neuron->calculateValue(network);
 
-        val += neuron->currentValue * c->weight;
+        float increment = neuron->currentValue * c->weight;
+        val += increment;
+        c->lastCalculatedValue = increment;
     }
 
 

@@ -32,6 +32,9 @@ NetworkRenderer::NetworkRenderer() : currentNetwork(nullptr), displayOffset(0, 0
 
 const ImColor NetworkRenderer::nodeColor = ImColor(ImVec4(1, 1, 1, 1));
 const ImColor NetworkRenderer::connectionColor = ImColor(ImVec4(1, 1, 1, 1));
+const ImColor NetworkRenderer::grayColor = ImColor(ImVec4(0.86f, 0.86f, 0.86f, 1));
+const ImColor NetworkRenderer::activeColor = ImColor(ImVec4(0, 0.8f, 0, 1));
+const ImColor NetworkRenderer::negativeActiveColor = ImColor(ImVec4(0.8f, 0, 0, 1));
 
 void NetworkRenderer::renderNetwork() {
     if (!currentNetwork) {
@@ -205,9 +208,9 @@ void NetworkRenderer::renderConnections(std::unordered_map<int, ImVec2> &innovat
         ImVec2 p2 = innovationNumberToNeuronPositionMap[c->to];
 
         drawList->AddLine(convertLocalToWindowPos(p1),
-                          convertLocalToWindowPos(p2), color, thickness);
+                          convertLocalToWindowPos(p2), getColorFromValue(c->lastCalculatedValue), thickness);
 
-        renderConnectionTriangle(p1, p2, arrowColor);
+        renderConnectionTriangle(p1, p2, getColorFromValue(c->lastCalculatedValue));
 
 
         if (displayConnectionInnovationNumber) {
@@ -233,11 +236,23 @@ void NetworkRenderer::renderNeurons(std::unordered_map<int, ImVec2> &innovationN
     }
 }
 
+ImU32 NetworkRenderer::getColorFromValue(float value) {
+    if (value >= 0.5f) {
+        return activeColor;
+    } else if (value <= -0.5f) {
+        return negativeActiveColor;
+    } else {
+        return grayColor;
+    }
+}
+
 void NetworkRenderer::renderNeuronAtPosition(ImVec2 pos,
                                              Neuron *neuron) {
     const int nodeRadius = 10;
 
-    drawList->AddCircleFilled(convertLocalToWindowPos(pos), nodeRadius, nodeColor, 0);
+
+    drawList->AddCircleFilled(convertLocalToWindowPos(pos), nodeRadius, getColorFromValue(neuron->currentValue), 0);
+
     if (displayNeuronInnovationNumber) {
         ImVec2 textPos = ImVec2(pos.x - 3, pos.y - 8);
 
