@@ -1,11 +1,15 @@
 #include "Gene.h"
+
 #include <vector>
+
 
 #ifndef __NEURON__
 #define __NEURON__
 
 
-namespace NeatSquared{
+namespace NeatSquared {
+
+    class NetworkInstance;
 
     class Connection;
 
@@ -25,13 +29,14 @@ namespace NeatSquared{
         std::vector<int> incomingConnections;
 
 
-        void addConnection(Connection* connection);
-        void removeConnection(Connection* connection);
+        void addConnection(Connection *connection);
+
+        void removeConnection(Connection *connection);
 
         /*
-            Calculates the neurans current value from all of its incoming connections
+            Calculates the neurons currentValue from all of its incoming connections.
         */
-        void calculateValue();
+        void calculateValue(NetworkInstance &network);
 
         /*
             The current value of this neuron. Used when running the network;

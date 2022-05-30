@@ -65,9 +65,24 @@ namespace NeatSquared {
 
 
         /*
-         * Remove a connection from this network
+         * Remove a connection from this network; WARNING: need to call recalculate connections before rendering after calling this function!!
          */
         void removeConnection(const Connection &c);
+
+        /*
+         * Checks if an innovation number is off an input neuron
+         */
+        bool isInnovationNumberOfInputNeuron(int innovationNumber);
+
+        /*
+         * Checks if an innovation number is off an output neuron
+         */
+        bool isInnovationNumberOfOutputNeuron(int innovationNumber);
+
+        /*
+         * Evaluates a network (i.e. takes values from the input neurons and passes that through the network all the way to the output neurons)
+         */
+        void evaluateNetwork();
 
 
         std::unordered_map<int, Connection> innovationToConnectionMap;
@@ -87,9 +102,10 @@ namespace NeatSquared {
         static std::vector<int> DEFAULT_INPUTS;
         static std::vector<int> DEFAULT_OUTPUTS;
 
-        bool isInnovationNumberOfInputNeuron(int innovationNumber);
-
-        bool isInnovationNumberOfOutputNeuron(int innovationNumber);
+        /*
+         * Utility used when evaluating network by neurons to keep track of loops
+         */
+        std::unordered_map<int, Neuron &> alreadyVisitedNeuronsWhenEvaluating;
     };
 
 }

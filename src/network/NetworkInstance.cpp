@@ -132,3 +132,17 @@ bool NetworkInstance::isInnovationNumberOfInputNeuron(int innovationNumber) {
 bool NetworkInstance::isInnovationNumberOfOutputNeuron(int innovationNumber) {
     return std::find(outputs.begin(), outputs.end(), innovationNumber) != outputs.end();
 }
+
+
+void NetworkInstance::evaluateNetwork() {
+    alreadyVisitedNeuronsWhenEvaluating.clear();
+
+    for (int innovationNumber: outputs) {
+        Neuron *n = getNeuronWithInnovationNumber(innovationNumber);
+        if (!n) {
+            throw std::runtime_error("OUTPUT NEURON NOT IN NETWORK!!");
+        }
+
+        n->calculateValue(*this);
+    }
+}
