@@ -176,7 +176,7 @@ GraphicsManager::~GraphicsManager() {
 
 
 void GraphicsManager::handleInput() {
-    const float speed = 5.0f;
+    const float speed = 30.0f;
     if (ImGui::IsKeyPressed(ImGuiKey_RightArrow)) {
         networkRenderer.displayOffset = ImVec2(networkRenderer.displayOffset.x - speed,
                                                networkRenderer.displayOffset.y);

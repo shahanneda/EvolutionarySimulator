@@ -72,7 +72,7 @@ void startGraphics() {
             GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
             breed->evaluateNetwork();
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
 }
 
