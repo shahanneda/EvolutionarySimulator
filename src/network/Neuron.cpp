@@ -16,7 +16,7 @@ Neuron::Neuron(int innovationNumber) : Gene(innovationNumber), currentValue(0) {
  */
 void Neuron::calculateValue(NetworkInstance &network) {
     float val = 0;
-    if (network.alreadyVisitedNeuronsWhenEvaluating.count(this->innovationNumber) != 0 ||
+    if (network.alreadyVisitedNeuronInnovationNumbersWhenEvaluating.count(this->innovationNumber) != 0 ||
         network.isInnovationNumberOfInputNeuron(this->innovationNumber)) {
         return;
     }
@@ -37,12 +37,14 @@ void Neuron::calculateValue(NetworkInstance &network) {
                     "NEURON NOT FOUND IN NETWORK, INVALID CONNECTION WHEN EVALUATING NETWORK!! Have you called network.recalculateConnections()??");
         }
 
+        // store seen for dfs
+        network.alreadyVisitedNeuronInnovationNumbersWhenEvaluating.insert({this->innovationNumber});
         neuron->calculateValue(network);
+
         val += neuron->currentValue * c->weight;
     }
 
 
-    network.alreadyVisitedNeuronsWhenEvaluating.insert({this->innovationNumber, *this});
     currentValue = activationFunction(val);
 }
 

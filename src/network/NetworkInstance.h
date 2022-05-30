@@ -10,6 +10,7 @@
 #include "Connection.h"
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace NeatSquared {
     class NetworkInstance {
@@ -105,7 +106,7 @@ namespace NeatSquared {
         /*
          * Utility used when evaluating network by neurons to keep track of loops
          */
-        std::unordered_map<int, Neuron &> alreadyVisitedNeuronsWhenEvaluating;
+        std::unordered_set<int> alreadyVisitedNeuronInnovationNumbersWhenEvaluating;
     };
 
 }

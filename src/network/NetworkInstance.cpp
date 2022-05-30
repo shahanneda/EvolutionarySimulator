@@ -135,7 +135,7 @@ bool NetworkInstance::isInnovationNumberOfOutputNeuron(int innovationNumber) {
 
 
 void NetworkInstance::evaluateNetwork() {
-    alreadyVisitedNeuronsWhenEvaluating.clear();
+    alreadyVisitedNeuronInnovationNumbersWhenEvaluating.clear();
 
     for (int innovationNumber: outputs) {
         Neuron *n = getNeuronWithInnovationNumber(innovationNumber);

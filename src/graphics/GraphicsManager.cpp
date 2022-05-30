@@ -103,6 +103,7 @@ void GraphicsManager::renderMainFrame(const ImGuiIO &io) {
 }
 
 void GraphicsManager::renderOptions() {
+    std::lock_guard<std::mutex> lock(networkRenderer.currentNetworkMutex);
     ImGui::Begin("Options");
     {
         ImGui::Checkbox("Display Neuron innovation numbers (instead of current values)",
