@@ -111,6 +111,8 @@ void GraphicsManager::renderOptions() {
         ImGui::Checkbox("Display Connection innovation numbers",
                         &networkRenderer.displayConnectionInnovationNumber);
 
+        ImGui::InputFloat("Input 1", &networkRenderer.currentNetwork->getNeuronWithInnovationNumber(0)->currentValue);
+        ImGui::InputFloat("Input 2", &networkRenderer.currentNetwork->getNeuronWithInnovationNumber(1)->currentValue);
     }
     ImGui::End();
 

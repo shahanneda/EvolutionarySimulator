@@ -69,6 +69,7 @@ void startGraphics() {
         breed = breeder.crossover(*breed.get(), *breed.get());
         GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
         GraphicsManager::getInstance().networkRenderer.currentNetworkMutex.unlock();
+        breed->evaluateNetwork();
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 }
