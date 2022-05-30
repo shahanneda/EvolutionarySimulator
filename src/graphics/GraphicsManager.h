@@ -23,15 +23,18 @@ namespace NeatSquared {
  */
     class GraphicsManager {
     private:
+        GraphicsManager();
+
+        ~GraphicsManager();
+
+        void handleInput();
+
         char *glslVersion;
         SDL_Window *window;
         ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
         bool shouldCloseGui = false;
         SDL_GLContext glContext;
 
-        GraphicsManager();
-
-        ~GraphicsManager();
 
     public:
         void startMainLoop();
@@ -42,6 +45,7 @@ namespace NeatSquared {
         GraphicsManager(GraphicsManager const &) = delete;
 
         void operator=(GraphicsManager const &) = delete;
+
         NetworkRenderer networkRenderer;
 
     private:

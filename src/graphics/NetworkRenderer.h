@@ -23,8 +23,6 @@ namespace NeatSquared {
     public:
         NetworkRenderer();
 
-        void handleInput();
-
         void renderNetwork();
 
 

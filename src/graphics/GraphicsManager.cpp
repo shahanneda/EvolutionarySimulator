@@ -51,7 +51,7 @@ void GraphicsManager::decideGLSLVersion() {
 void GraphicsManager::mainGUILoop() {
     ImGuiIO &io = ImGui::GetIO();
     pollSTL();
-    networkRenderer.handleInput();
+    handleInput();
     renderMainFrame(io);
     finishOpenGLRender(io);
 }
@@ -153,6 +153,27 @@ GraphicsManager::~GraphicsManager() {
     SDL_GL_DeleteContext(glContext);
     SDL_DestroyWindow(window);
     SDL_Quit();
+}
+
+
+void GraphicsManager::handleInput() {
+    const float speed = 5.0f;
+    if (ImGui::IsKeyPressed(ImGuiKey_RightArrow)) {
+        networkRenderer.displayOffset = ImVec2(networkRenderer.displayOffset.x - speed,
+                                               networkRenderer.displayOffset.y);
+    }
+    if (ImGui::IsKeyPressed(ImGuiKey_LeftArrow)) {
+        networkRenderer.displayOffset = ImVec2(networkRenderer.displayOffset.x + speed,
+                                               networkRenderer.displayOffset.y);
+    }
+    if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)) {
+        networkRenderer.displayOffset = ImVec2(networkRenderer.displayOffset.x,
+                                               networkRenderer.displayOffset.y + speed);
+    }
+    if (ImGui::IsKeyPressed(ImGuiKey_DownArrow)) {
+        networkRenderer.displayOffset = ImVec2(networkRenderer.displayOffset.x,
+                                               networkRenderer.displayOffset.y - speed);
+    }
 }
 
 GraphicsManager &GraphicsManager::getInstance() {

@@ -83,21 +83,6 @@ void NetworkRenderer::renderNetwork() {
     ImGui::End();
 }
 
-void NetworkRenderer::handleInput() {
-    const float speed = 5.0f;
-    if (ImGui::IsKeyPressed(ImGuiKey_RightArrow)) {
-        displayOffset = ImVec2(displayOffset.x - speed, displayOffset.y);
-    }
-    if (ImGui::IsKeyPressed(ImGuiKey_LeftArrow)) {
-        displayOffset = ImVec2(displayOffset.x + speed, displayOffset.y);
-    }
-    if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)) {
-        displayOffset = ImVec2(displayOffset.x, displayOffset.y + speed);
-    }
-    if (ImGui::IsKeyPressed(ImGuiKey_DownArrow)) {
-        displayOffset = ImVec2(displayOffset.x, displayOffset.y - speed);
-    }
-}
 
 void NetworkRenderer::calculateInputPositions(int spacing, int inputStartX, int inputStartY,
                                               std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap,
