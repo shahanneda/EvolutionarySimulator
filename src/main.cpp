@@ -9,6 +9,7 @@
 #include "network/NetworkInstance.h"
 #include "utils/RandomGenerator.h"
 #include "network/NetworkBreeder.h"
+#include "game/XORGame.h"
 
 using namespace NeatSquared;
 
@@ -17,6 +18,7 @@ void startGraphics() {
 }
 
 [[noreturn]] void NEATThread() {
+
     printf("Trying to start thread\n");
 
 
@@ -36,10 +38,10 @@ void startGraphics() {
 //    Connection con2(5, in1, out1, 1.0f, true);
 //    Connection con3(6, out1, in2, 2.0f, true);
 
-//    Connection c1(3, 0, 1, 1.0f, true);
+    Connection c1(3, 0, 2, 1.0f, true);
 //    Connection c2(4, 2, 0, 1.0f, true);
 
-    NetworkInstance n1({in1, in2, out1}, {});
+    NetworkInstance n1({in1, in2, out1}, {c1});
 
 
 
@@ -65,23 +67,30 @@ void startGraphics() {
 
 
     int count = 0;
+    XORGame game;
+    game.EvaluateNetwork(*breed);
+    printf("done evaluation\n");
+    GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
     while (true) {
-        {
-            std::lock_guard<std::mutex> lock(GraphicsManager::getInstance().networkRenderer.currentNetworkMutex);
-
-            if (count < 500) {
-                breed = breeder.crossover(*breed, *breed);
-            }
-            GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
-            breed->evaluateNetwork();
-            count++;
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+//        {
+////            std::lock_guard<std::mutex> lock(GraphicsManager::getInstance().networkRenderer.currentNetworkMutex);
+//
+////            breed = breeder.crossover(*breed, *breed);
+////            GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
+//
+////            if (count < 500) {
+////                breed = breeder.crossover(*breed, *breed);
+////            }
+////            breed->evaluateNetwork();
+//            count++;
+//        }
+//        std::this_thread::sleep_for(std::chrono::milliseconds(3000));
     }
 
 }
 
 int main() {
+
     std::thread t1(NEATThread);
     startGraphics();
 
