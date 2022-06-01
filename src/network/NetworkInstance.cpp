@@ -2,6 +2,7 @@
 #include "network/NetworkInstance.h"
 #include <iostream>
 #include "utils/RandomGenerator.h"
+#include "evolution/BreedingManager.h"
 
 using namespace NeatSquared;
 
@@ -145,4 +146,33 @@ void NetworkInstance::evaluateNetwork() {
 
         n->calculateValue(*this);
     }
+}
+
+float NetworkInstance::getCompatibilityDistanceWith(NetworkInstance &network) {
+    int noneMatchingGeneCount = 0;
+    int totalGeneCount = std::max(this->innovationToConnectionMap.size() + this->innovationToNeuronMap.size(),
+                                  network.innovationToConnectionMap.size() + network.innovationToNeuronMap.size());
+    float weightDifferences = 0;
+
+    for (auto &it: this->innovationToConnectionMap) {
+        Connection &c = it.second;
+
+        auto connectionInOtherNetworkIt = network.innovationToConnectionMap.find(c.innovationNumber);
+        if (connectionInOtherNetworkIt == network.innovationToConnectionMap.end()) {
+            noneMatchingGeneCount++;
+        } else {
+            weightDifferences += c.weight - connectionInOtherNetworkIt->second.weight;
+        }
+    }
+
+    for (auto &it: this->innovationToNeuronMap) {
+        Neuron &n = it.second;
+        if (network.innovationToNeuronMap.count(n.innovationNumber) == 0) {
+            noneMatchingGeneCount++;
+        }
+    }
+
+    return ((BreedingManager::NETWORK_COMPATIBILITY_MATCHING_GENE_CONSTANT * (float) noneMatchingGeneCount /
+             (float) totalGeneCount) +
+            BreedingManager::NETWORK_COMPATIBILITY_WEIGHT_DIFFERENCE_CONSTANT);
 }

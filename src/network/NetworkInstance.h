@@ -85,6 +85,12 @@ namespace NeatSquared {
          */
         void evaluateNetwork();
 
+        /*
+         * Gets how closely matched this network is with another network.
+         * */
+        float getCompatibilityDistanceWith(NetworkInstance &network);
+
+
 
         std::unordered_map<int, Connection> innovationToConnectionMap;
         std::unordered_map<int, Neuron> innovationToNeuronMap;
