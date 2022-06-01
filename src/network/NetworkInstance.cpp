@@ -149,7 +149,7 @@ void NetworkInstance::evaluateNetwork() {
 }
 
 float NetworkInstance::getCompatibilityDistanceWith(NetworkInstance &network) {
-    int noneMatchingGeneCount = 0;
+    int matchingGeneCount = 0;
     int totalGeneCount = std::max(this->innovationToConnectionMap.size() + this->innovationToNeuronMap.size(),
                                   network.innovationToConnectionMap.size() + network.innovationToNeuronMap.size());
     float weightDifferences = 0;
@@ -158,21 +158,23 @@ float NetworkInstance::getCompatibilityDistanceWith(NetworkInstance &network) {
         Connection &c = it.second;
 
         auto connectionInOtherNetworkIt = network.innovationToConnectionMap.find(c.innovationNumber);
-        if (connectionInOtherNetworkIt == network.innovationToConnectionMap.end()) {
-            noneMatchingGeneCount++;
-        } else {
+        if (connectionInOtherNetworkIt != network.innovationToConnectionMap.end()) {
+            matchingGeneCount++;
             weightDifferences += c.weight - connectionInOtherNetworkIt->second.weight;
         }
     }
 
     for (auto &it: this->innovationToNeuronMap) {
         Neuron &n = it.second;
-        if (network.innovationToNeuronMap.count(n.innovationNumber) == 0) {
-            noneMatchingGeneCount++;
+        if (network.innovationToNeuronMap.count(n.innovationNumber) > 0) {
+            matchingGeneCount++;
         }
     }
 
+    int noneMatchingGeneCount = totalGeneCount - matchingGeneCount;
+    printf(" found %d non matching genes\n", noneMatchingGeneCount);
+
     return ((BreedingManager::NETWORK_COMPATIBILITY_MATCHING_GENE_CONSTANT * (float) noneMatchingGeneCount /
-             (float) totalGeneCount) +
-            BreedingManager::NETWORK_COMPATIBILITY_WEIGHT_DIFFERENCE_CONSTANT);
+             (float) totalGeneCount) + BreedingManager::NETWORK_COMPATIBILITY_WEIGHT_DIFFERENCE_CONSTANT *
+                                       weightDifferences);
 }
