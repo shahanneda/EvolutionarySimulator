@@ -41,7 +41,7 @@ void startGraphics() {
     Connection c1(3, 0, 2, 1.0f, true);
 //    Connection c2(4, 2, 0, 1.0f, true);
 
-    NetworkInstance n1({in1, in2, out1}, {c1});
+    NetworkInstance n1({in1, in2, out1}, {});
 
 
 
@@ -63,28 +63,41 @@ void startGraphics() {
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
     std::unique_ptr<NetworkInstance> breed = breeder.crossover(n1, n1);
-    GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
+//    GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
 
 
     int count = 0;
     XORGame game;
-    game.EvaluateNetwork(*breed);
-    printf("done evaluation\n");
-    GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
+//    printf("done evaluation\n");
+//    GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
+    int oldfitness = 0;
+
+    GraphicsManager::getInstance().networkRenderer.currentNetwork = nullptr;
     while (true) {
-//        {
-////            std::lock_guard<std::mutex> lock(GraphicsManager::getInstance().networkRenderer.currentNetworkMutex);
+        {
+            std::lock_guard<std::mutex> lock(GraphicsManager::getInstance().networkRenderer.currentNetworkMutex);
 //
-////            breed = breeder.crossover(*breed, *breed);
-////            GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
+            if (count > 1000) {
+                GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
+                breed->evaluateNetwork();
+                continue;
+            }
+
+            std::unique_ptr<NetworkInstance> newBreed = breeder.crossover(*breed, *breed);
+//            breed = breeder.crossover(*breed, *breed);
+//            GraphicsManager::getInstance().networkRenderer.currentNetwork = newBreed.get();
 //
 ////            if (count < 500) {
 ////                breed = breeder.crossover(*breed, *breed);
 ////            }
-////            breed->evaluateNetwork();
-//            count++;
-//        }
-//        std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+            int newfitness = game.EvaluateNetwork(*newBreed);
+            if (oldfitness <= newfitness) {
+                breed = std::move(newBreed);
+            }
+            count++;
+            printf("on gen %d\n", count);
+        }
+//        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 
 }

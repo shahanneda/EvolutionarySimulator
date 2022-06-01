@@ -40,14 +40,14 @@ float XORGame::EvaluateNetwork(NetworkInstance &network) {
         network.evaluateNetwork();
 
         float actualOutput = out->currentValue;
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+//        std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
 
         if (actualOutput <= 0) {
             continue;
         }
 
-        printf("network fitness is %.2f\n", fitness);
+//        printf("network fitness is %.2f\n", fitness);
         fitness += logisticFitness(actualOutput, expectedOutput);
     }
     printf("network fitness is %.2f\n", fitness);

@@ -95,7 +95,9 @@ void GraphicsManager::renderMainFrame(const ImGuiIO &io) {
         ImGui::End();
 
 
-        renderOptions();
+        if (networkRenderer.currentNetwork) {
+            renderOptions();
+        }
         networkRenderer.renderNetwork();
 
     }
