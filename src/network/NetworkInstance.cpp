@@ -16,10 +16,12 @@ NetworkInstance::NetworkInstance(const std::unordered_map<int, Connection> &inno
                                  const std::unordered_map<int, Neuron> &innovationToNeuronMap, std::vector<int> inputs,
                                  std::vector<int> outputs)
         : innovationToConnectionMap(
-        innovationToConnectionMap), innovationToNeuronMap(innovationToNeuronMap), inputs(inputs), outputs(outputs) {}
+        innovationToConnectionMap), innovationToNeuronMap(innovationToNeuronMap), inputs(inputs), outputs(outputs),
+          id(-1) {}
 
 NetworkInstance::NetworkInstance(const std::vector<Neuron> &neurons, const std::vector<Connection> &connections,
-                                 std::vector<int> inputs, std::vector<int> outputs) : inputs(inputs), outputs(outputs) {
+                                 std::vector<int> inputs, std::vector<int> outputs) : inputs(inputs), outputs(outputs),
+                                                                                      id(-1) {
     for (auto c: connections) {
         innovationToConnectionMap.insert(pair<int, Connection>(c.innovationNumber, c));
     }

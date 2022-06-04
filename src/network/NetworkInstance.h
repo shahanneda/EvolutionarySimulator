@@ -91,7 +91,6 @@ namespace NeatSquared {
         float getCompatibilityDistanceWith(NetworkInstance &network);
 
 
-
         std::unordered_map<int, Connection> innovationToConnectionMap;
         std::unordered_map<int, Neuron> innovationToNeuronMap;
 
@@ -113,6 +112,11 @@ namespace NeatSquared {
          * Utility used when evaluating network by neurons to keep track of loops
          */
         std::unordered_set<int> alreadyVisitedNeuronInnovationNumbersWhenEvaluating;
+
+        /*
+         * Identification number of this network in its generation, -1 if this network has not been assigned to a generation yet
+         */
+        int id;
     };
 
 }
