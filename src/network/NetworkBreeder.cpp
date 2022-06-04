@@ -3,6 +3,8 @@
 //
 
 #include "NetworkBreeder.h"
+
+#include <memory>
 #include "NetworkInstance.h"
 #include "utils/RandomGenerator.h"
 
@@ -23,7 +25,7 @@ const int NetworkBreeder::MAX_NEW_GENE_MUTATION_RETRY_ATTEMPTS = 5;
 
 using std::vector;
 
-NetworkBreeder::NetworkBreeder() {
+NetworkBreeder::NetworkBreeder(NewGeneCreator &geneCreator) : geneCreator(geneCreator) {
 
 }
 
@@ -72,7 +74,8 @@ NetworkBreeder::crossover(NetworkInstance &moreFitParent, NetworkInstance &lessF
         }
     }
 
-    auto network = std::unique_ptr<NetworkInstance>(new NetworkInstance(newN, newC));
+    // use the same inputs /outputs as one of the parents, since those will never change
+    auto network = std::make_unique<NetworkInstance>(newN, newC, moreFitParent.inputs, moreFitParent.outputs);
     mutateNetwork(*network);
     network->recalculateConnections();
 

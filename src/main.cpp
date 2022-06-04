@@ -34,7 +34,6 @@ void startGraphics() {
 //    Neuron h2(100);
 //    Neuron h3(101);
 ////
-//    Connection con1(4, in1, in2, 1.0f, true);
 //    Connection con2(5, in1, out1, 1.0f, true);
 //    Connection con3(6, out1, in2, 2.0f, true);
 
@@ -43,7 +42,14 @@ void startGraphics() {
 
     NetworkInstance n1({in1, in2, out1}, {});
 
+    Connection con1(4, in1, in2, 1.0f, true);
+    Connection con2(5, in1, out1, 1.0f, true);
+    NetworkInstance n2({in1, in2, out1}, {con1, con2});
 
+
+    printf("compatibility distance is %.2f \n ", n1.getCompatibilityDistanceWith(n2));
+    printf("compatibility distance is %.2f \n ", n1.getCompatibilityDistanceWith(n1));
+    printf("compatibility distance is %.2f \n ", n2.getCompatibilityDistanceWith(n2));
 
 //    con1.weight = 0.1f;
 //    con2.weight = 0.1f;
@@ -63,6 +69,7 @@ void startGraphics() {
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
     std::unique_ptr<NetworkInstance> breed = breeder.crossover(n1, n1);
+
 //    GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
 
 
@@ -75,27 +82,29 @@ void startGraphics() {
     GraphicsManager::getInstance().networkRenderer.currentNetwork = nullptr;
     while (true) {
         {
-            std::lock_guard<std::mutex> lock(GraphicsManager::getInstance().networkRenderer.currentNetworkMutex);
+//            std::lock_guard<std::mutex> lock(GraphicsManager::getInstance().networkRenderer.currentNetworkMutex);
 //
-            if (count > 1000) {
-                GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
-                breed->evaluateNetwork();
-                continue;
-            }
-
-            std::unique_ptr<NetworkInstance> newBreed = breeder.crossover(*breed, *breed);
-//            breed = breeder.crossover(*breed, *breed);
-//            GraphicsManager::getInstance().networkRenderer.currentNetwork = newBreed.get();
+//            if (count > 10) {
+//                GraphicsManager::getInstance().networkRenderer.currentNetwork = breed.get();
+//                breed->evaluateNetwork();
+//                printf("compatibility distance is %.2f \n ", n1.getCompatibilityDistanceWith(*breed));
+//                std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+//                continue;
+//            }
 //
-////            if (count < 500) {
-////                breed = breeder.crossover(*breed, *breed);
-////            }
-            int newfitness = game.EvaluateNetwork(*newBreed);
-            if (oldfitness <= newfitness) {
-                breed = std::move(newBreed);
-            }
-            count++;
-            printf("on gen %d\n", count);
+//            std::unique_ptr<NetworkInstance> newBreed = breeder.crossover(*breed, *breed);
+////            breed = breeder.crossover(*breed, *breed);
+////            GraphicsManager::getInstance().networkRenderer.currentNetwork = newBreed.get();
+////
+//////            if (count < 500) {
+//////                breed = breeder.crossover(*breed, *breed);
+//////            }
+//            int newfitness = game.EvaluateNetwork(*newBreed);
+//            if (oldfitness <= newfitness) {
+//                breed = std::move(newBreed);
+//            }
+//            count++;
+//            printf("on gen %d\n", count);
         }
 //        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }

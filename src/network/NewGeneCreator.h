@@ -11,8 +11,10 @@
 #define INNOVATIONNUMBERMANAGER_H
 
 
-
-namespace NeatSquared{
+namespace NeatSquared {
+    /*
+     *  NewGeneCreator is responsible for creating new neurons and connections, assigning the correct innovation number to the new neurons/connections depending on whether that gene had been seen before in history or not.
+     */
     class NewGeneCreator {
     public:
         NewGeneCreator();

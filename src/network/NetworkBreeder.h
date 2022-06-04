@@ -11,9 +11,12 @@
 #include "network/NewGeneCreator.h"
 
 namespace NeatSquared {
+    /*
+     * Network breeder is responsible for breeding two networks: preforming genetic crossover and mutations.
+     */
     class NetworkBreeder {
     public:
-        NetworkBreeder();
+        NetworkBreeder(NewGeneCreator &geneCreator);
 
         /*
          * Breeds two networks and produces a new child network.
@@ -22,6 +25,7 @@ namespace NeatSquared {
 
 
     private:
+        NewGeneCreator &geneCreator;
 
         /*
          * Mutates a network
@@ -40,8 +44,6 @@ namespace NeatSquared {
         void setWeightMutation(NetworkInstance &network);
 
         void flipConnectionMutation(NetworkInstance &network);
-
-        NewGeneCreator geneCreator;
 
 
         /*

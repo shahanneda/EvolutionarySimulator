@@ -25,3 +25,5 @@ void Generation::addNetwork(std::unique_ptr<NetworkInstance> network) {
     at(size() - 1)->id = size() - 1;
 }
 
+Generation::Generation(Generation &&other) : container(std::move(other)), id(other.id) {}
+

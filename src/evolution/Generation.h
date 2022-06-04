@@ -22,10 +22,13 @@ namespace NeatSquared {
     public:
         explicit Generation(int id);
 
+        Generation(Generation &&other);
+
 
         // Allow outside to access these iterators so they can easily loop through the networks;
         using container::begin;
         using container::end;
+
 
         NetworkInstance *getNetworkWithId(int id);
 
