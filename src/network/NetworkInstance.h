@@ -15,13 +15,16 @@
 namespace NeatSquared {
     class NetworkInstance {
     public:
-        NetworkInstance(const std::unordered_map<int, Connection> &innovationToConnectionMap,
-                        const std::unordered_map<int, Neuron> &innovationToNeuronMap, std::vector<int> inputs,
-                        std::vector<int> outputs);
 
+        /*
+         * Make a new Network from the given neurons and connections. inputs/outputs vector should contain the innovationNumber of the neurons which are inputs and outputs respectively
+         */
         NetworkInstance(const std::vector<Neuron> &neurons, const std::vector<Connection> &connections,
                         std::vector<int> inputs, std::vector<int> outputs);
 
+        /*
+         * Make a network using the NetworkInstance::DEFAULT_INPUTS and NetworkInstance::DEFAULT_OUTPUTS. Use only for quick testing when manually creating networks.
+         */
         NetworkInstance(const std::vector<Neuron> &neurons, const std::vector<Connection> &connections);
 
         ~NetworkInstance();
@@ -117,6 +120,11 @@ namespace NeatSquared {
          * Identification number of this network in its generation, -1 if this network has not been assigned to a generation yet
          */
         int id;
+
+    private:
+        NetworkInstance(const std::unordered_map<int, Connection> &innovationToConnectionMap,
+                        const std::unordered_map<int, Neuron> &innovationToNeuronMap, std::vector<int> inputs,
+                        std::vector<int> outputs);
     };
 
 }

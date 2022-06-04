@@ -28,7 +28,6 @@ NetworkInstance::NetworkInstance(const std::vector<Neuron> &neurons, const std::
     for (auto n: neurons) {
         innovationToNeuronMap.insert(pair<int, Neuron>(n.innovationNumber, n));
     }
-    // TODO: write function here which goes through all the connections, and calls the right thing on the neuron.
 }
 
 NetworkInstance::NetworkInstance(const std::vector<Neuron> &neurons, const std::vector<Connection> &connections)
