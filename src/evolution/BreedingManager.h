@@ -31,7 +31,6 @@ namespace NeatSquared {
         Game &game;
 
         std::vector<Generation> generations;
-        std::vector<Species> species;
 
         int currentGeneration = 0;
 

@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include "network/NetworkInstance.h"
+#include "evolution/Species.h"
 
 
 #ifndef GENERATION_H
@@ -22,7 +23,9 @@ namespace NeatSquared {
     public:
         explicit Generation(int id);
 
-        Generation(Generation &&other);
+
+        std::vector<Species> species;
+
 
 
         // Allow outside to access these iterators so they can easily loop through the networks;
@@ -32,9 +35,13 @@ namespace NeatSquared {
 
         NetworkInstance *getNetworkWithId(int id);
 
-        void addNetwork(std::unique_ptr<NetworkInstance> network);
+        void addNetwork(std::unique_ptr<NetworkInstance> &network);
 
-        int id;
+        const int id;
+
+    private:
+        void placeNetworkInSpecies(NetworkInstance &network);
+
 
     };
 

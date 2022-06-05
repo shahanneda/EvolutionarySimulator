@@ -10,7 +10,16 @@
 
 namespace NeatSquared {
     class Species {
+    public:
+        Species(int id);
+
+        NetworkInstance &getRepresentative();
+
+        void addNetwork(NetworkInstance &network);
+
         std::vector<std::reference_wrapper<NetworkInstance>> networks;
+        const int id;
+
     };
 }
 

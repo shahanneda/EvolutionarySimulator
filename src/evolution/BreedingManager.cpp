@@ -25,7 +25,6 @@ void BreedingManager::createStartingGeneration() {
 
     Generation &gen = generations[0];
 
-
     std::vector<Neuron> neurons;
     std::vector<int> inputNumbers;
     std::vector<int> outputNumbers;
@@ -43,7 +42,10 @@ void BreedingManager::createStartingGeneration() {
 
     for (int i = 0; i < MAX_NETWORKS_IN_GENERATION; i++) {
         std::unique_ptr<NetworkInstance> network(new NetworkInstance(neurons, {}, inputNumbers, outputNumbers));
+        gen.addNetwork(network);
     }
 }
+
+
 
 

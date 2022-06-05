@@ -20,10 +20,24 @@ NetworkInstance *Generation::getNetworkWithId(int id) {
     return at(id).get();
 }
 
-void Generation::addNetwork(std::unique_ptr<NetworkInstance> network) {
+void Generation::addNetwork(std::unique_ptr<NetworkInstance> &network) {
     push_back(std::move(network));
-    at(size() - 1)->id = size() - 1;
+    NetworkInstance &storedNetwork = *at(size() - 1);
+    storedNetwork.id = size() - 1;
+
+    placeNetworkInSpecies(storedNetwork);
 }
 
-Generation::Generation(Generation &&other) : container(std::move(other)), id(other.id) {}
+void Generation::placeNetworkInSpecies(NetworkInstance &network) {
+    for (unsigned long i = 0; i < species.size(); i++) {
+        if (species[i].getRepresentative().isCompatibleWith(network)) {
+            species[i].addNetwork(network);
+            return;
+        }
+    }
+
+    // network was not compatible with any of the existing species, thus make a new species
+    species.emplace_back(species.size());
+    species[species.size() - 1].addNetwork(network);
+}
 

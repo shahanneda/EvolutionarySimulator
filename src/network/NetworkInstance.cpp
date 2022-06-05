@@ -179,3 +179,7 @@ float NetworkInstance::getCompatibilityDistanceWith(NetworkInstance &network) {
              (float) totalGeneCount) + BreedingManager::NETWORK_COMPATIBILITY_WEIGHT_DIFFERENCE_CONSTANT *
                                        weightDifferences);
 }
+
+bool NetworkInstance::isCompatibleWith(NetworkInstance &network) {
+    return getCompatibilityDistanceWith(network) <= BreedingManager::SAME_SPECIES_NETWORK_COMPATIBILITY_CUTOFF;
+}

@@ -93,6 +93,11 @@ namespace NeatSquared {
          * */
         float getCompatibilityDistanceWith(NetworkInstance &network);
 
+        /*
+         * Evaluates if the networks compatibility distance is close enough to allow the two networks to be in the same species.
+         */
+        bool isCompatibleWith(NetworkInstance &network);
+
 
         std::unordered_map<int, Connection> innovationToConnectionMap;
         std::unordered_map<int, Neuron> innovationToNeuronMap;
@@ -120,6 +125,11 @@ namespace NeatSquared {
          * Identification number of this network in its generation, -1 if this network has not been assigned to a generation yet
          */
         int id;
+
+        /*
+         * The fitness that this network showed the last time it was evaluated.
+         */
+        float lastEvaluationFitness;
 
     private:
         NetworkInstance(const std::unordered_map<int, Connection> &innovationToConnectionMap,
