@@ -1,3 +1,3 @@
-glm/** linguist-detectable=false
-imgui/** linguist-detectable=false
+glm/** -linguist-detectable
+imgui/** -linguist-detectable
 
