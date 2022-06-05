@@ -31,7 +31,7 @@ namespace NeatSquared {
          * Uses network to evaluate a game
          */
         virtual
-        float EvaluateNetwork(NetworkInstance &network) = 0;
+        float evaluateNetwork(NetworkInstance &network) = 0;
 
     };
 }

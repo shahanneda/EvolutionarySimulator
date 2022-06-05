@@ -20,6 +20,7 @@ namespace NeatSquared {
         std::vector<std::reference_wrapper<NetworkInstance>> networks;
         const int id;
 
+        float averageFitness;
     };
 }
 

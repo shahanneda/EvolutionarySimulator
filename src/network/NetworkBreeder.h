@@ -19,13 +19,18 @@ namespace NeatSquared {
         NetworkBreeder(NewGeneCreator &geneCreator);
 
         /*
-         * Breeds two networks and produces a new child network.
+         * Breed two networks, creating a new child network
          */
-        std::unique_ptr<NetworkInstance> crossover(NetworkInstance &moreFitParent, NetworkInstance &lessFitParent);
+        std::unique_ptr<NetworkInstance> breed(NetworkInstance &moreFitParent, NetworkInstance &lessFitParent);
 
 
     private:
         NewGeneCreator &geneCreator;
+
+        /*
+         * Crossover two networks, creating a new child network
+         */
+        std::unique_ptr<NetworkInstance> crossover(NetworkInstance &moreFitParent, NetworkInstance &lessFitParent);
 
         /*
          * Mutates a network

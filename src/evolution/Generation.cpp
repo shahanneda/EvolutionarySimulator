@@ -4,6 +4,7 @@
 
 #include <string>
 
+#include "utils/RandomGenerator.h"
 #include "Generation.h"
 
 using namespace NeatSquared;
@@ -20,7 +21,7 @@ NetworkInstance *Generation::getNetworkWithId(int id) {
     return at(id).get();
 }
 
-void Generation::addNetwork(std::unique_ptr<NetworkInstance> &network) {
+void Generation::addNetwork(std::unique_ptr<NetworkInstance> network) {
     push_back(std::move(network));
     NetworkInstance &storedNetwork = *at(size() - 1);
     storedNetwork.id = size() - 1;
@@ -41,3 +42,14 @@ void Generation::placeNetworkInSpecies(NetworkInstance &network) {
     species[species.size() - 1].addNetwork(network);
 }
 
+float Generation::getSumOfAverageSpeciesFitness() {
+    float sum = 0;
+    for (Species &s: species) {
+        sum += s.averageFitness;
+    }
+    return sum;
+}
+
+NetworkInstance &Generation::getRandomNetwork() {
+    return *at(RandomGenerator::getRandomInRange(0, size()));
+}

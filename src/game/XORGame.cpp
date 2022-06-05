@@ -16,7 +16,7 @@ XORGame::XORGame() {
 }
 
 
-float XORGame::EvaluateNetwork(NetworkInstance &network) {
+float XORGame::evaluateNetwork(NetworkInstance &network) {
     Neuron *const input1 = network.getNeuronWithInnovationNumber(network.inputs[0]);
     Neuron *const input2 = network.getNeuronWithInnovationNumber(network.inputs[1]);
     Neuron *const out = network.getNeuronWithInnovationNumber(network.outputs[0]);
@@ -40,18 +40,13 @@ float XORGame::EvaluateNetwork(NetworkInstance &network) {
         network.evaluateNetwork();
 
         float actualOutput = out->currentValue;
-//        std::this_thread::sleep_for(std::chrono::milliseconds(50));
-
 
         if (actualOutput <= 0) {
             continue;
         }
 
-//        printf("network fitness is %.2f\n", fitness);
         fitness += logisticFitness(actualOutput, expectedOutput);
     }
-    printf("network fitness is %.2f\n", fitness);
-
 }
 
 

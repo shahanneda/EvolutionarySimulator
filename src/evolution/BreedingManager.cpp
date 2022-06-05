@@ -41,8 +41,83 @@ void BreedingManager::createStartingGeneration() {
     }
 
     for (int i = 0; i < MAX_NETWORKS_IN_GENERATION; i++) {
-        std::unique_ptr<NetworkInstance> network(new NetworkInstance(neurons, {}, inputNumbers, outputNumbers));
-        gen.addNetwork(network);
+        gen.addNetwork(
+                std::make_unique<NetworkInstance>(neurons, std::vector<Connection>(), inputNumbers, outputNumbers));
+    }
+}
+
+
+void BreedingManager::evaluateFitnessOfSpecies(Species &species) {
+    float averageFitness = 0;
+
+    for (NetworkInstance &network: species.networks) {
+        network.lastEvaluationFitness = game.evaluateNetwork(network);
+        averageFitness += network.lastEvaluationFitness;
+    }
+    species.averageFitness = averageFitness;
+
+    std::sort(species.networks.begin(), species.networks.end(),
+              [](const NetworkInstance &n1, const NetworkInstance &n2) {
+                  return n1.lastEvaluationFitness > n2.lastEvaluationFitness;
+              });
+}
+
+void BreedingManager::evaluateFitnessOfGeneration(Generation &generation) {
+    for (Species &s: generation.species) {
+        evaluateFitnessOfSpecies(s);
+    }
+}
+
+int BreedingManager::getCurrentGenerationNumber() {
+    return generations.size() - 1;
+}
+
+Generation &BreedingManager::getCurrentGeneration() {
+    return generations[getCurrentGenerationNumber()];
+}
+
+
+void BreedingManager::breedNextGeneration() {
+    Generation &oldGeneration = getCurrentGeneration();
+    generations.push_back(Generation(getCurrentGenerationNumber() + 1));
+
+    Generation &newGeneration = getCurrentGeneration();
+
+
+    float sumOfAverageSpeciesFitnessInGeneration = oldGeneration.getSumOfAverageSpeciesFitness();
+
+    for (Species &s: oldGeneration.species) {
+        int numberOfSurvivingNetworksInSpecies = (int)
+                ((s.averageFitness / sumOfAverageSpeciesFitnessInGeneration) *
+                 MAX_NETWORKS_IN_GENERATION);
+
+
+        if (s.networks.empty()) {
+            continue;
+        }
+
+        if (s.networks.size() == 1) {
+            NetworkInstance &network = s.networks[0];
+            NetworkInstance &randomNet = oldGeneration.getRandomNetwork();
+
+            newGeneration.addNetwork(networkBreeder.breed(network, randomNet));
+        }
+
+        int currentlyBreedingMember = 0;
+        for (int i = 0; i < numberOfSurvivingNetworksInSpecies; i++) {
+            // if we reach the end of the species, go back and make more children from the start, the randomness in the process will mean children from the same parent won't be identical
+            if (currentlyBreedingMember + 1 >= s.networks.size()) {
+                currentlyBreedingMember = 0;
+            }
+
+            NetworkInstance &net1 = s.networks[currentlyBreedingMember];
+            NetworkInstance &net2 = s.networks[currentlyBreedingMember + 1];
+
+            newGeneration.addNetwork(networkBreeder.breed(net1, net2));
+
+            currentlyBreedingMember++;
+        }
+
     }
 }
 

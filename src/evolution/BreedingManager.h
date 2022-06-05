@@ -32,13 +32,25 @@ namespace NeatSquared {
 
         std::vector<Generation> generations;
 
-        int currentGeneration = 0;
+        int getCurrentGenerationNumber();
+
 
     private:
         void createStartingGeneration();
 
         NewGeneCreator geneCreator;
         NetworkBreeder networkBreeder;
+
+        void evaluateFitnessOfSpecies(Species &species);
+
+        void evaluateFitnessOfGeneration(Generation &generation);
+
+        /*
+         * Creats the next generation by breeding from this generation. Assumes that evaluteFitnessOfGeneration has already been called for the current genreation.
+         */
+        void breedNextGeneration();
+
+        Generation &getCurrentGeneration();
 
     };
 

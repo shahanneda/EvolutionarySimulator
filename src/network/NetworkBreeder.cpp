@@ -29,11 +29,18 @@ NetworkBreeder::NetworkBreeder(NewGeneCreator &geneCreator) : geneCreator(geneCr
 
 }
 
+std::unique_ptr<NetworkInstance> NetworkBreeder::breed(NetworkInstance &moreFitParent, NetworkInstance &lessFitParent) {
+    auto network = crossover(moreFitParent, lessFitParent);
+    mutateNetwork(*network);
+    network->recalculateConnections();
+    return network;
+}
+
 
 std::unique_ptr<NetworkInstance>
 NetworkBreeder::crossover(NetworkInstance &moreFitParent, NetworkInstance &lessFitParent) {
     /*
-     * for gene in moreFitParent, if it is also in the lessFitParent, do 50/50 chance
+     * for gene in moreFitParent, if it is also in the lessFitParent, pick one with 50/50 chance
      * if it is not in lessFitParent, just add it to the current geonome
      */
 
@@ -76,9 +83,6 @@ NetworkBreeder::crossover(NetworkInstance &moreFitParent, NetworkInstance &lessF
 
     // use the same inputs /outputs as one of the parents, since those will never change
     auto network = std::make_unique<NetworkInstance>(newN, newC, moreFitParent.inputs, moreFitParent.outputs);
-    mutateNetwork(*network);
-    network->recalculateConnections();
-
     return network;
 }
 
@@ -160,7 +164,8 @@ void NetworkBreeder::addNewConnectionMutation(NetworkInstance &network) {
         }
 
 
-        Connection connectionBetweenThese = geneCreator.getNewConnection(from->innovationNumber, to->innovationNumber);
+        Connection connectionBetweenThese = geneCreator.getNewConnection(from->innovationNumber,
+                                                                         to->innovationNumber);
         connectionBetweenThese.weight = RandomGenerator::getRandomInRange(-2, 2);
 
         // maybe this connection is already in the network, in that case we should retry with two new nodes
@@ -201,7 +206,8 @@ void NetworkBreeder::setWeightMutation(NetworkInstance &network) {
 void NetworkBreeder::flipConnectionMutation(NetworkInstance &network) {
     Connection *c = network.getRandomConnection();
     // we do not want to create invalid connections going into an input, or from and output, so do not flip in those cases
-    if (c && !network.isInnovationNumberOfInputNeuron(c->from) && !network.isInnovationNumberOfOutputNeuron(c->to)) {
+    if (c && !network.isInnovationNumberOfInputNeuron(c->from) &&
+        !network.isInnovationNumberOfOutputNeuron(c->to)) {
         int old = c->from;
         c->from = c->to;
         c->to = old;

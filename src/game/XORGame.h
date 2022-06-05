@@ -13,7 +13,7 @@ namespace NeatSquared {
     public:
         XORGame();
 
-        float EvaluateNetwork(NetworkInstance &network) override;
+        float evaluateNetwork(NetworkInstance &network) override;
 
         /*
          * Returns a high number if actual is close to expected, returns a low number if actual is far from expected. Inspired by logistic regression loss function.
