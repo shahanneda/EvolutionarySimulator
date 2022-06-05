@@ -41,7 +41,6 @@ void NetworkPickerWindow::renderWindow() {
     Generation &selectedGeneration = (*generations)[selectedGenerationId];
 
 
-    ImGui::ShowDemoWindow();
     ImGui::Begin("Network Picker");
     {
         ImGui::BeginGroup();

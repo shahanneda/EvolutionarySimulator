@@ -27,7 +27,7 @@ Connection NeatSquared::NewGeneCreator::getNewConnection(int from, int to) {
 
 
 NewGeneCreator::NewGeneCreator()
-        : nextFreeInnovationNumber(3) {}
+        : nextFreeInnovationNumber(0) {}
 
 Neuron NewGeneCreator::getNewNeuron() {
     return Neuron(nextFreeInnovationNumber++);

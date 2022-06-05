@@ -5,6 +5,7 @@
 
 #include "GraphicsManager.h"
 
+#include <string>
 #include <SDL_opengl.h>
 #include <stdexcept>
 
@@ -95,9 +96,7 @@ void GraphicsManager::renderMainFrame(const ImGuiIO &io) {
         ImGui::End();
 
 
-        if (networkRenderer.currentNetwork) {
-            renderOptions();
-        }
+        renderOptions();
         networkRenderer.renderNetwork();
         networkPicker.renderWindow();
 
@@ -107,7 +106,6 @@ void GraphicsManager::renderMainFrame(const ImGuiIO &io) {
 }
 
 void GraphicsManager::renderOptions() {
-    std::lock_guard<std::mutex> lock(networkRenderer.currentNetworkMutex);
     ImGui::Begin("Options");
     {
         ImGui::Checkbox("Display Neuron innovation numbers (instead of current values)",
@@ -116,8 +114,14 @@ void GraphicsManager::renderOptions() {
         ImGui::Checkbox("Display Connection innovation numbers",
                         &networkRenderer.displayConnectionInnovationNumber);
 
-//        ImGui::InputFloat("Input 1", &networkRenderer.currentNetwork->getNeuronWithInnovationNumber(0)->currentValue);
-//        ImGui::InputFloat("Input 2", &networkRenderer.currentNetwork->getNeuronWithInnovationNumber(1)->currentValue);
+        if (networkRenderer.currentNetwork) {
+            std::lock_guard<std::mutex> lock(networkRenderer.currentNetworkMutex);
+            for (int inputInnovationNumber: networkRenderer.currentNetwork->inputs) {
+                ImGui::InputFloat(("Neuron " + std::to_string(inputInnovationNumber)).c_str(),
+                                  &networkRenderer.currentNetwork->getNeuronWithInnovationNumber(
+                                          inputInnovationNumber)->currentValue);
+            }
+        }
     }
     ImGui::End();
 
