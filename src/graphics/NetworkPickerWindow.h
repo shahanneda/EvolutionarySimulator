@@ -10,9 +10,18 @@
 namespace NeatSquared {
     class NetworkPickerWindow {
     public:
+        NetworkPickerWindow();
+
         void renderWindow();
 
         std::vector<Generation> *generations;
+        int selectedGenerationId;
+        Species *selectedSpecies;
+        NetworkInstance *selectedNetwork;
+
+        bool beginListBox(const char *id);
+
+        void changeRenderingNetwork(NetworkInstance &network);
     };
 }
 

@@ -30,7 +30,7 @@ namespace NeatSquared {
         /*
          * Returns the sum of the fitness of all the species, using each species average fitness.
          */
-        float getSumOfAverageSpeciesFitness();
+        float getSumOfAverageSpeciesFitness() const;
 
 
         NetworkInstance &getRandomNetwork();

@@ -42,9 +42,9 @@ void Generation::placeNetworkInSpecies(NetworkInstance &network) {
     species[species.size() - 1].addNetwork(network);
 }
 
-float Generation::getSumOfAverageSpeciesFitness() {
+float Generation::getSumOfAverageSpeciesFitness() const {
     float sum = 0;
-    for (Species &s: species) {
+    for (const Species &s: species) {
         sum += s.averageFitness;
     }
     return sum;

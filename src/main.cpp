@@ -22,6 +22,8 @@ void startGraphics() {
     XORGame xorGame;
     BreedingManager manager(xorGame);
 
+    GraphicsManager::getInstance().networkPicker.generations = &manager.generations;
+
     manager.evaluateFitnessOfGeneration(manager.generations[0]);
     manager.breedNextGeneration();
 
