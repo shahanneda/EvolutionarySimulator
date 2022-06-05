@@ -15,6 +15,8 @@ static const int WINDOW_HEIGHT = 720;
 #include "graphics/NetworkRenderer.h"
 #include "graphics/NetworkPickerWindow.h"
 
+#include "evolution/BreedingManager.h"
+
 namespace NeatSquared {
 
 /*
@@ -46,6 +48,8 @@ namespace NeatSquared {
         GraphicsManager(GraphicsManager const &) = delete;
 
         void operator=(GraphicsManager const &) = delete;
+
+        BreedingManager *breedingManager;
 
         NetworkRenderer networkRenderer;
         NetworkPickerWindow networkPicker;

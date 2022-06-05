@@ -22,7 +22,8 @@ void startGraphics() {
     XORGame xorGame;
     BreedingManager manager(xorGame);
 
-    GraphicsManager::getInstance().networkPicker.generations = &manager.generations;
+    GraphicsManager::getInstance().breedingManager = &manager;
+
 
     manager.evaluateFitnessOfGeneration(manager.generations[0]);
     manager.breedNextGeneration();
@@ -33,9 +34,9 @@ void startGraphics() {
 }
 
 int main() {
-
     std::thread t1(NEATThread);
     startGraphics();
+
 
     return 0;
 }

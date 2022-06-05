@@ -14,7 +14,6 @@ namespace NeatSquared {
 
         void renderWindow();
 
-        std::vector<Generation> *generations;
         int selectedGenerationId;
         Species *selectedSpecies;
         NetworkInstance *selectedNetwork;

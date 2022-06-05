@@ -17,7 +17,7 @@
 
 using namespace NeatSquared;
 
-GraphicsManager::GraphicsManager() : networkRenderer() {
+GraphicsManager::GraphicsManager() : breedingManager(nullptr) {
     decideGLSLVersion();
     initSDL();
     initImGui();
@@ -107,6 +107,14 @@ void GraphicsManager::renderMainFrame(const ImGuiIO &io) {
 void GraphicsManager::renderOptions() {
     ImGui::Begin("Options");
     {
+        if (ImGui::Button("Evaluate Current Generation Fitness", ImVec2(0, 0))) {
+            breedingManager->evaluateFitnessOfGeneration(breedingManager->getCurrentGeneration());
+        }
+
+        if (ImGui::Button("Breed Next Generation", ImVec2(0, 0))) {
+            breedingManager->breedNextGeneration();
+        }
+
         ImGui::Checkbox("Display Neuron innovation numbers (instead of current values)",
                         &networkRenderer.displayNeuronInnovationNumber);
 
@@ -121,6 +129,7 @@ void GraphicsManager::renderOptions() {
                                           inputInnovationNumber)->currentValue);
             }
         }
+
     }
     ImGui::End();
 
