@@ -12,7 +12,8 @@ static const int WINDOW_HEIGHT = 720;
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
-#include "NetworkRenderer.h"
+#include "graphics/NetworkRenderer.h"
+#include "graphics/NetworkPickerWindow.h"
 
 namespace NeatSquared {
 
@@ -47,6 +48,7 @@ namespace NeatSquared {
         void operator=(GraphicsManager const &) = delete;
 
         NetworkRenderer networkRenderer;
+        NetworkPickerWindow networkPicker;
 
     private:
         void decideGLSLVersion();

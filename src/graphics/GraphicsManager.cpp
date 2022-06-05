@@ -99,6 +99,8 @@ void GraphicsManager::renderMainFrame(const ImGuiIO &io) {
             renderOptions();
         }
         networkRenderer.renderNetwork();
+        networkPicker.renderWindow();
+
 
     }
     ImGui::Render();

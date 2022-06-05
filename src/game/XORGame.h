@@ -9,7 +9,7 @@
 
 
 namespace NeatSquared {
-    class XORGame : Game {
+    class XORGame : public Game {
     public:
         XORGame();
 
