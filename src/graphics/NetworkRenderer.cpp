@@ -46,6 +46,7 @@ void NetworkRenderer::renderNetwork() {
         return;
     }
 
+    currentNetwork->evaluateNetwork();
     std::lock_guard<std::mutex> lock(currentNetworkMutex);
 
     std::deque<Neuron *> neuronsToRender;

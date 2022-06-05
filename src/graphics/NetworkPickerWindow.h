@@ -14,8 +14,10 @@ namespace NeatSquared {
 
         void renderWindow();
 
+        // have to use int for selected generation, since the generations are stored in a vector and references to vectors can change as the vector grows/shrinks
+
         int selectedGenerationId;
-        Species *selectedSpecies;
+        const Species *selectedSpecies;
         NetworkInstance *selectedNetwork;
 
         bool beginListBox(const char *id);

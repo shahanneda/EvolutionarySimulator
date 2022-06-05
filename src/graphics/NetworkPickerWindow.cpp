@@ -23,7 +23,7 @@ NetworkPickerWindow::NetworkPickerWindow() : selectedGenerationId(0), selectedSp
 
 bool NetworkPickerWindow::beginListBox(const char *id) {
     return ImGui::BeginListBox(id, ImVec2(ImGui::GetWindowContentRegionWidth() * 0.33f,
-                                          ImGui::GetWindowHeight()));
+                                          ImGui::GetWindowHeight() * 0.90f));
 }
 
 std::string getLabelString(std::string label, int id, float fitness) {
@@ -53,8 +53,18 @@ void NetworkPickerWindow::renderWindow() {
                 const bool is_selected = (g.id == selectedGenerationId);
 
                 if (ImGui::Selectable(getLabelString("Generation", g.id, g.getSumOfAverageSpeciesFitness()).c_str(),
-                                      is_selected))
+                                      is_selected)) {
                     selectedGenerationId = g.id;
+
+                    // set default selected network if possible
+                    if (!g.species.empty()) {
+                        selectedSpecies = &g.species[0];
+                        if (!selectedSpecies->networks.empty()) {
+                            selectedNetwork = &selectedSpecies->networks[0].get();
+                            changeRenderingNetwork(*selectedNetwork);
+                        }
+                    }
+                }
 
                 if (is_selected)
                     ImGui::SetItemDefaultFocus();
@@ -71,8 +81,14 @@ void NetworkPickerWindow::renderWindow() {
             for (Species &s: selectedGeneration.species) {
                 const bool is_selected = selectedSpecies && (s.id == selectedSpecies->id);
 
-                if (ImGui::Selectable(getLabelString("Species", s.id, s.averageFitness).c_str(), is_selected))
+                if (ImGui::Selectable(getLabelString("Species", s.id, s.averageFitness).c_str(), is_selected)) {
                     selectedSpecies = &s;
+                    // set default selected network if possible
+                    if (!s.networks.empty()) {
+                        selectedNetwork = &selectedSpecies->networks[0].get();
+                        changeRenderingNetwork(*selectedNetwork);
+                    }
+                }
 
                 if (is_selected)
                     ImGui::SetItemDefaultFocus();

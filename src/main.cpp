@@ -31,10 +31,10 @@ void startGraphics() {
     }
 
     while (true) {
-        if (GraphicsManager::getInstance().networkRenderer.currentNetwork) {
-            GraphicsManager::getInstance().networkRenderer.currentNetwork->evaluateNetwork();
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+//        if (GraphicsManager::getInstance().networkRenderer.currentNetwork) {
+//            GraphicsManager::getInstance().networkRenderer.currentNetwork->evaluateNetwork();
+//        }
+//        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 

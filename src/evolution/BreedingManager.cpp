@@ -66,6 +66,10 @@ void BreedingManager::evaluateFitnessOfGeneration(Generation &generation) {
     for (Species &s: generation.species) {
         evaluateFitnessOfSpecies(s);
     }
+    std::sort(generation.species.begin(), generation.species.end(),
+              [](const Species &s1, const Species &s2) {
+                  return s1.averageFitness > s2.averageFitness;
+              });
 }
 
 int BreedingManager::getCurrentGenerationNumber() {

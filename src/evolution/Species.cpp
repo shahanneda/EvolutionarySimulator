@@ -10,6 +10,7 @@ Species::Species(int id) : id(id) {
 
 }
 
+
 NetworkInstance &Species::getRepresentative() {
     if (networks.empty()) {
         throw std::runtime_error("Trying to get the representative of a species which has no networks!! ");
