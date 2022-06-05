@@ -30,7 +30,7 @@ namespace NeatSquared {
 
         void handleInput();
 
-        char *glslVersion;
+        const char *glslVersion;
         SDL_Window *window;
         ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
         bool shouldCloseGui = false;

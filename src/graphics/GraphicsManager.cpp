@@ -83,7 +83,6 @@ void GraphicsManager::renderMainFrame(const ImGuiIO &io) {
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
     {
-        const ImU32 col = ImColor(clear_color);
         ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x, io.DisplaySize.y));
         ImGui::SetNextWindowPos(ImVec2(0, 0));
 

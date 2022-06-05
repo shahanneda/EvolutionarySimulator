@@ -72,6 +72,7 @@ void NetworkRenderer::renderNetwork() {
 
         const int inputStartX = 50;
         const int inputStartY = 50;
+        const int maxLayerNumber = 4;
 
 
         std::unordered_map<int, ImVec2> innovationNumberToNeuronPositionMap;
@@ -80,7 +81,7 @@ void NetworkRenderer::renderNetwork() {
         calculateInputPositions(verticalSpacing, inputStartX, inputStartY, innovationNumberToNeuronPositionMap,
                                 connectionsToRender);
 
-        calculateNeuronPositions(horizontalSpacing, verticalSpacing, outputStartX, outputStartY,
+        calculateNeuronPositions(horizontalSpacing, verticalSpacing, outputStartX, outputStartY, maxLayerNumber,
                                  innovationNumberToNeuronPositionMap,
                                  neuronsToRender, connectionsToRender);
         renderConnections(innovationNumberToNeuronPositionMap, connectionsToRender);
@@ -130,11 +131,12 @@ void NetworkRenderer::addConnectionsToRender(vector<int> &connectionInnovationNu
 
 
 void NetworkRenderer::calculateNeuronPositions(int horizontalSpacing, int verticalSpacing, int startX, int startY,
+                                               int maxLayerNumber,
                                                std::unordered_map<int, ImVec2> &innovationNumberToNeuronPositionMap,
                                                std::deque<Neuron *> &neuronsToRender,
                                                std::unordered_map<int, Connection *> &connectionsToRender) {
     // bfs
-    int layerNumber = 10;
+    int layerNumber = maxLayerNumber;
     while (!neuronsToRender.empty()) {
         auto layerCount = neuronsToRender.size();
 
