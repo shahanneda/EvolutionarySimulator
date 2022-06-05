@@ -12,7 +12,7 @@ using namespace NeatSquared;
 
 XORGame::XORGame() {
     this->numberOfInputs = 2;
-    this->numberOfInputs = 1;
+    this->numberOfOutputs = 1;
 }
 
 

@@ -51,5 +51,5 @@ float Generation::getSumOfAverageSpeciesFitness() {
 }
 
 NetworkInstance &Generation::getRandomNetwork() {
-    return *at(RandomGenerator::getRandomInRange(0, size()));
+    return *at(RandomGenerator::getRandomInRange(0, size() - 1));
 }

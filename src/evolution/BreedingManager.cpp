@@ -106,7 +106,7 @@ void BreedingManager::breedNextGeneration() {
         int currentlyBreedingMember = 0;
         for (int i = 0; i < numberOfSurvivingNetworksInSpecies; i++) {
             // if we reach the end of the species, go back and make more children from the start, the randomness in the process will mean children from the same parent won't be identical
-            if (currentlyBreedingMember + 1 >= s.networks.size()) {
+            if (currentlyBreedingMember + 1 >= static_cast<int>(s.networks.size())) {
                 currentlyBreedingMember = 0;
             }
 

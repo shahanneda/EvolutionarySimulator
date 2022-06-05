@@ -34,6 +34,13 @@ namespace NeatSquared {
 
         int getCurrentGenerationNumber();
 
+        void evaluateFitnessOfGeneration(Generation &generation);
+
+        /*
+         * Creates the next generation by breeding from this generation. Assumes that evaluateFitnessOfGeneration has already been called for the current generation.
+         */
+        void breedNextGeneration();
+
 
     private:
         void createStartingGeneration();
@@ -43,12 +50,6 @@ namespace NeatSquared {
 
         void evaluateFitnessOfSpecies(Species &species);
 
-        void evaluateFitnessOfGeneration(Generation &generation);
-
-        /*
-         * Creats the next generation by breeding from this generation. Assumes that evaluteFitnessOfGeneration has already been called for the current genreation.
-         */
-        void breedNextGeneration();
 
         Generation &getCurrentGeneration();
 

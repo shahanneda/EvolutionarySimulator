@@ -22,6 +22,9 @@ void startGraphics() {
     XORGame xorGame;
     BreedingManager manager(xorGame);
 
+    manager.evaluateFitnessOfGeneration(manager.generations[0]);
+    manager.breedNextGeneration();
+
     while (true) {
 
     }
