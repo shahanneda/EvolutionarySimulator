@@ -26,7 +26,8 @@ float XORGame::evaluateNetwork(NetworkInstance &network) {
     }
 
 
-    float fitness = 0;
+    // Start off with some initial fitness so that evolution will get a start (else everything would be eliminated right at the start)
+    float fitness = 1;
 
     // TODO: Add options to slow down training here so it can better be seen in the UI
 
@@ -47,6 +48,7 @@ float XORGame::evaluateNetwork(NetworkInstance &network) {
 
         fitness += logisticFitness(actualOutput, expectedOutput);
     }
+    return fitness;
 }
 
 

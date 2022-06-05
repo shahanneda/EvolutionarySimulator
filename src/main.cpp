@@ -25,11 +25,16 @@ void startGraphics() {
     GraphicsManager::getInstance().breedingManager = &manager;
 
 
-    manager.evaluateFitnessOfGeneration(manager.generations[0]);
-    manager.breedNextGeneration();
+    for (int i = 0; i < 100; i++) {
+        manager.evaluateFitnessOfGeneration(manager.getCurrentGeneration());
+        manager.breedNextGeneration();
+    }
 
     while (true) {
-
+        if (GraphicsManager::getInstance().networkRenderer.currentNetwork) {
+            GraphicsManager::getInstance().networkRenderer.currentNetwork->evaluateNetwork();
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 

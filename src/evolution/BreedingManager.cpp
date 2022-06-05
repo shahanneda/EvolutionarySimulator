@@ -13,8 +13,8 @@ using namespace NeatSquared;
 
 const float BreedingManager::NETWORK_COMPATIBILITY_MATCHING_GENE_CONSTANT = 1;
 const float BreedingManager::NETWORK_COMPATIBILITY_WEIGHT_DIFFERENCE_CONSTANT = 1;
-const float BreedingManager::SAME_SPECIES_NETWORK_COMPATIBILITY_CUTOFF = 3;
-const int BreedingManager::MAX_NETWORKS_IN_GENERATION = 10;
+const float BreedingManager::SAME_SPECIES_NETWORK_COMPATIBILITY_CUTOFF = 0.5;
+const int BreedingManager::MAX_NETWORKS_IN_GENERATION = 100;
 
 BreedingManager::BreedingManager(Game &game) : game(game), geneCreator(), networkBreeder(geneCreator) {
     createStartingGeneration();
@@ -78,11 +78,12 @@ Generation &BreedingManager::getCurrentGeneration() {
 
 
 void BreedingManager::breedNextGeneration() {
-    Generation &oldGeneration = getCurrentGeneration();
-    generations.push_back(Generation(getCurrentGenerationNumber() + 1));
+    int currentGenerationNumber = getCurrentGenerationNumber();
 
-    Generation &newGeneration = getCurrentGeneration();
+    generations.emplace_back(currentGenerationNumber + 1);
 
+    Generation &oldGeneration = generations[currentGenerationNumber];
+    Generation &newGeneration = generations[currentGenerationNumber + 1];
 
     float sumOfAverageSpeciesFitnessInGeneration = oldGeneration.getSumOfAverageSpeciesFitness();
 
@@ -100,7 +101,13 @@ void BreedingManager::breedNextGeneration() {
             NetworkInstance &network = s.networks[0];
             NetworkInstance &randomNet = oldGeneration.getRandomNetwork();
 
-            newGeneration.addNetwork(networkBreeder.breed(network, randomNet));
+
+            if (network.lastEvaluationFitness > randomNet.lastEvaluationFitness) {
+                newGeneration.addNetwork(networkBreeder.breed(network, randomNet));
+            } else {
+                newGeneration.addNetwork(networkBreeder.breed(randomNet, network));
+            }
+            continue;
         }
 
         int currentlyBreedingMember = 0;
@@ -113,7 +120,11 @@ void BreedingManager::breedNextGeneration() {
             NetworkInstance &net1 = s.networks[currentlyBreedingMember];
             NetworkInstance &net2 = s.networks[currentlyBreedingMember + 1];
 
-            newGeneration.addNetwork(networkBreeder.breed(net1, net2));
+            if (net1.lastEvaluationFitness > net2.lastEvaluationFitness) {
+                newGeneration.addNetwork(networkBreeder.breed(net1, net2));
+            } else {
+                newGeneration.addNetwork(networkBreeder.breed(net2, net1));
+            }
 
             currentlyBreedingMember++;
         }
