@@ -34,6 +34,10 @@ std::string getLabelString(std::string label, int id, float fitness) {
 }
 
 void NetworkPickerWindow::renderWindow() {
+    if (!GraphicsManager::getInstance().breedingManager) {
+        return;
+    }
+
     std::vector<Generation> *generations = &GraphicsManager::getInstance().breedingManager->generations;
 
     if (!generations) {
