@@ -98,6 +98,10 @@ namespace NeatSquared {
          */
         bool isCompatibleWith(NetworkInstance &network);
 
+        /*
+         * Make a clone of this network
+         */
+        std::unique_ptr<NetworkInstance> clone();
 
         std::unordered_map<int, Connection> innovationToConnectionMap;
         std::unordered_map<int, Neuron> innovationToNeuronMap;

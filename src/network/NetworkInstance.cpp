@@ -1,6 +1,8 @@
-#include <algorithm>
-#include "network/NetworkInstance.h"
 #include <iostream>
+#include <algorithm>
+#include <memory>
+
+#include "network/NetworkInstance.h"
 #include "utils/RandomGenerator.h"
 #include "evolution/BreedingManager.h"
 
@@ -182,4 +184,10 @@ float NetworkInstance::getCompatibilityDistanceWith(NetworkInstance &network) {
 
 bool NetworkInstance::isCompatibleWith(NetworkInstance &network) {
     return getCompatibilityDistanceWith(network) <= BreedingManager::SAME_SPECIES_NETWORK_COMPATIBILITY_CUTOFF;
+}
+
+
+std::unique_ptr<NetworkInstance> NetworkInstance::clone() {
+    return std::unique_ptr<NetworkInstance>(
+            new NetworkInstance(innovationToConnectionMap, innovationToNeuronMap, inputs, outputs));
 }
