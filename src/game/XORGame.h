@@ -21,8 +21,9 @@ namespace NeatSquared {
         static float logisticFitness(float actual, int expected);
 
     private:
-        const int numberOfIterations = 1000;
+        const int numberOfIterations = 10;
 
+        float differenceSquaredFitness(float actual, float expected);
     };
 }
 

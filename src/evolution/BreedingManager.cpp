@@ -11,10 +11,10 @@
 
 using namespace NeatSquared;
 
-const float BreedingManager::NETWORK_COMPATIBILITY_MATCHING_GENE_CONSTANT = 1;
+const float BreedingManager::NETWORK_COMPATIBILITY_MATCHING_GENE_CONSTANT = 2;
 const float BreedingManager::NETWORK_COMPATIBILITY_WEIGHT_DIFFERENCE_CONSTANT = 1;
-const float BreedingManager::SAME_SPECIES_NETWORK_COMPATIBILITY_CUTOFF = 0.5;
-const int BreedingManager::MAX_NETWORKS_IN_GENERATION = 100;
+const float BreedingManager::SAME_SPECIES_NETWORK_COMPATIBILITY_CUTOFF = 0.4;
+const int BreedingManager::MAX_NETWORKS_IN_GENERATION = 200;
 
 BreedingManager::BreedingManager(Game &game) : game(game), geneCreator(), networkBreeder(geneCreator) {
     createStartingGeneration();

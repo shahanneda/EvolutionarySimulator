@@ -19,6 +19,7 @@ XORGame::XORGame() {
 float XORGame::evaluateNetwork(NetworkInstance &network) {
     Neuron *const input1 = network.getNeuronWithInnovationNumber(network.inputs[0]);
     Neuron *const input2 = network.getNeuronWithInnovationNumber(network.inputs[1]);
+    Neuron *const input3 = network.getNeuronWithInnovationNumber(network.inputs[2]);
     Neuron *const out = network.getNeuronWithInnovationNumber(network.outputs[0]);
 
     if (!input1 || !input2 || !out) {
@@ -38,6 +39,7 @@ float XORGame::evaluateNetwork(NetworkInstance &network) {
 
         input1->currentValue = (float) in1;
         input2->currentValue = (float) in2;
+//        input3->currentValue = 1;
         network.evaluateNetwork();
 
         float actualOutput = out->currentValue;
@@ -46,11 +48,17 @@ float XORGame::evaluateNetwork(NetworkInstance &network) {
             continue;
         }
 
-        fitness += logisticFitness(actualOutput, expectedOutput);
+//        fitness += logisticFitness(actualOutput, expectedOutput);
+        fitness += differenceSquaredFitness(actualOutput, expectedOutput);
     }
     return fitness;
 }
 
+float XORGame::differenceSquaredFitness(float actual, float expected) {
+    float fitness = pow(1 - abs(expected - actual), 2.0f);
+    printf(" actual is %.2f expected is %.2f giving fitness %.2f\n", actual, expected, fitness);
+    return fitness;
+}
 
 float XORGame::logisticFitness(float actual, int expected) {
     return -((1 - expected) * log(actual) + (expected) * log(1 - actual));

@@ -15,6 +15,7 @@
 using namespace NeatSquared;
 
 void startGraphics() {
+    printf("starting graphics\n");
     GraphicsManager::getInstance().startMainLoop();
 }
 
@@ -25,11 +26,12 @@ void startGraphics() {
     GraphicsManager::getInstance().breedingManager = &manager;
 
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 300; i++) {
         manager.evaluateFitnessOfGeneration(manager.getCurrentGeneration());
         manager.breedNextGeneration();
     }
 
+    printf(" Finished NEAT Thread init\n");
     while (true) {
 //        if (GraphicsManager::getInstance().networkRenderer.currentNetwork) {
 //            GraphicsManager::getInstance().networkRenderer.currentNetwork->evaluateNetwork();
@@ -39,6 +41,7 @@ void startGraphics() {
 }
 
 int main() {
+    GraphicsManager::getInstance();
     std::thread t1(NEATThread);
     startGraphics();
 
