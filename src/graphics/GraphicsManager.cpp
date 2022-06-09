@@ -115,14 +115,24 @@ void GraphicsManager::renderOptions() {
             breedingManager->breedNextGeneration();
         }
 
+
         ImGui::Checkbox("Display Neuron innovation numbers (instead of current values)",
                         &networkRenderer.displayNeuronInnovationNumber);
 
         ImGui::Checkbox("Display Connection innovation numbers",
                         &networkRenderer.displayConnectionInnovationNumber);
 
+        ImGui::Checkbox("Display Connection Weights",
+                        &networkRenderer.displayConnectionWeight);
+
         if (networkRenderer.currentNetwork) {
             std::lock_guard<std::mutex> lock(networkRenderer.currentNetworkMutex);
+
+            if (ImGui::Button("Reevaluate current network", ImVec2(0, 0))) {
+                networkRenderer.currentNetwork->lastEvaluationFitness = breedingManager->game.evaluateNetwork(
+                        *networkRenderer.currentNetwork);
+            }
+
             for (int inputInnovationNumber: networkRenderer.currentNetwork->inputs) {
                 ImGui::InputFloat(("Neuron " + std::to_string(inputInnovationNumber)).c_str(),
                                   &networkRenderer.currentNetwork->getNeuronWithInnovationNumber(

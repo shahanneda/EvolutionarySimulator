@@ -32,6 +32,7 @@ namespace NeatSquared {
         ImVec2 displayOffset;
         bool displayNeuronInnovationNumber;
         bool displayConnectionInnovationNumber;
+        bool displayConnectionWeight;
 
     private:
         static const ImColor nodeColor;

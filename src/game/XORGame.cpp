@@ -10,7 +10,7 @@
 
 using namespace NeatSquared;
 
-XORGame::XORGame() {
+XORGame::XORGame() : shouldSlowTraining(false) {
     this->numberOfInputs = 2;
     this->numberOfOutputs = 1;
 }
@@ -19,7 +19,7 @@ XORGame::XORGame() {
 float XORGame::evaluateNetwork(NetworkInstance &network) {
     Neuron *const input1 = network.getNeuronWithInnovationNumber(network.inputs[0]);
     Neuron *const input2 = network.getNeuronWithInnovationNumber(network.inputs[1]);
-    Neuron *const input3 = network.getNeuronWithInnovationNumber(network.inputs[2]);
+//    Neuron *const input3 = network.getNeuronWithInnovationNumber(network.inputs[2]);
     Neuron *const out = network.getNeuronWithInnovationNumber(network.outputs[0]);
 
     if (!input1 || !input2 || !out) {
@@ -32,11 +32,17 @@ float XORGame::evaluateNetwork(NetworkInstance &network) {
 
     // TODO: Add options to slow down training here so it can better be seen in the UI
 
-    for (int i = 0; i < numberOfIterations; i++) {
+//    float casesCorrect = 0;
+    for (int i = 0; i < 50; i++) {
         int in1 = RandomGenerator::getRandomFloatInRange(0, 1) > 0.5;
         int in2 = RandomGenerator::getRandomFloatInRange(0, 1) > 0.5;
-        int expectedOutput = in1 != in2;
 
+        if (in1 == 0 && in2 == 0) {
+            i--;
+            continue;
+        }
+
+        int expectedOutput = in1 != in2;
         input1->currentValue = (float) in1;
         input2->currentValue = (float) in2;
 //        input3->currentValue = 1;
@@ -48,7 +54,6 @@ float XORGame::evaluateNetwork(NetworkInstance &network) {
             continue;
         }
 
-//        fitness += logisticFitness(actualOutput, expectedOutput);
         fitness += differenceSquaredFitness(actualOutput, expectedOutput);
     }
     return fitness;

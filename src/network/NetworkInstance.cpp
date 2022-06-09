@@ -175,7 +175,7 @@ float NetworkInstance::getCompatibilityDistanceWith(NetworkInstance &network) {
     }
 
     int noneMatchingGeneCount = totalGeneCount - matchingGeneCount;
-    printf(" found %d non matching genes\n", noneMatchingGeneCount);
+//    printf(" found %d non matching genes\n", noneMatchingGeneCount);
 
     return ((BreedingManager::NETWORK_COMPATIBILITY_MATCHING_GENE_CONSTANT * (float) noneMatchingGeneCount /
              (float) totalGeneCount) + BreedingManager::NETWORK_COMPATIBILITY_WEIGHT_DIFFERENCE_CONSTANT *

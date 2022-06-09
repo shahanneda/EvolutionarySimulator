@@ -20,8 +20,10 @@ namespace NeatSquared {
          */
         static float logisticFitness(float actual, int expected);
 
+        bool shouldSlowTraining;
+
     private:
-        const int numberOfIterations = 10;
+        const int numberOfIterations = 20;
 
         float differenceSquaredFitness(float actual, float expected);
     };

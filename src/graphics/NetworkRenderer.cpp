@@ -64,8 +64,8 @@ void NetworkRenderer::renderNetwork() {
         windowPos = ImGui::GetWindowPos();
         drawList = ImGui::GetWindowDrawList();
 
-        const int verticalSpacing = 50;
-        const int horizontalSpacing = 50;
+        const int verticalSpacing = 100;
+        const int horizontalSpacing = 100;
 
 //        printf("dith %.2f \n", ImGui::GetWindowWidth());
         const int outputStartX = ImGui::GetWindowWidth() / 2;
@@ -216,13 +216,16 @@ void NetworkRenderer::renderConnections(std::unordered_map<int, ImVec2> &innovat
         renderConnectionTriangle(p1, p2, getColorFromValue(c->lastCalculatedValue));
 
 
+        int xTextOffset = -4;
+        int yTextOffset = -8;
+        ImVec2 textPos = ImVec2((p1.x + p2.x) / 2 + xTextOffset, (p1.y + p2.y) / 2 + yTextOffset);
+        const ImU32 textColor = ImColor(ImVec4(1, 1, 1, 1));
         if (displayConnectionInnovationNumber) {
-            int xTextOffset = -4;
-            int yTextOffset = -8;
-            ImVec2 textPos = ImVec2((p1.x + p2.x) / 2 + xTextOffset, (p1.y + p2.y) / 2 + yTextOffset);
-            const ImU32 textColor = ImColor(ImVec4(1, 1, 1, 1));
             drawList->AddText(NULL, 15.0f, convertLocalToWindowPos(textPos), textColor,
                               std::to_string(c->innovationNumber).c_str());
+        } else if (displayConnectionWeight) {
+            drawList->AddText(NULL, 15.0f, convertLocalToWindowPos(textPos), textColor,
+                              std::to_string(c->weight).c_str());
         }
     }
 
