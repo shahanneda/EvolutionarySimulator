@@ -22,6 +22,9 @@ namespace NeatSquared {
         std::vector<std::reference_wrapper<NetworkInstance>> networks;
         int id;
 
+        /*
+         * The average fitness of networks in this generation. Set by BreedingManager::evaluateFitnessOfSpecies
+         */
         float averageFitness;
 
     };

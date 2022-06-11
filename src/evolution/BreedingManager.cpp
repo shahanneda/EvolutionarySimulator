@@ -11,10 +11,20 @@
 
 using namespace NeatSquared;
 
-const float BreedingManager::NETWORK_COMPATIBILITY_MATCHING_GENE_CONSTANT = 2;
-const float BreedingManager::NETWORK_COMPATIBILITY_WEIGHT_DIFFERENCE_CONSTANT = 1;
-const float BreedingManager::SAME_SPECIES_NETWORK_COMPATIBILITY_CUTOFF = 2;
+const float BreedingManager::NETWORK_COMPATIBILITY_MATCHING_GENE_CONSTANT = 1;
+const float BreedingManager::NETWORK_COMPATIBILITY_WEIGHT_DIFFERENCE_CONSTANT = 0.4;
+const float BreedingManager::SAME_SPECIES_NETWORK_COMPATIBILITY_CUTOFF = 3;
 const int BreedingManager::MAX_NETWORKS_IN_GENERATION = 500;
+
+const float NetworkBreeder::SAME_GENE_BOTH_PARENT_MORE_FIT_PROB = 0.5f;
+const float NetworkBreeder::NEW_NEURON_MUTATION_PROB = 0.05f;
+const float NetworkBreeder::NEW_CONNECTION_MUTATION_PROB = 0.05f;
+const float NetworkBreeder::TOGGLE_CONNECTION_MUTATION_PROB = 0.1f;
+const float NetworkBreeder::SCALE_WEIGHT_MUTATION_PROB = 0.72f;
+const float NetworkBreeder::SET_WEIGHT_MUTATION_PROB = 0.1f;
+const float NetworkBreeder::FLIP_CONNECTION_MUTATION_PROB = 0.1f;
+
+const int NetworkBreeder::MAX_NEW_GENE_MUTATION_RETRY_ATTEMPTS = 5;
 
 BreedingManager::BreedingManager(Game &game) : game(game), geneCreator(), networkBreeder(geneCreator) {
     createStartingGeneration();
@@ -54,7 +64,7 @@ void BreedingManager::evaluateFitnessOfSpecies(Species &species) {
         network.lastEvaluationFitness = game.evaluateNetwork(network);
         averageFitness += network.lastEvaluationFitness;
     }
-    species.averageFitness = averageFitness;
+    species.averageFitness = averageFitness / species.networks.size();
 
     std::sort(species.networks.begin(), species.networks.end(),
               [](const NetworkInstance &n1, const NetworkInstance &n2) {
@@ -114,8 +124,9 @@ void BreedingManager::breedNextGeneration() {
             continue;
         }
 
-        newGeneration.addNetwork(s.networks[0].get().clone());
-        newGeneration.addNetwork(s.networks[1].get().clone());
+        if (s.networks.size() > 5) {
+            newGeneration.addNetwork(s.networks[0].get().clone());
+        }
 
         int currentlyBreedingMember = 0;
         for (int i = 2; i < numberOfSurvivingNetworksInSpecies; i++) {

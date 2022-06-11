@@ -11,7 +11,7 @@
 using namespace NeatSquared;
 
 XORGame::XORGame() : shouldSlowTraining(false) {
-    this->numberOfInputs = 2;
+    this->numberOfInputs = 3;
     this->numberOfOutputs = 1;
 }
 
@@ -19,7 +19,7 @@ XORGame::XORGame() : shouldSlowTraining(false) {
 float XORGame::evaluateNetwork(NetworkInstance &network) {
     Neuron *const input1 = network.getNeuronWithInnovationNumber(network.inputs[0]);
     Neuron *const input2 = network.getNeuronWithInnovationNumber(network.inputs[1]);
-//    Neuron *const input3 = network.getNeuronWithInnovationNumber(network.inputs[2]);
+    Neuron *const input3 = network.getNeuronWithInnovationNumber(network.inputs[2]);
     Neuron *const out = network.getNeuronWithInnovationNumber(network.outputs[0]);
 
     if (!input1 || !input2 || !out) {
@@ -28,39 +28,45 @@ float XORGame::evaluateNetwork(NetworkInstance &network) {
 
 
     // Start off with some initial fitness so that evolution will get a start (else everything would be eliminated right at the start)
-    float fitness = 1;
+    float fitness = 0;
 
     // TODO: Add options to slow down training here so it can better be seen in the UI
 
 //    float casesCorrect = 0;
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 4; i++) {
         int in1 = RandomGenerator::getRandomFloatInRange(0, 1) > 0.5;
         int in2 = RandomGenerator::getRandomFloatInRange(0, 1) > 0.5;
-
-        if (in1 == 0 && in2 == 0) {
-            i--;
-            continue;
+        if (i == 0) {
+            in1 = 0;
+            in2 = 0;
+        } else if (i == 1) {
+            in1 = 1;
+            in2 = 0;
+        } else if (i == 2) {
+            in1 = 0;
+            in2 = 1;
+        } else if (i == 3) {
+            in1 = 1;
+            in2 = 1;
         }
+
 
         int expectedOutput = in1 != in2;
         input1->currentValue = (float) in1;
         input2->currentValue = (float) in2;
-//        input3->currentValue = 1;
+        input3->currentValue = 1;
         network.evaluateNetwork();
 
         float actualOutput = out->currentValue;
-
-        if (actualOutput <= 0) {
-            continue;
-        }
+//        printf("inputs were: %.2f and %.2f output is %.2f\n", input1->currentValue, input2->currentValue, actualOutput);
 
         fitness += differenceSquaredFitness(actualOutput, expectedOutput);
     }
-    return fitness;
+    return fitness * fitness;
 }
 
 float XORGame::differenceSquaredFitness(float actual, float expected) {
-    float fitness = pow(1 - abs(expected - actual), 2.0f);
+    float fitness = 1 - abs(expected - actual);
     printf(" actual is %.2f expected is %.2f giving fitness %.2f\n", actual, expected, fitness);
     return fitness;
 }

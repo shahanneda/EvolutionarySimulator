@@ -26,7 +26,7 @@ void startGraphics() {
     GraphicsManager::getInstance().breedingManager = &manager;
 
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 400; i++) {
         manager.evaluateFitnessOfGeneration(manager.getCurrentGeneration());
         manager.breedNextGeneration();
     }
