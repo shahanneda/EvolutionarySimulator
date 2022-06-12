@@ -246,25 +246,13 @@ ImU32 NetworkRenderer::getColorFromValue(float value) {
     value = fmax(0, fmin(1, value)); // clamp value between 0 and 1
     float distanceToActive = value;
     float distanceToNegative = 1 - value;
-    printf("value is %.2f, active %.2f negative %.2f\n", value, distanceToActive, distanceToNegative);
 
-
-    const ImU32 color = ImColor(
+    return ImColor(
             ImVec4(distanceToActive * activeColor.Value.x + distanceToNegative * negativeActiveColor.Value.x,
                    distanceToActive * activeColor.Value.y + distanceToNegative * negativeActiveColor.Value.y,
                    distanceToActive * activeColor.Value.z + distanceToNegative * negativeActiveColor.Value.z,
                    1));
 
-    return color;
-
-// Old Simple system
-//    if (value >= 0.5f) {
-//        return activeColor;
-//    } else if (value <= -0.5f) {
-//        return negativeActiveColor;
-//    } else {
-//        return grayColor;
-//    }
 }
 
 void NetworkRenderer::renderNeuronAtPosition(ImVec2 pos,
