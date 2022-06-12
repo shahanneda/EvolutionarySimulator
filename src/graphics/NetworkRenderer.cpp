@@ -33,8 +33,8 @@ NetworkRenderer::NetworkRenderer() : currentNetwork(nullptr), displayOffset(0, 0
 const ImColor NetworkRenderer::nodeColor = ImColor(ImVec4(1, 1, 1, 1));
 const ImColor NetworkRenderer::connectionColor = ImColor(ImVec4(1, 1, 1, 1));
 const ImColor NetworkRenderer::grayColor = ImColor(ImVec4(0.86f, 0.86f, 0.86f, 1));
-const ImColor NetworkRenderer::activeColor = ImColor(ImVec4(0, 0.8f, 0, 1));
-const ImColor NetworkRenderer::negativeActiveColor = ImColor(ImVec4(0.8f, 0, 0, 1));
+const ImColor NetworkRenderer::activeColor = ImColor(ImVec4(0, 1.0f, 0, 1));
+const ImColor NetworkRenderer::negativeActiveColor = ImColor(ImVec4(1.0f, 0, 0, 1));
 
 void NetworkRenderer::renderNetwork() {
     if (!currentNetwork) {
@@ -67,7 +67,6 @@ void NetworkRenderer::renderNetwork() {
         const int verticalSpacing = 100;
         const int horizontalSpacing = 100;
 
-//        printf("dith %.2f \n", ImGui::GetWindowWidth());
         const int outputStartX = ImGui::GetWindowWidth() / 2;
         const int outputStartY = 100;
 
@@ -194,7 +193,7 @@ void NetworkRenderer::renderConnections(std::unordered_map<int, ImVec2> &innovat
                                         std::unordered_map<int, Connection *> &connectionsToRender) {
     for (auto it: connectionsToRender) {
         Connection *c = it.second;
-        float thickness = (c->weight + 2) * 1;
+        float thickness = fmin(abs(c->weight) * 2 + 1, 5.0f);
 
         // just for debugging weight breeding, not actual color system
         ImColor arrowColor;
@@ -243,13 +242,29 @@ void NetworkRenderer::renderNeurons(std::unordered_map<int, ImVec2> &innovationN
 }
 
 ImU32 NetworkRenderer::getColorFromValue(float value) {
-    if (value >= 0.5f) {
-        return activeColor;
-    } else if (value <= -0.5f) {
-        return negativeActiveColor;
-    } else {
-        return grayColor;
-    }
+    value = (value + 1) / 2; // shift from t expected (-1,1) to (0, 1)
+    value = fmax(0, fmin(1, value)); // clamp value between 0 and 1
+    float distanceToActive = value;
+    float distanceToNegative = 1 - value;
+    printf("value is %.2f, active %.2f negative %.2f\n", value, distanceToActive, distanceToNegative);
+
+
+    const ImU32 color = ImColor(
+            ImVec4(distanceToActive * activeColor.Value.x + distanceToNegative * negativeActiveColor.Value.x,
+                   distanceToActive * activeColor.Value.y + distanceToNegative * negativeActiveColor.Value.y,
+                   distanceToActive * activeColor.Value.z + distanceToNegative * negativeActiveColor.Value.z,
+                   1));
+
+    return color;
+
+// Old Simple system
+//    if (value >= 0.5f) {
+//        return activeColor;
+//    } else if (value <= -0.5f) {
+//        return negativeActiveColor;
+//    } else {
+//        return grayColor;
+//    }
 }
 
 void NetworkRenderer::renderNeuronAtPosition(ImVec2 pos,
