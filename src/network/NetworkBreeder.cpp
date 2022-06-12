@@ -177,7 +177,7 @@ void NetworkBreeder::toggleConnectionMutation(NetworkInstance &network) {
 
 void NetworkBreeder::scaleWeightMutation(NetworkInstance &network) {
     Connection *c = network.getRandomConnection();
-    float scale = RandomGenerator::getRandomFloatInRange(-1, 1.5f);
+    float scale = RandomGenerator::getRandomFloatInRange(-1.5, 1.5f);
     if (c) {
         c->weight *= scale;
     }

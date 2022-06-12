@@ -23,6 +23,7 @@ namespace NeatSquared {
         static const float NETWORK_COMPATIBILITY_WEIGHT_DIFFERENCE_CONSTANT;
         static const float SAME_SPECIES_NETWORK_COMPATIBILITY_CUTOFF;
         static const int MAX_NETWORKS_IN_GENERATION;
+        static const float SPECIES_BREEDING_PERCENT;
 
 
     public:

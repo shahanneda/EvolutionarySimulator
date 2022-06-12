@@ -14,13 +14,14 @@ using namespace NeatSquared;
 const float BreedingManager::NETWORK_COMPATIBILITY_MATCHING_GENE_CONSTANT = 1;
 const float BreedingManager::NETWORK_COMPATIBILITY_WEIGHT_DIFFERENCE_CONSTANT = 0.4;
 const float BreedingManager::SAME_SPECIES_NETWORK_COMPATIBILITY_CUTOFF = 3;
-const int BreedingManager::MAX_NETWORKS_IN_GENERATION = 500;
+const int BreedingManager::MAX_NETWORKS_IN_GENERATION = 200;
+const float BreedingManager::SPECIES_BREEDING_PERCENT = 0.6; // Only the top this percent will be allowed to breed in any given species
 
-const float NetworkBreeder::SAME_GENE_BOTH_PARENT_MORE_FIT_PROB = 0.5f;
+const float NetworkBreeder::SAME_GENE_BOTH_PARENT_MORE_FIT_PROB = 0.8f;
 const float NetworkBreeder::NEW_NEURON_MUTATION_PROB = 0.05f;
 const float NetworkBreeder::NEW_CONNECTION_MUTATION_PROB = 0.05f;
 const float NetworkBreeder::TOGGLE_CONNECTION_MUTATION_PROB = 0.1f;
-const float NetworkBreeder::SCALE_WEIGHT_MUTATION_PROB = 0.72f;
+const float NetworkBreeder::SCALE_WEIGHT_MUTATION_PROB = 0.6f;
 const float NetworkBreeder::SET_WEIGHT_MUTATION_PROB = 0.1f;
 const float NetworkBreeder::FLIP_CONNECTION_MUTATION_PROB = 0.1f;
 
@@ -124,14 +125,18 @@ void BreedingManager::breedNextGeneration() {
             continue;
         }
 
+        // clone the top member to the next generation
         if (s.networks.size() > 5) {
             newGeneration.addNetwork(s.networks[0].get().clone());
         }
 
+        // We only want the top members of a species to breed, the lower fitness members of a species wont be allowed to breed
+        const int breedingCutoff = static_cast<int>(s.networks.size()) * SPECIES_BREEDING_PERCENT;
+
         int currentlyBreedingMember = 0;
         for (int i = 2; i < numberOfSurvivingNetworksInSpecies; i++) {
-            // if we reach the end of the species, go back and make more children from the start, the randomness in the process will mean children from the same parent won't be identical
-            if (currentlyBreedingMember + 1 >= static_cast<int>(s.networks.size())) {
+            // if we reach the end of the fit members we want to breed, go back and make more children from the start, the randomness in the process will mean children from the same parent won't be identical
+            if (currentlyBreedingMember + 1 >= breedingCutoff) {
                 currentlyBreedingMember = 0;
             }
 

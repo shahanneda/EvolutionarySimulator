@@ -196,23 +196,18 @@ void NetworkRenderer::renderConnections(std::unordered_map<int, ImVec2> &innovat
         float thickness = fmin(abs(c->weight) * 2 + 1, 5.0f);
 
         // just for debugging weight breeding, not actual color system
-        ImColor arrowColor;
-        ImColor color;
-        if (c->weight > 0.5) {
-            color = ImColor(ImVec4(1, 0, 0, 1));
-            arrowColor = ImColor(ImVec4(0.8, 0.1, 0, 1));
-        } else {
-            color = ImColor(ImVec4(0, 1, 0, 1));
-            arrowColor = ImColor(ImVec4(0.1, 0.8, 0, 1));
+        ImColor connectionColor = getColorFromValue(c->lastCalculatedValue);
+        if (!c->enabled) {
+            connectionColor = grayColor;
         }
 
         ImVec2 p1 = innovationNumberToNeuronPositionMap[c->from];
         ImVec2 p2 = innovationNumberToNeuronPositionMap[c->to];
 
         drawList->AddLine(convertLocalToWindowPos(p1),
-                          convertLocalToWindowPos(p2), getColorFromValue(c->lastCalculatedValue), thickness);
+                          convertLocalToWindowPos(p2), connectionColor, thickness);
 
-        renderConnectionTriangle(p1, p2, getColorFromValue(c->lastCalculatedValue));
+        renderConnectionTriangle(p1, p2, connectionColor);
 
 
         int xTextOffset = -4;
