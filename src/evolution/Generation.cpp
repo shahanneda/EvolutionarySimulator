@@ -11,7 +11,7 @@ using namespace NeatSquared;
 
 Generation::Generation(int id) : id(id) {}
 
-NetworkInstance *Generation::getNetworkWithId(int id) {
+NetworkInstance *Generation::getNetworkWithId(unsigned int id) {
     if (id >= size()) {
         throw std::runtime_error(
                 "Trying to get network " + std::to_string(id) + " in generation " + std::to_string(this->id) +
@@ -48,6 +48,13 @@ float Generation::getSumOfAverageSpeciesFitness() const {
         sum += s.averageFitness;
     }
     return sum;
+}
+
+float Generation::getTopSpeciesFitness() const {
+    if (species.size() == 0) {
+        return 0.0f;
+    }
+    return species[0].averageFitness;
 }
 
 NetworkInstance &Generation::getRandomNetwork() {

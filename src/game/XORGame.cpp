@@ -11,7 +11,7 @@
 using namespace NeatSquared;
 
 XORGame::XORGame() : shouldSlowTraining(false) {
-    this->numberOfInputs = 3;
+    this->numberOfInputs = 2;
     this->numberOfOutputs = 1;
 }
 
@@ -19,7 +19,7 @@ XORGame::XORGame() : shouldSlowTraining(false) {
 float XORGame::evaluateNetwork(NetworkInstance &network) {
     Neuron *const input1 = network.getNeuronWithInnovationNumber(network.inputs[0]);
     Neuron *const input2 = network.getNeuronWithInnovationNumber(network.inputs[1]);
-    Neuron *const input3 = network.getNeuronWithInnovationNumber(network.inputs[2]);
+//    Neuron *const input3 = network.getNeuronWithInnovationNumber(network.inputs[2]);
     Neuron *const out = network.getNeuronWithInnovationNumber(network.outputs[0]);
 
     if (!input1 || !input2 || !out) {
@@ -54,7 +54,7 @@ float XORGame::evaluateNetwork(NetworkInstance &network) {
         int expectedOutput = in1 != in2;
         input1->currentValue = (float) in1;
         input2->currentValue = (float) in2;
-        input3->currentValue = 1;
+//        input3->currentValue = 1;
         network.evaluateNetwork();
 
         float actualOutput = out->currentValue;
@@ -67,7 +67,7 @@ float XORGame::evaluateNetwork(NetworkInstance &network) {
 
 float XORGame::differenceSquaredFitness(float actual, float expected) {
     float fitness = 1 - abs(expected - actual);
-    printf(" actual is %.2f expected is %.2f giving fitness %.2f\n", actual, expected, fitness);
+//    printf(" actual is %.2f expected is %.2f giving fitness %.2f\n", actual, expected, fitness);
     return fitness;
 }
 

@@ -56,7 +56,8 @@ void NetworkPickerWindow::renderWindow() {
 
                 const bool is_selected = (g.id == selectedGenerationId);
 
-                if (ImGui::Selectable(getLabelString("Generation", g.id, g.getSumOfAverageSpeciesFitness()).c_str(),
+                if (ImGui::Selectable(getLabelString("Generation", g.id,
+                                                     g.getTopSpeciesFitness()).c_str(),
                                       is_selected)) {
                     selectedGenerationId = g.id;
 

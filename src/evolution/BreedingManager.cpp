@@ -14,15 +14,15 @@ using namespace NeatSquared;
 const float BreedingManager::NETWORK_COMPATIBILITY_MATCHING_GENE_CONSTANT = 1;
 const float BreedingManager::NETWORK_COMPATIBILITY_WEIGHT_DIFFERENCE_CONSTANT = 0.4;
 const float BreedingManager::SAME_SPECIES_NETWORK_COMPATIBILITY_CUTOFF = 3;
-const int BreedingManager::MAX_NETWORKS_IN_GENERATION = 200;
-const float BreedingManager::SPECIES_BREEDING_PERCENT = 0.6; // Only the top this percent will be allowed to breed in any given species
+const int BreedingManager::MAX_NETWORKS_IN_GENERATION = 5000;
+const float BreedingManager::SPECIES_BREEDING_PERCENT = 0.4; // Only the top this percent will be allowed to breed in any given species
 
-const float NetworkBreeder::SAME_GENE_BOTH_PARENT_MORE_FIT_PROB = 0.8f;
+const float NetworkBreeder::SAME_GENE_BOTH_PARENT_MORE_FIT_PROB = 0.5f;
 const float NetworkBreeder::NEW_NEURON_MUTATION_PROB = 0.05f;
 const float NetworkBreeder::NEW_CONNECTION_MUTATION_PROB = 0.05f;
 const float NetworkBreeder::TOGGLE_CONNECTION_MUTATION_PROB = 0.1f;
-const float NetworkBreeder::SCALE_WEIGHT_MUTATION_PROB = 0.6f;
-const float NetworkBreeder::SET_WEIGHT_MUTATION_PROB = 0.1f;
+const float NetworkBreeder::SCALE_WEIGHT_MUTATION_PROB = 0.7f;
+const float NetworkBreeder::SET_WEIGHT_MUTATION_PROB = 0.5f;
 const float NetworkBreeder::FLIP_CONNECTION_MUTATION_PROB = 0.1f;
 
 const int NetworkBreeder::MAX_NEW_GENE_MUTATION_RETRY_ATTEMPTS = 5;
@@ -59,18 +59,30 @@ void BreedingManager::createStartingGeneration() {
 
 
 void BreedingManager::evaluateFitnessOfSpecies(Species &species) {
-    float averageFitness = 0;
 
     for (NetworkInstance &network: species.networks) {
         network.lastEvaluationFitness = game.evaluateNetwork(network);
-        averageFitness += network.lastEvaluationFitness;
     }
-    species.averageFitness = averageFitness / species.networks.size();
 
     std::sort(species.networks.begin(), species.networks.end(),
               [](const NetworkInstance &n1, const NetworkInstance &n2) {
                   return n1.lastEvaluationFitness > n2.lastEvaluationFitness;
               });
+
+    // to calculate average fitness of species, only use the number of breeding members, so the top performers don't get held back by any disfigured ones.
+    int healthyMemberCount = std::max(SPECIES_BREEDING_PERCENT * species.networks.size(), 1.0f);
+    int count = 0;
+    float averageFitness = 0;
+    for (NetworkInstance &network: species.networks) {
+        network.lastEvaluationFitness = game.evaluateNetwork(network);
+        averageFitness += network.lastEvaluationFitness;
+
+        count++;
+        if (count > healthyMemberCount) {
+            break;
+        }
+    }
+    species.averageFitness = averageFitness / count;
 }
 
 void BreedingManager::evaluateFitnessOfGeneration(Generation &generation) {

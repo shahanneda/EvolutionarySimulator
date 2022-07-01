@@ -23,7 +23,7 @@ namespace NeatSquared {
     public:
         explicit Generation(int id);
 
-        NetworkInstance *getNetworkWithId(int id);
+        NetworkInstance *getNetworkWithId(unsigned int id);
 
         void addNetwork(std::unique_ptr<NetworkInstance> network);
 
@@ -31,6 +31,11 @@ namespace NeatSquared {
          * Returns the sum of the fitness of all the species, using each species average fitness.
          */
         float getSumOfAverageSpeciesFitness() const;
+
+        /*
+         * Returns the fitness of the top species
+         */
+        float getTopSpeciesFitness() const;
 
 
         NetworkInstance &getRandomNetwork();
