@@ -11,10 +11,10 @@
 
 using namespace NeatSquared;
 
-const float BreedingManager::NETWORK_COMPATIBILITY_MATCHING_GENE_CONSTANT = 1;
+const float BreedingManager::NETWORK_COMPATIBILITY_MATCHING_GENE_CONSTANT = 3;
 const float BreedingManager::NETWORK_COMPATIBILITY_WEIGHT_DIFFERENCE_CONSTANT = 0.4;
 const float BreedingManager::SAME_SPECIES_NETWORK_COMPATIBILITY_CUTOFF = 3;
-const int BreedingManager::MAX_NETWORKS_IN_GENERATION = 5000;
+const int BreedingManager::MAX_NETWORKS_IN_GENERATION = 1000;
 const float BreedingManager::SPECIES_BREEDING_PERCENT = 0.4; // Only the top this percent will be allowed to breed in any given species
 
 const float NetworkBreeder::SAME_GENE_BOTH_PARENT_MORE_FIT_PROB = 0.5f;
