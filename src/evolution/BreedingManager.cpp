@@ -11,9 +11,9 @@
 
 using namespace NeatSquared;
 
-const float BreedingManager::NETWORK_COMPATIBILITY_MATCHING_GENE_CONSTANT = 3;
-const float BreedingManager::NETWORK_COMPATIBILITY_WEIGHT_DIFFERENCE_CONSTANT = 0.4;
-const float BreedingManager::SAME_SPECIES_NETWORK_COMPATIBILITY_CUTOFF = 3;
+const float BreedingManager::NETWORK_COMPATIBILITY_MATCHING_GENE_CONSTANT = 5;
+const float BreedingManager::NETWORK_COMPATIBILITY_WEIGHT_DIFFERENCE_CONSTANT = 0.5;
+const float BreedingManager::SAME_SPECIES_NETWORK_COMPATIBILITY_CUTOFF = 2.5f;
 const int BreedingManager::MAX_NETWORKS_IN_GENERATION = 1000;
 const float BreedingManager::SPECIES_BREEDING_PERCENT = 0.4; // Only the top this percent will be allowed to breed in any given species
 

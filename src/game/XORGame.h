@@ -23,7 +23,6 @@ namespace NeatSquared {
         bool shouldSlowTraining;
 
     private:
-        const int numberOfIterations = 20;
 
         float differenceSquaredFitness(float actual, float expected);
     };
