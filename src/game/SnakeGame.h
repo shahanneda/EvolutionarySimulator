@@ -13,7 +13,7 @@ namespace NeatSquared {
     class SnakeGame : public Game {
 
     private:
-        enum DIRECTION {
+        enum Direction {
             UP,
             RIGHT,
             DOWN,
@@ -25,7 +25,7 @@ namespace NeatSquared {
             int y;
         };
 
-        enum TILE_TYPE {
+        enum TileType {
             SNAKE,
             FOOD,
             EMPTY
@@ -37,7 +37,7 @@ namespace NeatSquared {
         };
 
 
-        void setBoardPos(BoardPosition pos, TILE_TYPE type);
+        void setBoardPos(BoardPosition pos, TileType type);
 
         /*
          * Resets all aspects of the game, including score, iterationCount, snake position, and board.
@@ -49,10 +49,14 @@ namespace NeatSquared {
          */
         bool nextGameIteration();
 
+        static bool isValidBoardPosition(BoardPosition pos);
+
+        bool isValidSnakeBoardPosition(BoardPosition pos);
+
         int score = 0;
         int iterationCount = 0;
-    public:
 
+    public:
         SnakeGame();
 
         float evaluateNetwork(NetworkInstance &network) override;
@@ -60,11 +64,10 @@ namespace NeatSquared {
         static const int BOARD_SIZE = 10;
 
         SnakeNode snakeHead{{4, 4}, nullptr};
-        std::array<TILE_TYPE, BOARD_SIZE * BOARD_SIZE> board;
+        Direction headDirection;
+        std::array<TileType, BOARD_SIZE * BOARD_SIZE> board;
 
-        TILE_TYPE getBoardPos(BoardPosition pos);
-
-
+        TileType getBoardPos(BoardPosition pos);
     }
 
 
