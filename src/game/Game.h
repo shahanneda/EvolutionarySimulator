@@ -28,6 +28,11 @@ namespace NeatSquared {
         int numberOfOutputs = 0;
 
         /*
+         *  Slow game so it can be viewed easier in the UI
+         */
+        bool shouldSlowGame = false;
+
+        /*
          * Uses network to evaluate a game
          */
         virtual

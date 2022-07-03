@@ -49,12 +49,20 @@ namespace NeatSquared {
          */
         bool nextGameIteration();
 
+        void generateFood();
+
         static bool isValidBoardPosition(BoardPosition pos);
 
         bool isValidSnakeBoardPosition(BoardPosition pos);
 
         int score = 0;
         int iterationCount = 0;
+
+
+        constexpr const static int slowGameDownDelay = 100;
+        constexpr const static float fitnessTimeMultiplier = 2.f;
+        constexpr const static float fitnessScoreMultiplier = 100.f;
+
 
     public:
         SnakeGame();
@@ -64,11 +72,17 @@ namespace NeatSquared {
         static const int BOARD_SIZE = 10;
 
         SnakeNode snakeHead{{4, 4}, nullptr};
+        BoardPosition foodPosition;
         Direction headDirection;
         std::array<TileType, BOARD_SIZE * BOARD_SIZE> board;
 
         TileType getBoardPos(BoardPosition pos);
-    }
 
+        bool isFacingCorrectDirection() const;
+
+        BoardPosition moveOneStepInDirection(BoardPosition pos, Direction direction);
+    };
+
+};
 
 #endif //SNAKEGAME_H
