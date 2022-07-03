@@ -131,6 +131,7 @@ void NetworkPickerWindow::renderWindow() {
 void NetworkPickerWindow::changeRenderingNetwork(NetworkInstance &network) {
     std::lock_guard<std::mutex>(GraphicsManager::getInstance().networkRenderer.currentNetworkMutex);
     GraphicsManager::getInstance().networkRenderer.currentNetwork = &network;
+
 }
 
 

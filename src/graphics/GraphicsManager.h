@@ -14,6 +14,7 @@ static const int WINDOW_HEIGHT = 720;
 #include "imgui_impl_opengl3.h"
 #include "graphics/NetworkRenderer.h"
 #include "graphics/NetworkPickerWindow.h"
+#include "graphics/SnakeGameRenderer.h"
 
 #include "evolution/BreedingManager.h"
 
@@ -53,6 +54,7 @@ namespace NeatSquared {
 
         NetworkRenderer networkRenderer;
         NetworkPickerWindow networkPicker;
+        SnakeGameRenderer snakeRenderer;
 
     private:
         void decideGLSLVersion();

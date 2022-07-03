@@ -20,7 +20,6 @@ namespace NeatSquared {
          */
         static float logisticFitness(float actual, int expected);
 
-        bool shouldSlowTraining;
 
     private:
 

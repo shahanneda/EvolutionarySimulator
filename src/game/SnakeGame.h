@@ -12,24 +12,30 @@
 namespace NeatSquared {
     class SnakeGame : public Game {
 
-    private:
+    public:
+        struct BoardPosition {
+            int x;
+            int y;
+        };
+        enum TileType {
+            SNAKE,
+            FOOD,
+            EMPTY
+        };
+
+        /*
+         * Advances game to next step, return true if snake is alive, false if snake is dead.
+         */
+        bool nextGameIteration();
+
         enum Direction {
             UP,
             RIGHT,
             DOWN,
             LEFT
         };
+    private:
 
-        struct BoardPosition {
-            int x;
-            int y;
-        };
-
-        enum TileType {
-            SNAKE,
-            FOOD,
-            EMPTY
-        };
 
         struct SnakeNode {
             BoardPosition pos;
@@ -44,10 +50,6 @@ namespace NeatSquared {
          */
         void resetGame();
 
-        /*
-         * Advances game to next step, return true if snake is alive, false if snake is dead.
-         */
-        bool nextGameIteration();
 
         void generateFood();
 
@@ -65,6 +67,8 @@ namespace NeatSquared {
 
 
     public:
+
+
         SnakeGame();
 
         float evaluateNetwork(NetworkInstance &network) override;

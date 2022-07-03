@@ -61,7 +61,9 @@ void BreedingManager::createStartingGeneration() {
 void BreedingManager::evaluateFitnessOfSpecies(Species &species) {
 
     for (NetworkInstance &network: species.networks) {
-        network.lastEvaluationFitness = game.evaluateNetwork(network);
+        // evaluate each networks 2 time to prevent just being lucky on on run
+        network.lastEvaluationFitness =
+                (game.evaluateNetwork(network) + game.evaluateNetwork(network)) / 2.f;
     }
 
     std::sort(species.networks.begin(), species.networks.end(),
@@ -74,7 +76,6 @@ void BreedingManager::evaluateFitnessOfSpecies(Species &species) {
     int count = 0;
     float averageFitness = 0;
     for (NetworkInstance &network: species.networks) {
-        network.lastEvaluationFitness = game.evaluateNetwork(network);
         averageFitness += network.lastEvaluationFitness;
 
         count++;

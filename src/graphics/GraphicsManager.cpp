@@ -98,8 +98,7 @@ void GraphicsManager::renderMainFrame(const ImGuiIO &io) {
         renderOptions();
         networkRenderer.renderNetwork();
         networkPicker.renderWindow();
-
-
+        snakeRenderer.renderWindow();
     }
     ImGui::Render();
 }
@@ -124,6 +123,10 @@ void GraphicsManager::renderOptions() {
 
         ImGui::Checkbox("Display Connection Weights",
                         &networkRenderer.displayConnectionWeight);
+
+        if (breedingManager) {
+            ImGui::Checkbox("Slow down training", &breedingManager->game.shouldSlowGame);
+        }
 
         if (networkRenderer.currentNetwork) {
             std::lock_guard<std::mutex> lock(networkRenderer.currentNetworkMutex);

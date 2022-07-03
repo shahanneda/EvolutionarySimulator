@@ -15,6 +15,9 @@ using namespace NeatSquared;
 SnakeGame::SnakeGame() {
     this->numberOfInputs = 2;
     this->numberOfOutputs = 4;
+//    this->shouldSlowGame = true;
+
+    resetGame();
 }
 
 SnakeGame::TileType SnakeGame::getBoardPos(BoardPosition pos) {
@@ -49,6 +52,7 @@ void SnakeGame::resetGame() {
     snakeHead = {snakeStartingPosition, nullptr};
     score = 0;
     iterationCount = 0;
+    generateFood();
 }
 
 float SnakeGame::evaluateNetwork(NetworkInstance &network) {
@@ -80,12 +84,12 @@ float SnakeGame::evaluateNetwork(NetworkInstance &network) {
         if (outGoDown->currentValue >= 0.5f) {
             headDirection = UP;
         }
+
+        if (shouldSlowGame) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(SnakeGame::slowGameDownDelay));
+        }
     }
 
-
-    if (shouldSlowGame) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(SnakeGame::slowGameDownDelay));
-    }
 
     return iterationCount * fitnessTimeMultiplier + score * fitnessScoreMultiplier;
 }
@@ -107,9 +111,9 @@ SnakeGame::BoardPosition SnakeGame::moveOneStepInDirection(BoardPosition pos, Di
     // move head forward
     switch (direction) {
         case UP:
-            return {pos.x, pos.y + 1};
-        case DOWN:
             return {pos.x, pos.y - 1};
+        case DOWN:
+            return {pos.x, pos.y + 1};
         case RIGHT:
             return {pos.x + 1, pos.y};
         case LEFT:
@@ -138,27 +142,28 @@ bool SnakeGame::nextGameIteration() {
     setBoardPos(snakeHead.pos, SNAKE);
 
     // move rest of snake to follow
+    SnakeNode *prev = &snakeHead;
     SnakeNode *current = snakeHead.prev;
     while (current != nullptr) {
         BoardPosition temp = current->pos;
-        current->pos = oldPosition;
-        setBoardPos(current->pos, EMPTY);
-        setBoardPos(oldPosition, SNAKE);
-        oldPosition = temp;
 
-        // preserve tail so we can add to it fast if needed
-        if (current->prev) {
-            current = current->prev;
-        } else {
-            break;
-        }
+        setBoardPos(current->pos, EMPTY); // empty the spot for this node
+
+        current->pos = oldPosition; //set this nodes position where the one ahead of it previously was
+        setBoardPos(current->pos, SNAKE); // color this node
+
+        oldPosition = temp; // store the nodes old position for other nodes
+
+        // go to next node
+        prev = current;
+        current = prev->prev;
     }
 
     // add new node if has ate
     if (hasAte) {
         score++;
         // oldPosition holds the old spot of the last node, so where the new snake node should go
-        current->prev = new SnakeNode({oldPosition, nullptr});
+        prev->prev = new SnakeNode({oldPosition, nullptr});
         generateFood();
     }
 
@@ -174,8 +179,11 @@ bool SnakeGame::isValidBoardPosition(SnakeGame::BoardPosition pos) {
 }
 
 void SnakeGame::generateFood() {
-    foodPosition = {RandomGenerator::getRandomInRange(0, BOARD_SIZE - 1),
-                    RandomGenerator::getRandomInRange(0, BOARD_SIZE - 1)};
+    do {
+        foodPosition = {RandomGenerator::getRandomInRange(0, BOARD_SIZE - 1),
+                        RandomGenerator::getRandomInRange(0, BOARD_SIZE - 1)};
+
+    } while (getBoardPos(foodPosition) == SNAKE);
 
     setBoardPos(foodPosition, FOOD);
 }

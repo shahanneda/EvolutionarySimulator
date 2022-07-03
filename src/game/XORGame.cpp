@@ -10,7 +10,7 @@
 
 using namespace NeatSquared;
 
-XORGame::XORGame() : shouldSlowTraining(false) {
+XORGame::XORGame() {
     this->numberOfInputs = 2;
     this->numberOfOutputs = 1;
 }
