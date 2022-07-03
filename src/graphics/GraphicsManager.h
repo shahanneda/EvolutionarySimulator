@@ -56,6 +56,7 @@ namespace NeatSquared {
         NetworkPickerWindow networkPicker;
         SnakeGameRenderer snakeRenderer;
 
+
     private:
         void decideGLSLVersion();
 

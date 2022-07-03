@@ -35,6 +35,8 @@ namespace NeatSquared {
 
         int getCurrentGenerationNumber();
 
+        bool shouldPauseTraining = false;
+
         /*
          * Evaluate the fitness of a generation
          */

@@ -59,8 +59,10 @@ namespace NeatSquared {
 
         int score = 0;
         int iterationCount = 0;
+        int lastFoodIteration = 0;
 
 
+        constexpr const static int maximumIterationWithoutFoodCutoff = 100;
         constexpr const static int slowGameDownDelay = 100;
         constexpr const static float fitnessTimeMultiplier = 2.f;
         constexpr const static float fitnessScoreMultiplier = 100.f;
@@ -85,6 +87,10 @@ namespace NeatSquared {
         bool isFacingCorrectDirection() const;
 
         BoardPosition moveOneStepInDirection(BoardPosition pos, Direction direction);
+
+        Direction rotateDirectionRight(Direction dir) const;
+
+        Direction rotateDirectionLeft(Direction dir) const;
     };
 
 };

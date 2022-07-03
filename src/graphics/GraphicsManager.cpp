@@ -124,6 +124,9 @@ void GraphicsManager::renderOptions() {
         ImGui::Checkbox("Display Connection Weights",
                         &networkRenderer.displayConnectionWeight);
 
+        ImGui::Checkbox("Pause Training",
+                        &breedingManager->shouldPauseTraining);
+
         if (breedingManager) {
             ImGui::Checkbox("Slow down training", &breedingManager->game.shouldSlowGame);
         }
@@ -136,11 +139,12 @@ void GraphicsManager::renderOptions() {
                         *networkRenderer.currentNetwork);
             }
 
-            for (int inputInnovationNumber: networkRenderer.currentNetwork->inputs) {
-                ImGui::InputFloat(("Neuron " + std::to_string(inputInnovationNumber)).c_str(),
-                                  &networkRenderer.currentNetwork->getNeuronWithInnovationNumber(
-                                          inputInnovationNumber)->currentValue);
-            }
+// manually input neuroan values:
+//            for (int inputInnovationNumber: networkRenderer.currentNetwork->inputs) {
+//                ImGui::InputFloat(("Neuron " + std::to_string(inputInnovationNumber)).c_str(),
+//                                  &networkRenderer.currentNetwork->getNeuronWithInnovationNumber(
+//                                          inputInnovationNumber)->currentValue);
+//            }
         }
 
     }
@@ -209,18 +213,22 @@ void GraphicsManager::handleInput() {
     if (ImGui::IsKeyPressed(ImGuiKey_RightArrow)) {
         networkRenderer.displayOffset = ImVec2(networkRenderer.displayOffset.x - speed,
                                                networkRenderer.displayOffset.y);
+        snakeRenderer.game->headDirection = SnakeGame::RIGHT;
     }
     if (ImGui::IsKeyPressed(ImGuiKey_LeftArrow)) {
         networkRenderer.displayOffset = ImVec2(networkRenderer.displayOffset.x + speed,
                                                networkRenderer.displayOffset.y);
+        snakeRenderer.game->headDirection = SnakeGame::LEFT;
     }
     if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)) {
         networkRenderer.displayOffset = ImVec2(networkRenderer.displayOffset.x,
                                                networkRenderer.displayOffset.y + speed);
+        snakeRenderer.game->headDirection = SnakeGame::UP;
     }
     if (ImGui::IsKeyPressed(ImGuiKey_DownArrow)) {
         networkRenderer.displayOffset = ImVec2(networkRenderer.displayOffset.x,
                                                networkRenderer.displayOffset.y - speed);
+        snakeRenderer.game->headDirection = SnakeGame::DOWN;
     }
 }
 

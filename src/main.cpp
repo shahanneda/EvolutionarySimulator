@@ -25,13 +25,25 @@ void startGraphics() {
     BreedingManager manager(snakeGame);
     GraphicsManager &graphicsManager = GraphicsManager::getInstance();
 
+
     graphicsManager.breedingManager = &manager;
+
+
     graphicsManager.snakeRenderer.game = &snakeGame;
-
-
     for (int i = 0; i < 1000; i++) {
         manager.evaluateFitnessOfGeneration(manager.getCurrentGeneration());
         manager.breedNextGeneration();
+
+
+
+        // pause training
+        while (manager.shouldPauseTraining) {
+            if (graphicsManager.snakeRenderer.game &&
+                graphicsManager.networkRenderer.currentNetwork) {
+                graphicsManager.snakeRenderer.game->evaluateNetwork(*graphicsManager.networkRenderer.currentNetwork);
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            }
+        };
     }
 
     printf(" Finished NEAT Thread init\n");

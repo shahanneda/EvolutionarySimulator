@@ -99,6 +99,11 @@ namespace NeatSquared {
         bool isCompatibleWith(NetworkInstance &network);
 
         /*
+         * Gets the number of connections + neurons in this network
+         */
+        int getSize();
+
+        /*
          * Make a clone of this network
          */
         std::unique_ptr<NetworkInstance> clone();

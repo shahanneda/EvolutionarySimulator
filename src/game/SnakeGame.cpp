@@ -13,7 +13,7 @@
 using namespace NeatSquared;
 
 SnakeGame::SnakeGame() {
-    this->numberOfInputs = 2;
+    this->numberOfInputs = 7;
     this->numberOfOutputs = 4;
 //    this->shouldSlowGame = true;
 
@@ -38,6 +38,7 @@ void SnakeGame::setBoardPos(BoardPosition pos, SnakeGame::TileType type) {
 
 void SnakeGame::resetGame() {
     BoardPosition snakeStartingPosition = {4, 4};
+    BoardPosition foodStartingPosition = {2, 2};
 
     board.fill(SnakeGame::TileType::EMPTY);
 
@@ -52,6 +53,11 @@ void SnakeGame::resetGame() {
     snakeHead = {snakeStartingPosition, nullptr};
     score = 0;
     iterationCount = 0;
+    lastFoodIteration = 0;
+
+
+//    foodPosition = foodStartingPosition;
+//    setBoardPos(foodPosition, FOOD);
     generateFood();
 }
 
@@ -59,8 +65,16 @@ float SnakeGame::evaluateNetwork(NetworkInstance &network) {
     resetGame();
 
     while (nextGameIteration()) {
-        Neuron *const inputIsFacingCorrectDirection = network.getNeuronWithInnovationNumber(network.inputs[0]);
-        Neuron *const inputIsValidBlockInFront = network.getNeuronWithInnovationNumber(network.inputs[1]);
+//        Neuron *const inputIsFacingCorrectDirection = network.getNeuronWithInnovationNumber(network.inputs[0]);
+        Neuron *const inputIsValidBlockUp = network.getNeuronWithInnovationNumber(network.inputs[0]);
+        Neuron *const inputIsValidBlockRight = network.getNeuronWithInnovationNumber(network.inputs[1]);
+        Neuron *const inputIsValidBlockLeft = network.getNeuronWithInnovationNumber(network.inputs[2]);
+        Neuron *const inputIsValidBlockDown = network.getNeuronWithInnovationNumber(network.inputs[2]);
+        Neuron *const inputFoodUp = network.getNeuronWithInnovationNumber(network.inputs[3]);
+        Neuron *const inputFoodDown = network.getNeuronWithInnovationNumber(network.inputs[4]);
+        Neuron *const inputFoodLeft = network.getNeuronWithInnovationNumber(network.inputs[5]);
+        Neuron *const inputFoodRight = network.getNeuronWithInnovationNumber(network.inputs[6]);
+        // what about telling it if it needs to right right left up down
 
         Neuron *const outGoLeft = network.getNeuronWithInnovationNumber(network.outputs[0]);
         Neuron *const outGoRight = network.getNeuronWithInnovationNumber(network.outputs[1]);
@@ -68,9 +82,21 @@ float SnakeGame::evaluateNetwork(NetworkInstance &network) {
         Neuron *const outGoDown = network.getNeuronWithInnovationNumber(network.outputs[3]);
 
 
-        inputIsFacingCorrectDirection->currentValue = isFacingCorrectDirection();
-        inputIsValidBlockInFront->currentValue = isValidSnakeBoardPosition(
-                moveOneStepInDirection(snakeHead.pos, headDirection));
+        inputIsValidBlockUp->currentValue = isValidSnakeBoardPosition(
+                moveOneStepInDirection(snakeHead.pos, UP));
+        inputIsValidBlockRight->currentValue = isValidSnakeBoardPosition(
+                moveOneStepInDirection(snakeHead.pos, RIGHT));
+        inputIsValidBlockLeft->currentValue = isValidSnakeBoardPosition(
+                moveOneStepInDirection(snakeHead.pos, LEFT));
+        inputIsValidBlockDown->currentValue = isValidSnakeBoardPosition(
+                moveOneStepInDirection(snakeHead.pos, DOWN));
+
+        inputFoodUp->currentValue = snakeHead.pos.y > foodPosition.y;
+        inputFoodDown->currentValue = snakeHead.pos.y < foodPosition.y;
+        inputFoodRight->currentValue = snakeHead.pos.x < foodPosition.x;
+        inputFoodLeft->currentValue = snakeHead.pos.x > foodPosition.x;
+
+        network.evaluateNetwork();
 
         if (outGoLeft->currentValue >= 0.5f) {
             headDirection = LEFT;
@@ -82,7 +108,7 @@ float SnakeGame::evaluateNetwork(NetworkInstance &network) {
             headDirection = UP;
         }
         if (outGoDown->currentValue >= 0.5f) {
-            headDirection = UP;
+            headDirection = DOWN;
         }
 
         if (shouldSlowGame) {
@@ -90,8 +116,36 @@ float SnakeGame::evaluateNetwork(NetworkInstance &network) {
         }
     }
 
+    float sizeModifier = network.getSize() * 0.001f;
 
-    return iterationCount * fitnessTimeMultiplier + score * fitnessScoreMultiplier;
+
+    return iterationCount * fitnessTimeMultiplier + score * fitnessScoreMultiplier - sizeModifier;
+}
+
+SnakeGame::Direction SnakeGame::rotateDirectionRight(SnakeGame::Direction dir) const {
+    switch (dir) {
+        case RIGHT:
+            return DOWN;
+        case LEFT:
+            return UP;
+        case UP:
+            return RIGHT;
+        case DOWN:
+            return LEFT;
+    }
+}
+
+SnakeGame::Direction SnakeGame::rotateDirectionLeft(SnakeGame::Direction dir) const {
+    switch (dir) {
+        case RIGHT:
+            return UP;
+        case LEFT:
+            return DOWN;
+        case UP:
+            return LEFT;
+        case DOWN:
+            return RIGHT;
+    }
 }
 
 bool SnakeGame::isFacingCorrectDirection() const {
@@ -161,12 +215,17 @@ bool SnakeGame::nextGameIteration() {
 
     // add new node if has ate
     if (hasAte) {
+        lastFoodIteration = iterationCount;
         score++;
         // oldPosition holds the old spot of the last node, so where the new snake node should go
         prev->prev = new SnakeNode({oldPosition, nullptr});
         generateFood();
     }
 
+    if (iterationCount - lastFoodIteration > maximumIterationWithoutFoodCutoff) {
+        // kill snake if it hasnt ate food in a while
+        return false;
+    }
     return true;
 }
 

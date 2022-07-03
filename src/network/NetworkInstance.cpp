@@ -191,3 +191,7 @@ std::unique_ptr<NetworkInstance> NetworkInstance::clone() {
     return std::unique_ptr<NetworkInstance>(
             new NetworkInstance(innovationToConnectionMap, innovationToNeuronMap, inputs, outputs));
 }
+
+int NetworkInstance::getSize() {
+    return innovationToConnectionMap.size() + innovationToNeuronMap.size();
+}
