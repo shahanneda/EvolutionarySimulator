@@ -47,7 +47,9 @@ void NetworkRenderer::renderNetwork() {
     }
 
     std::lock_guard<std::mutex> lock(currentNetworkMutex);
-    currentNetwork->evaluateNetwork();
+
+    // for inspecting networks manually this is needed, but not for auto evaluation
+    // currentNetwork->evaluateNetwork();
 
     std::deque<Neuron *> neuronsToRender;
     for (int innovationNumber: currentNetwork->outputs) {

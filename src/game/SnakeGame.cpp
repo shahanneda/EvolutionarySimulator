@@ -13,7 +13,7 @@
 using namespace NeatSquared;
 
 SnakeGame::SnakeGame() {
-    this->numberOfInputs = 7;
+    this->numberOfInputs = 5;
     this->numberOfOutputs = 4;
 //    this->shouldSlowGame = true;
 
@@ -65,15 +65,15 @@ float SnakeGame::evaluateNetwork(NetworkInstance &network) {
     resetGame();
 
     while (nextGameIteration()) {
-//        Neuron *const inputIsFacingCorrectDirection = network.getNeuronWithInnovationNumber(network.inputs[0]);
-        Neuron *const inputIsValidBlockUp = network.getNeuronWithInnovationNumber(network.inputs[0]);
-        Neuron *const inputIsValidBlockRight = network.getNeuronWithInnovationNumber(network.inputs[1]);
-        Neuron *const inputIsValidBlockLeft = network.getNeuronWithInnovationNumber(network.inputs[2]);
-        Neuron *const inputIsValidBlockDown = network.getNeuronWithInnovationNumber(network.inputs[2]);
-        Neuron *const inputFoodUp = network.getNeuronWithInnovationNumber(network.inputs[3]);
-        Neuron *const inputFoodDown = network.getNeuronWithInnovationNumber(network.inputs[4]);
-        Neuron *const inputFoodLeft = network.getNeuronWithInnovationNumber(network.inputs[5]);
-        Neuron *const inputFoodRight = network.getNeuronWithInnovationNumber(network.inputs[6]);
+        Neuron *const inputIsFacingCorrectDirection = network.getNeuronWithInnovationNumber(network.inputs[4]);
+//        Neuron *const inputIsValidBlockUp = network.getNeuronWithInnovationNumber(network.inputs[0]);
+//        Neuron *const inputIsValidBlockRight = network.getNeuronWithInnovationNumber(network.inputs[1]);
+//        Neuron *const inputIsValidBlockLeft = network.getNeuronWithInnovationNumber(network.inputs[2]);
+//        Neuron *const inputIsValidBlockDown = network.getNeuronWithInnovationNumber(network.inputs[2]);
+        Neuron *const inputFoodUp = network.getNeuronWithInnovationNumber(network.inputs[0]);
+        Neuron *const inputFoodDown = network.getNeuronWithInnovationNumber(network.inputs[1]);
+        Neuron *const inputFoodLeft = network.getNeuronWithInnovationNumber(network.inputs[2]);
+        Neuron *const inputFoodRight = network.getNeuronWithInnovationNumber(network.inputs[3]);
         // what about telling it if it needs to right right left up down
 
         Neuron *const outGoLeft = network.getNeuronWithInnovationNumber(network.outputs[0]);
@@ -82,14 +82,14 @@ float SnakeGame::evaluateNetwork(NetworkInstance &network) {
         Neuron *const outGoDown = network.getNeuronWithInnovationNumber(network.outputs[3]);
 
 
-        inputIsValidBlockUp->currentValue = isValidSnakeBoardPosition(
-                moveOneStepInDirection(snakeHead.pos, UP));
-        inputIsValidBlockRight->currentValue = isValidSnakeBoardPosition(
-                moveOneStepInDirection(snakeHead.pos, RIGHT));
-        inputIsValidBlockLeft->currentValue = isValidSnakeBoardPosition(
-                moveOneStepInDirection(snakeHead.pos, LEFT));
-        inputIsValidBlockDown->currentValue = isValidSnakeBoardPosition(
-                moveOneStepInDirection(snakeHead.pos, DOWN));
+        inputIsFacingCorrectDirection->currentValue = isValidSnakeBoardPosition(
+                moveOneStepInDirection(snakeHead.pos, headDirection));
+//        inputIsValidBlockRight->currentValue = isValidSnakeBoardPosition(
+//                moveOneStepInDirection(snakeHead.pos, RIGHT));
+//        inputIsValidBlockLeft->currentValue = isValidSnakeBoardPosition(
+//                moveOneStepInDirection(snakeHead.pos, LEFT));
+//        inputIsValidBlockDown->currentValue = isValidSnakeBoardPosition(
+//                moveOneStepInDirection(snakeHead.pos, DOWN));
 
         inputFoodUp->currentValue = snakeHead.pos.y > foodPosition.y;
         inputFoodDown->currentValue = snakeHead.pos.y < foodPosition.y;
