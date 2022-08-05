@@ -15,8 +15,6 @@ using namespace NeatSquared;
 SnakeGame::SnakeGame() {
     this->numberOfInputs = 4;
     this->numberOfOutputs = 2;
-//    this->shouldSlowGame = true;
-
     resetGame();
 }
 
@@ -62,39 +60,32 @@ void SnakeGame::resetGame() {
 float SnakeGame::evaluateNetwork(NetworkInstance &network) {
     resetGame();
 
+    Neuron *const inputFoodHorizontal = network.getNeuronWithInnovationNumber(network.inputs[0]);
+    Neuron *const inputFoodVertical = network.getNeuronWithInnovationNumber(network.inputs[1]);
+
+    Neuron *const inputIsValidNodeHorizontal = network.getNeuronWithInnovationNumber(network.inputs[2]);
+    Neuron *const inputIsValidNodeVertical = network.getNeuronWithInnovationNumber(network.inputs[3]);
+
+    Neuron *const outHorizontal = network.getNeuronWithInnovationNumber(network.outputs[0]);
+    Neuron *const outVertical = network.getNeuronWithInnovationNumber(network.outputs[1]);
+
     while (nextGameIteration()) {
 
+        // Provide network with information about food position
+        inputFoodHorizontal->currentValue = (snakeHead.pos.x - foodPosition.x) > 0 ? 1 : -1;
+        inputFoodVertical->currentValue = (snakeHead.pos.y - foodPosition.y) > 0 ? 1 : -1;
 
-        Neuron *const inputFoodHorizontal = network.getNeuronWithInnovationNumber(network.inputs[0]);
-        Neuron *const inputFoodVertical = network.getNeuronWithInnovationNumber(network.inputs[1]);
-
-        Neuron *const inputIsValidBlockUp = network.getNeuronWithInnovationNumber(network.inputs[2]);
-        Neuron *const inputIsValidBlockRight = network.getNeuronWithInnovationNumber(network.inputs[3]);
-//        Neuron *const inputIsValidBlockLeft = network.getNeuronWithInnovationNumber(network.inputs[4]);
-//        Neuron *const inputIsValidBlockDown = network.getNeuronWithInnovationNumber(network.inputs[5]);
-
-        // what about telling it if it needs to right right left up down
-
-        Neuron *const outHorizontal = network.getNeuronWithInnovationNumber(network.outputs[0]);
-        Neuron *const outVertical = network.getNeuronWithInnovationNumber(network.outputs[1]);
-
+        // Provide network with information about its surroundings (are its surroundings safe nodes?)
         bool topValid = isValidSnakeBoardPosition(moveOneStepInDirection(snakeHead.pos, UP));
         bool bottomValid = isValidSnakeBoardPosition(moveOneStepInDirection(snakeHead.pos, DOWN));
         bool rightValid = isValidSnakeBoardPosition(
                 moveOneStepInDirection(snakeHead.pos, RIGHT));
         bool leftValid = isValidSnakeBoardPosition(
                 moveOneStepInDirection(snakeHead.pos, LEFT));
+        // if both top xor bottom 0, if only top valid then 1, else if only bottom valid -1
+        inputIsValidNodeHorizontal->currentValue = topValid == bottomValid ? 0 : (topValid ? 1 : -1);
+        inputIsValidNodeVertical->currentValue = rightValid == leftValid ? 0 : (rightValid ? 1 : -1);
 
-        // if both top is valid and bottom valid or invalid, 0, if only top valid then 1, else if only bottom valid -1
-        inputIsValidBlockUp->currentValue = topValid == bottomValid ? 0 : (topValid ? 1 : -1);
-        inputIsValidBlockRight->currentValue = rightValid == leftValid ? 0 : (rightValid ? 1 : -1);
-
-//        inputIsValidBlockLeft->currentValue
-//        inputIsValidBlockDown->currentValue
-
-
-        inputFoodHorizontal->currentValue = (snakeHead.pos.x - foodPosition.x) > 0 ? 1 : -1;
-        inputFoodVertical->currentValue = (snakeHead.pos.y - foodPosition.y) > 0 ? 1 : -1;
 
         network.evaluateNetwork();
 
@@ -116,10 +107,10 @@ float SnakeGame::evaluateNetwork(NetworkInstance &network) {
         }
     }
 
-    float sizeModifier = network.getSize() * 0.001f;
+    float sizeModifier = network.getSize() * fitnessSizeMultiplier;
 
 
-    return iterationCount * fitnessTimeMultiplier + score * fitnessScoreMultiplier - sizeModifier;
+    return iterationCount * fitnessTimeMultiplier + score * fitnessScoreMultiplier + sizeModifier;
 }
 
 SnakeGame::Direction SnakeGame::rotateDirectionRight(SnakeGame::Direction dir) const {

@@ -66,6 +66,7 @@ namespace NeatSquared {
         constexpr const static int slowGameDownDelay = 100;
         constexpr const static float fitnessTimeMultiplier = 2.f;
         constexpr const static float fitnessScoreMultiplier = 100.f;
+        constexpr const static float fitnessSizeMultiplier = -0.001;
 
 
     public:

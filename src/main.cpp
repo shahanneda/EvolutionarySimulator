@@ -36,9 +36,7 @@ void startGraphics() {
         manager.evaluateFitnessOfGeneration(manager.getCurrentGeneration());
         manager.breedNextGeneration();
 
-
-
-        // pause training
+        // pause training if requested
         while (manager.shouldPauseTraining) {
             if (graphicsManager.snakeRenderer.game &&
                 graphicsManager.networkRenderer.currentNetwork) {
@@ -56,14 +54,10 @@ void startGraphics() {
     while (true) {
         if (graphicsManager.snakeRenderer.game &&
             graphicsManager.networkRenderer.currentNetwork) {
-//            std::lock_guard<std::mutex> lock(graphicsManager.networkRenderer.currentNetworkMutex);
             graphicsManager.snakeRenderer.game->evaluateNetwork(*graphicsManager.networkRenderer.currentNetwork);
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-//        snakeGame.nextGameIteration();
-//        if (GraphicsManager::getInstance().networkRenderer.currentNetwork) {
-//            GraphicsManager::getInstance().networkRenderer.currentNetwork->evaluateNetwork();
-//        }
+
     }
 }
 
