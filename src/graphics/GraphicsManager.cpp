@@ -128,7 +128,7 @@ void GraphicsManager::renderOptions() {
                         &breedingManager->shouldPauseTraining);
 
         if (breedingManager) {
-            ImGui::Checkbox("Slow down training", &breedingManager->game.shouldSlowGame);
+            ImGui::Checkbox("Slow down game", &breedingManager->game.shouldSlowGame);
         }
 
         if (networkRenderer.currentNetwork) {

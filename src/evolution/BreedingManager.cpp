@@ -15,11 +15,11 @@ const float BreedingManager::NETWORK_COMPATIBILITY_MATCHING_GENE_CONSTANT = 5;
 const float BreedingManager::NETWORK_COMPATIBILITY_WEIGHT_DIFFERENCE_CONSTANT = 0.5;
 const float BreedingManager::SAME_SPECIES_NETWORK_COMPATIBILITY_CUTOFF = 1.f;
 const int BreedingManager::MAX_NETWORKS_IN_GENERATION = 1000;
-const float BreedingManager::SPECIES_BREEDING_PERCENT = 0.4; // Only the top this percent will be allowed to breed in any given species
+const float BreedingManager::SPECIES_BREEDING_PERCENT = 0.3; // Only the top this percent will be allowed to breed in any given species
 
 const float NetworkBreeder::SAME_GENE_BOTH_PARENT_MORE_FIT_PROB = 0.5f;
-const float NetworkBreeder::NEW_NEURON_MUTATION_PROB = 0.2f;
-const float NetworkBreeder::NEW_CONNECTION_MUTATION_PROB = 0.2f;
+const float NetworkBreeder::NEW_NEURON_MUTATION_PROB = 0.3f;
+const float NetworkBreeder::NEW_CONNECTION_MUTATION_PROB = 0.3f;
 const float NetworkBreeder::TOGGLE_CONNECTION_MUTATION_PROB = 0.1f;
 const float NetworkBreeder::SCALE_WEIGHT_MUTATION_PROB = 0.7f;
 const float NetworkBreeder::SET_WEIGHT_MUTATION_PROB = 0.5f;
@@ -62,7 +62,7 @@ void BreedingManager::evaluateFitnessOfSpecies(Species &species) {
 
     for (NetworkInstance &network: species.networks) {
         network.lastEvaluationFitness =
-                (game.evaluateNetwork(network));
+                ((game.evaluateNetwork(network)) + (game.evaluateNetwork(network))) / 2.0f;
     }
 
     std::sort(species.networks.begin(), species.networks.end(),

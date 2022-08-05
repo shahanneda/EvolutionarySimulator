@@ -26,7 +26,7 @@ using namespace NeatSquared;
 using std::vector;
 
 NetworkRenderer::NetworkRenderer() : currentNetwork(nullptr), displayOffset(0, 0),
-                                     displayNeuronInnovationNumber(false), displayConnectionInnovationNumber(true) {
+                                     displayNeuronInnovationNumber(false), displayConnectionInnovationNumber(false) {
 
 }
 
@@ -66,7 +66,7 @@ void NetworkRenderer::renderNetwork() {
         windowPos = ImGui::GetWindowPos();
         drawList = ImGui::GetWindowDrawList();
 
-        const int verticalSpacing = 100;
+        const int verticalSpacing = 50;
         const int horizontalSpacing = 100;
 
         const int outputStartX = ImGui::GetWindowWidth() / 2;
@@ -80,7 +80,7 @@ void NetworkRenderer::renderNetwork() {
         std::unordered_map<int, ImVec2> innovationNumberToNeuronPositionMap;
         std::unordered_map<int, Connection *> connectionsToRender;
 
-        calculateInputPositions(verticalSpacing, inputStartX, inputStartY, innovationNumberToNeuronPositionMap,
+        calculateInputPositions(verticalSpacing * 2, inputStartX, inputStartY, innovationNumberToNeuronPositionMap,
                                 connectionsToRender);
 
         calculateNeuronPositions(horizontalSpacing, verticalSpacing, outputStartX, outputStartY, maxLayerNumber,

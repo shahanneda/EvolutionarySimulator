@@ -13,7 +13,7 @@
 using namespace NeatSquared;
 
 SnakeGame::SnakeGame() {
-    this->numberOfInputs = 6;
+    this->numberOfInputs = 4;
     this->numberOfOutputs = 2;
 //    this->shouldSlowGame = true;
 
@@ -70,21 +70,27 @@ float SnakeGame::evaluateNetwork(NetworkInstance &network) {
 
         Neuron *const inputIsValidBlockUp = network.getNeuronWithInnovationNumber(network.inputs[2]);
         Neuron *const inputIsValidBlockRight = network.getNeuronWithInnovationNumber(network.inputs[3]);
-        Neuron *const inputIsValidBlockLeft = network.getNeuronWithInnovationNumber(network.inputs[4]);
-        Neuron *const inputIsValidBlockDown = network.getNeuronWithInnovationNumber(network.inputs[5]);
+//        Neuron *const inputIsValidBlockLeft = network.getNeuronWithInnovationNumber(network.inputs[4]);
+//        Neuron *const inputIsValidBlockDown = network.getNeuronWithInnovationNumber(network.inputs[5]);
 
         // what about telling it if it needs to right right left up down
 
         Neuron *const outHorizontal = network.getNeuronWithInnovationNumber(network.outputs[0]);
         Neuron *const outVertical = network.getNeuronWithInnovationNumber(network.outputs[1]);
-        inputIsValidBlockUp->currentValue = isValidSnakeBoardPosition(
-                moveOneStepInDirection(snakeHead.pos, UP));
-        inputIsValidBlockRight->currentValue = isValidSnakeBoardPosition(
+
+        bool topValid = isValidSnakeBoardPosition(moveOneStepInDirection(snakeHead.pos, UP));
+        bool bottomValid = isValidSnakeBoardPosition(moveOneStepInDirection(snakeHead.pos, DOWN));
+        bool rightValid = isValidSnakeBoardPosition(
                 moveOneStepInDirection(snakeHead.pos, RIGHT));
-        inputIsValidBlockLeft->currentValue = isValidSnakeBoardPosition(
+        bool leftValid = isValidSnakeBoardPosition(
                 moveOneStepInDirection(snakeHead.pos, LEFT));
-        inputIsValidBlockDown->currentValue = isValidSnakeBoardPosition(
-                moveOneStepInDirection(snakeHead.pos, DOWN));
+
+        // if both top is valid and bottom valid or invalid, 0, if only top valid then 1, else if only bottom valid -1
+        inputIsValidBlockUp->currentValue = topValid == bottomValid ? 0 : (topValid ? 1 : -1);
+        inputIsValidBlockRight->currentValue = rightValid == leftValid ? 0 : (rightValid ? 1 : -1);
+
+//        inputIsValidBlockLeft->currentValue
+//        inputIsValidBlockDown->currentValue
 
 
         inputFoodHorizontal->currentValue = (snakeHead.pos.x - foodPosition.x) > 0 ? 1 : -1;
@@ -213,6 +219,8 @@ bool SnakeGame::nextGameIteration() {
         score++;
         // oldPosition holds the old spot of the last node, so where the new snake node should go
         prev->prev = new SnakeNode({oldPosition, nullptr});
+        setBoardPos(oldPosition, SNAKE);
+
         generateFood();
     }
 
