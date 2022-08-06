@@ -70,7 +70,7 @@ void BreedingManager::evaluateFitnessOfSpecies(Species &species) {
         }
 
         network.lastEvaluationFitness =
-                ((game.evaluateNetwork(network)) + (game.evaluateNetwork(network))) / 2.0f;
+                game.evaluateNetwork(network);
     }
 
     std::sort(species.networks.begin(), species.networks.end(),
