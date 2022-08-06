@@ -36,7 +36,7 @@ const ImColor NetworkRenderer::grayColor = ImColor(ImVec4(0.86f, 0.86f, 0.86f, 1
 const ImColor NetworkRenderer::activeColor = ImColor(ImVec4(0, 1.0f, 0, 1));
 const ImColor NetworkRenderer::negativeActiveColor = ImColor(ImVec4(1.0f, 0, 0, 1));
 
-void NetworkRenderer::renderNetwork() {
+void NetworkRenderer::renderWindow(const ImGuiIO &io) {
     if (!currentNetwork) {
         ImGui::Begin("Network Renderer");
         {
@@ -61,7 +61,9 @@ void NetworkRenderer::renderNetwork() {
     }
 
 
-    ImGui::Begin("Network Renderer");
+    ImGui::SetNextWindowSize({io.DisplaySize.x, io.DisplaySize.y * 0.6f}, ImGuiCond_Always);
+    ImGui::SetNextWindowPos({0, io.DisplaySize.y * 0.4f});
+    ImGui::Begin("Network Renderer", NULL);
     {
         windowPos = ImGui::GetWindowPos();
         drawList = ImGui::GetWindowDrawList();

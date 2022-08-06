@@ -2,24 +2,24 @@
 // Created by Shahan Nedadahandeh on 2022-07-02.
 //
 
-#include "game/SnakeGame.h"
-#include "imgui.h"
-
 #ifndef SNAKEGAMERENDERER_H
 #define SNAKEGAMERENDERER_H
 
+#include "game/SnakeGame.h"
+#include "graphics/GraphicsWindow.h"
+
+#include "imgui.h"
 
 namespace NeatSquared {
-    class SnakeGameRenderer {
+    class SnakeGameRenderer : public GraphicsWindow {
     public:
         SnakeGameRenderer();
 
         SnakeGame *game;
 
-        void renderWindow();
+        float boxSizing = 20.0f;
 
-        constexpr const static float boxSizing = 20.0f;
-
+        void renderWindow(const ImGuiIO &io) override;
 
         void renderTile(SnakeGame::BoardPosition pos, ImColor color, ImVec2 windowPos, ImDrawList *drawList);
     };

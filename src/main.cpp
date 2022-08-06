@@ -41,6 +41,11 @@ void startGraphics() {
             if (graphicsManager.snakeRenderer.game &&
                 graphicsManager.networkRenderer.currentNetwork) {
                 {
+                    if (!manager.hasAutoSetSlowGameThisPause) {
+                        manager.hasAutoSetSlowGameThisPause = true;
+                        snakeGame.shouldSlowGame = true;
+                    }
+
                     if (graphicsManager.networkPicker.selectedNetwork) {
                         std::lock_guard<std::mutex> networkLock(graphicsManager.networkRenderer.currentNetworkMutex);
                         graphicsManager.networkRenderer.currentNetwork = graphicsManager.networkPicker.selectedNetwork;
@@ -51,6 +56,10 @@ void startGraphics() {
                 }
             }
         };
+
+
+        // If game is unpaused, reset boolean
+        manager.hasAutoSetSlowGameThisPause = false;
     }
 
     printf(" Finished NEAT Thread init\n");

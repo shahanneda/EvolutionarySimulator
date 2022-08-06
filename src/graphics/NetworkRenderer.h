@@ -11,6 +11,7 @@
 #include "network/Connection.h"
 #include "network/Neuron.h"
 #include "network/NetworkInstance.h"
+#include "graphics/GraphicsWindow.h"
 
 #include <deque>
 #include <mutex>
@@ -19,12 +20,9 @@
 
 namespace NeatSquared {
 
-    class NetworkRenderer {
+    class NetworkRenderer : public GraphicsWindow {
     public:
         NetworkRenderer();
-
-        void renderNetwork();
-
 
         NeatSquared::NetworkInstance *currentNetwork;
         std::mutex currentNetworkMutex;
@@ -33,6 +31,8 @@ namespace NeatSquared {
         bool displayNeuronInnovationNumber;
         bool displayConnectionInnovationNumber;
         bool displayConnectionWeight;
+
+        void renderWindow(const ImGuiIO &io) override;
 
     private:
         static const ImColor nodeColor;

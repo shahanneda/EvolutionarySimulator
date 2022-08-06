@@ -89,21 +89,24 @@ void GraphicsManager::renderMainFrame(const ImGuiIO &io) {
 
         ImGui::Begin(" ", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoBringToFrontOnFocus);
         {
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
+            ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
                         ImGui::GetIO().Framerate);
         }
         ImGui::End();
 
-
-        renderOptions();
-        networkRenderer.renderNetwork();
-        networkPicker.renderWindow();
-        snakeRenderer.renderWindow();
+        ImGui::SetNextWindowSize({io.DisplaySize.x * 0.3f, io.DisplaySize.y * 0.3f}, ImGuiCond_Always);
+        ImGui::SetNextWindowPos({io.DisplaySize.x * 0.7f, 0});
+        snakeRenderer.renderWindow(io);
+        renderOptions(io);
+        networkRenderer.renderWindow(io);
+        networkPicker.renderWindow(io);
     }
     ImGui::Render();
 }
 
-void GraphicsManager::renderOptions() {
+void GraphicsManager::renderOptions(const ImGuiIO &io) {
+    ImGui::SetNextWindowSize({io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.4f}, ImGuiCond_Always);
+    ImGui::SetNextWindowPos({io.DisplaySize.x * 0.65f, 0});
     ImGui::Begin("Options");
     {
         if (breedingManager) {
@@ -136,7 +139,7 @@ void GraphicsManager::renderOptions() {
         }
 
         if (networkRenderer.currentNetwork) {
-            std::lock_guard<std::mutex> lock(networkRenderer.currentNetworkMutex);
+            std::lock_guard <std::mutex> lock(networkRenderer.currentNetworkMutex);
 
             if (ImGui::Button("Reevaluate current network", ImVec2(0, 0))) {
                 networkRenderer.currentNetwork->lastEvaluationFitness = breedingManager->game.evaluateNetwork(

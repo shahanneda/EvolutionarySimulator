@@ -33,7 +33,7 @@ std::string getLabelString(std::string label, int id, float fitness) {
     return stream.str();
 }
 
-void NetworkPickerWindow::renderWindow() {
+void NetworkPickerWindow::renderWindow(const ImGuiIO &io) {
     if (!GraphicsManager::getInstance().breedingManager) {
         return;
     }
@@ -47,6 +47,8 @@ void NetworkPickerWindow::renderWindow() {
     Generation &selectedGeneration = (*generations)[selectedGenerationId];
 
 
+    ImGui::SetNextWindowSize({io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.4f}, ImGuiCond_Always);
+    ImGui::SetNextWindowPos({0, 0});
     ImGui::Begin("Network Picker");
     {
         ImGui::BeginGroup();

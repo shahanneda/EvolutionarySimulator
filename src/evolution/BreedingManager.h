@@ -37,6 +37,9 @@ namespace NeatSquared {
 
         bool shouldPauseTraining = false;
 
+        // Used to automatically set the slow one time everytime the user pauses. We don't want to slow the game if the user manually request that it is not slow, so only once.
+        bool hasAutoSetSlowGameThisPause = false;
+
         /*
          * Evaluate the fitness of a generation
          */

@@ -75,7 +75,7 @@ namespace NeatSquared {
 
         static void EmscriptenMainLoop();
 
-        void renderOptions();
+        void renderOptions(const ImGuiIO &io);
     };
 }
 #endif //GRAPHICSMANAGER_H

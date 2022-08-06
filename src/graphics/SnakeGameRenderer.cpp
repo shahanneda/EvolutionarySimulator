@@ -5,13 +5,14 @@
 #include "SnakeGameRenderer.h"
 
 #include "imgui.h"
+#include <algorithm>
 
 using namespace NeatSquared;
 
 SnakeGameRenderer::SnakeGameRenderer() {
 }
 
-void SnakeGameRenderer::renderWindow() {
+void SnakeGameRenderer::renderWindow(const ImGuiIO &io) {
     // if game is null, we are not playing snake and should not render renderer for snake
     if (game == nullptr) {
         return;
@@ -21,6 +22,13 @@ void SnakeGameRenderer::renderWindow() {
     ImColor foodColor = ImColor(ImVec4(1, 0, 0, 1));
 
 
+    float windowWidth = io.DisplaySize.x * 0.15f;
+    float windowHeight = io.DisplaySize.y * 0.4f;
+
+    boxSizing = std::min(windowWidth, windowHeight) / SnakeGame::BOARD_SIZE;
+
+    ImGui::SetNextWindowSize({windowWidth, windowHeight}, ImGuiCond_Always);
+    ImGui::SetNextWindowPos({io.DisplaySize.x * 0.5f, 0});
     ImGui::Begin("Snake");
     {
         ImVec2 windowPos = ImGui::GetWindowPos();
