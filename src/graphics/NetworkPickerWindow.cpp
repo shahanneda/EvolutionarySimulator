@@ -28,7 +28,7 @@ bool NetworkPickerWindow::beginListBox(const char *id) {
 
 std::string getLabelString(std::string label, int id, float fitness) {
     std::stringstream stream;
-    stream << std::fixed << std::setprecision(2) << label << " " << id << " -(f: "
+    stream << std::fixed << std::setprecision(2) << label << " " << id << " ("
            << fitness << ")";
     return stream.str();
 }
@@ -52,7 +52,9 @@ void NetworkPickerWindow::renderWindow() {
         ImGui::BeginGroup();
         ImGui::Text("Generations");
         if (beginListBox("##Generations")) {
-            for (const Generation &g: *generations) {
+            // Show generations in reverse order, also don't show the last generation, since its still training
+            for (unsigned long i = generations->size() - 2; i != -1; i--) {
+                Generation &g = (*generations)[i];
 
                 const bool is_selected = (g.id == selectedGenerationId);
 
