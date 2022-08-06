@@ -41,11 +41,14 @@ void startGraphics() {
             if (graphicsManager.snakeRenderer.game &&
                 graphicsManager.networkRenderer.currentNetwork) {
                 {
+                    if (graphicsManager.networkPicker.selectedNetwork) {
+                        std::lock_guard<std::mutex> networkLock(graphicsManager.networkRenderer.currentNetworkMutex);
+                        graphicsManager.networkRenderer.currentNetwork = graphicsManager.networkPicker.selectedNetwork;
+                    }
+
                     graphicsManager.snakeRenderer.game->evaluateNetwork(
                             *graphicsManager.networkRenderer.currentNetwork);
                 }
-
-                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             }
         };
     }

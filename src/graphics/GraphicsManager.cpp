@@ -106,14 +106,16 @@ void GraphicsManager::renderMainFrame(const ImGuiIO &io) {
 void GraphicsManager::renderOptions() {
     ImGui::Begin("Options");
     {
-        if (ImGui::Button("Evaluate Current Generation Fitness", ImVec2(0, 0))) {
-            breedingManager->evaluateFitnessOfGeneration(breedingManager->getCurrentGeneration());
-        }
+        if (breedingManager) {
+            ImGui::Checkbox("Pause Training",
+                            &breedingManager->shouldPauseTraining);
 
-        if (ImGui::Button("Breed Next Generation", ImVec2(0, 0))) {
-            breedingManager->breedNextGeneration();
+            if (breedingManager->shouldPauseTraining) {
+                ImGui::Checkbox("Slow down game", &breedingManager->game.shouldSlowGame);
+            } else {
+                breedingManager->game.shouldSlowGame = false;
+            }
         }
-
 
         ImGui::Checkbox("Display Neuron innovation numbers (instead of current values)",
                         &networkRenderer.displayNeuronInnovationNumber);
@@ -124,11 +126,13 @@ void GraphicsManager::renderOptions() {
         ImGui::Checkbox("Display Connection Weights",
                         &networkRenderer.displayConnectionWeight);
 
-        ImGui::Checkbox("Pause Training",
-                        &breedingManager->shouldPauseTraining);
 
-        if (breedingManager) {
-            ImGui::Checkbox("Slow down game", &breedingManager->game.shouldSlowGame);
+        if (ImGui::Button("Evaluate Current Generation Fitness", ImVec2(0, 0))) {
+            breedingManager->evaluateFitnessOfGeneration(breedingManager->getCurrentGeneration());
+        }
+
+        if (ImGui::Button("Breed Next Generation", ImVec2(0, 0))) {
+            breedingManager->breedNextGeneration();
         }
 
         if (networkRenderer.currentNetwork) {

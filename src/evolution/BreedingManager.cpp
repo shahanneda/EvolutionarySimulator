@@ -5,16 +5,19 @@
 #include "BreedingManager.h"
 #include "network/Neuron.h"
 #include "network/Connection.h"
+#include "graphics/GraphicsManager.h"
 
 #include <algorithm>
 #include <memory>
+
+#include <mutex>
 
 using namespace NeatSquared;
 
 const float BreedingManager::NETWORK_COMPATIBILITY_MATCHING_GENE_CONSTANT = 5;
 const float BreedingManager::NETWORK_COMPATIBILITY_WEIGHT_DIFFERENCE_CONSTANT = 0.5;
 const float BreedingManager::SAME_SPECIES_NETWORK_COMPATIBILITY_CUTOFF = 1.f;
-const int BreedingManager::MAX_NETWORKS_IN_GENERATION = 1000;
+const int BreedingManager::MAX_NETWORKS_IN_GENERATION = 500;
 const float BreedingManager::SPECIES_BREEDING_PERCENT = 0.3; // Only the top this percent will be allowed to breed in any given species
 
 const float NetworkBreeder::SAME_GENE_BOTH_PARENT_MORE_FIT_PROB = 0.5f;
@@ -61,6 +64,11 @@ void BreedingManager::createStartingGeneration() {
 void BreedingManager::evaluateFitnessOfSpecies(Species &species) {
 
     for (NetworkInstance &network: species.networks) {
+        {
+            std::lock_guard<std::mutex> networkLock(GraphicsManager::getInstance().networkRenderer.currentNetworkMutex);
+            GraphicsManager::getInstance().networkRenderer.currentNetwork = &network;
+        }
+
         network.lastEvaluationFitness =
                 ((game.evaluateNetwork(network)) + (game.evaluateNetwork(network))) / 2.0f;
     }

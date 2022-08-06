@@ -70,6 +70,11 @@ float SnakeGame::evaluateNetwork(NetworkInstance &network) {
     Neuron *const outVertical = network.getNeuronWithInnovationNumber(network.outputs[1]);
 
     while (nextGameIteration()) {
+        if (shouldTerminateGame) {
+            // exit if early termination is required
+            shouldTerminateGame = false;
+            break;
+        }
 
         // Provide network with information about food position
         inputFoodHorizontal->currentValue = (snakeHead.pos.x - foodPosition.x) > 0 ? 1 : -1;
@@ -167,6 +172,8 @@ SnakeGame::BoardPosition SnakeGame::moveOneStepInDirection(BoardPosition pos, Di
 }
 
 bool SnakeGame::nextGameIteration() {
+
+
     iterationCount += 1;
 
     BoardPosition oldPosition = snakeHead.pos;
