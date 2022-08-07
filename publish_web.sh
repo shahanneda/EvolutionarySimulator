@@ -8,6 +8,6 @@ cp web/coi-serviceworker.min.js coi-serviceworker.min.js
 rm .gitignore
 mv .gitignore-web .gitignore
 git add .
-git commit -m "Built web"
-git push
+# git commit -m "Built web"
+# git push
 # git checkout master
