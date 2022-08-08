@@ -3,9 +3,10 @@
 //
 
 #include "SnakeGameRenderer.h"
+#include "graphics/GraphicsManager.h"
 
-#include "imgui.h"
 #include <algorithm>
+#include "imgui.h"
 
 using namespace NeatSquared;
 
@@ -29,7 +30,7 @@ void SnakeGameRenderer::renderWindow(const ImGuiIO &io) {
 
     ImGui::SetNextWindowSize({windowWidth, windowHeight}, ImGuiCond_Always);
     ImGui::SetNextWindowPos({io.DisplaySize.x * 0.5f, 0});
-    ImGui::Begin("Snake");
+    ImGui::Begin("Snake", NULL, GraphicsManager::DEFAULT_WINDOW_FLAGS);
     {
         ImVec2 windowPos = ImGui::GetWindowPos();
         ImDrawList *drawList = ImGui::GetWindowDrawList();

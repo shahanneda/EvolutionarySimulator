@@ -10,7 +10,7 @@ using namespace NeatSquared;
 
 #include "network/Neuron.h"
 #include "network/NetworkInstance.h"
-#include "imgui.h"
+#include "GraphicsManager.h"
 
 #include <iostream>
 #include <mutex>
@@ -20,6 +20,7 @@ using namespace NeatSquared;
 #include <sstream>
 #include <iomanip>
 
+#include "imgui.h"
 #include "glm/gtx/rotate_vector.hpp"
 #include <glm/glm.hpp>
 
@@ -63,7 +64,8 @@ void NetworkRenderer::renderWindow(const ImGuiIO &io) {
 
     ImGui::SetNextWindowSize({io.DisplaySize.x, io.DisplaySize.y * 0.6f}, ImGuiCond_Always);
     ImGui::SetNextWindowPos({0, io.DisplaySize.y * 0.4f});
-    ImGui::Begin("Network Renderer", NULL);
+    ImGui::Begin("Network Renderer", NULL,
+                 GraphicsManager::DEFAULT_WINDOW_FLAGS);
     {
         windowPos = ImGui::GetWindowPos();
         drawList = ImGui::GetWindowDrawList();

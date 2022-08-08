@@ -39,6 +39,8 @@ namespace NeatSquared {
         bool shouldCloseGui = false;
         SDL_GLContext glContext;
 
+        static const bool RENDER_DEBUG_MODE = false;
+
 
     public:
         void startMainLoop();
@@ -55,6 +57,9 @@ namespace NeatSquared {
         NetworkRenderer networkRenderer;
         NetworkPickerWindow networkPicker;
         SnakeGameRenderer snakeRenderer;
+
+        const static int DEFAULT_WINDOW_FLAGS =
+                ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove;
 
 
     private:

@@ -105,11 +105,12 @@ void GraphicsManager::renderMainFrame(const ImGuiIO &io) {
 }
 
 void GraphicsManager::renderOptions(const ImGuiIO &io) {
-    ImGui::SetNextWindowSize({io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.4f}, ImGuiCond_Always);
+    ImGui::SetNextWindowSize({io.DisplaySize.x * 0.35f, io.DisplaySize.y * 0.4f}, ImGuiCond_Always);
     ImGui::SetNextWindowPos({io.DisplaySize.x * 0.65f, 0});
-    ImGui::Begin("Options");
+    ImGui::Begin("Options", NULL, DEFAULT_WINDOW_FLAGS);
     {
         if (breedingManager) {
+            ImGui::Text("Game options");
             ImGui::Checkbox("Pause Training",
                             &breedingManager->shouldPauseTraining);
 
@@ -120,7 +121,12 @@ void GraphicsManager::renderOptions(const ImGuiIO &io) {
             }
         }
 
-        ImGui::Checkbox("Display Neuron innovation numbers (instead of current values)",
+        ImGui::Dummy(ImVec2(0.0f, 5.0f));
+        ImGui::Separator();
+        ImGui::Dummy(ImVec2(0.0f, 5.0f));
+
+        ImGui::Text("Network Options");
+        ImGui::Checkbox("Display Neuron innovation numbers",
                         &networkRenderer.displayNeuronInnovationNumber);
 
         ImGui::Checkbox("Display Connection innovation numbers",
@@ -129,29 +135,33 @@ void GraphicsManager::renderOptions(const ImGuiIO &io) {
         ImGui::Checkbox("Display Connection Weights",
                         &networkRenderer.displayConnectionWeight);
 
+        ImGui::Dummy(ImVec2(0.0f, 5.0f));
+        ImGui::Separator();
+        ImGui::Dummy(ImVec2(0.0f, 5.0f));
 
-        if (ImGui::Button("Evaluate Current Generation Fitness", ImVec2(0, 0))) {
-            breedingManager->evaluateFitnessOfGeneration(breedingManager->getCurrentGeneration());
-        }
+        ImGui::TextWrapped(
+                "Welcome to this evolutionary simulator by shahanneda. Take a look by clicking the 'Pause training button' and explroing the generations on the left!");
 
-        if (ImGui::Button("Breed Next Generation", ImVec2(0, 0))) {
-            breedingManager->breedNextGeneration();
-        }
+        if (networkRenderer.currentNetwork && GraphicsManager::RENDER_DEBUG_MODE) {
+            std::lock_guard<std::mutex> lock(networkRenderer.currentNetworkMutex);
 
-        if (networkRenderer.currentNetwork) {
-            std::lock_guard <std::mutex> lock(networkRenderer.currentNetworkMutex);
+            if (ImGui::Button("Evaluate Current Generation Fitness", ImVec2(0, 0))) {
+                breedingManager->evaluateFitnessOfGeneration(breedingManager->getCurrentGeneration());
+            }
+
+            if (ImGui::Button("Breed Next Generation", ImVec2(0, 0))) {
+                breedingManager->breedNextGeneration();
+            }
 
             if (ImGui::Button("Reevaluate current network", ImVec2(0, 0))) {
                 networkRenderer.currentNetwork->lastEvaluationFitness = breedingManager->game.evaluateNetwork(
                         *networkRenderer.currentNetwork);
             }
-
-// manually input neuroan values:
-//            for (int inputInnovationNumber: networkRenderer.currentNetwork->inputs) {
-//                ImGui::InputFloat(("Neuron " + std::to_string(inputInnovationNumber)).c_str(),
-//                                  &networkRenderer.currentNetwork->getNeuronWithInnovationNumber(
-//                                          inputInnovationNumber)->currentValue);
-//            }
+            for (int inputInnovationNumber: networkRenderer.currentNetwork->inputs) {
+                ImGui::InputFloat(("Neuron " + std::to_string(inputInnovationNumber)).c_str(),
+                                  &networkRenderer.currentNetwork->getNeuronWithInnovationNumber(
+                                          inputInnovationNumber)->currentValue);
+            }
         }
 
     }

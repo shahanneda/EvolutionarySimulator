@@ -49,14 +49,14 @@ void NetworkPickerWindow::renderWindow(const ImGuiIO &io) {
 
     ImGui::SetNextWindowSize({io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.4f}, ImGuiCond_Always);
     ImGui::SetNextWindowPos({0, 0});
-    ImGui::Begin("Network Picker");
+    ImGui::Begin("Network Picker", NULL, GraphicsManager::DEFAULT_WINDOW_FLAGS);
     {
         ImGui::BeginGroup();
         ImGui::Text("Generations");
         if (beginListBox("##Generations")) {
             // Show generations in reverse order, also don't show the last generation, since its still training
-            for (unsigned long i = generations->size() - 2; i != -1; i--) {
-                Generation &g = (*generations)[i];
+            for (unsigned long i = generations->size() - 1; i > 0; i--) {
+                Generation &g = (*generations)[i - 1];
 
                 const bool is_selected = (g.id == selectedGenerationId);
 

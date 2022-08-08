@@ -10,7 +10,10 @@ float RandomGenerator::getRandom() {
 
 
 std::random_device dev;
-std::mt19937 RandomGenerator::rngGen(dev());
+
+// 0, 1
+
+std::mt19937 RandomGenerator::rngGen(1);
 std::uniform_int_distribution<std::mt19937::result_type> RandomGenerator::random1to100(1, 100);
 
 int RandomGenerator::getRandomInRange(int start, int end) {

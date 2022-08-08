@@ -32,7 +32,7 @@ void startGraphics() {
     manager.evaluateFitnessOfGeneration(manager.getCurrentGeneration());
     manager.breedNextGeneration();
     graphicsManager.snakeRenderer.game = &snakeGame;
-    for (int i = 0; i < 5000; i++) {
+    for (int i = 0; i < 400; i++) {
         manager.evaluateFitnessOfGeneration(manager.getCurrentGeneration());
         manager.breedNextGeneration();
 
@@ -47,7 +47,7 @@ void startGraphics() {
                     }
 
                     if (graphicsManager.networkPicker.selectedNetwork) {
-                        std::lock_guard<std::mutex> networkLock(graphicsManager.networkRenderer.currentNetworkMutex);
+                        std::lock_guard <std::mutex> networkLock(graphicsManager.networkRenderer.currentNetworkMutex);
                         graphicsManager.networkRenderer.currentNetwork = graphicsManager.networkPicker.selectedNetwork;
                     }
 
@@ -62,14 +62,14 @@ void startGraphics() {
         manager.hasAutoSetSlowGameThisPause = false;
     }
 
+    manager.shouldPauseTraining = true;
+    snakeGame.shouldSlowGame = true;
     printf(" Finished NEAT Thread init\n");
     while (true) {
         if (graphicsManager.snakeRenderer.game &&
             graphicsManager.networkRenderer.currentNetwork) {
             graphicsManager.snakeRenderer.game->evaluateNetwork(*graphicsManager.networkRenderer.currentNetwork);
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
     }
 }
 
