@@ -1,8 +1,0 @@
-/*
-/*/
-!/dist
-!/dist/*
-!/dist/**
-!/index.html
-!/coi-serviceworker.min.js
-!.gitignore

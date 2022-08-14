@@ -1,0 +1,1 @@
+/Users/shahan/Documents/Projects/emsdk/upstream/emscripten/em++   -Wall -pedantic -Wextra -Wno-missing-braces -O0 -s USE_SDL=2 -std=c++1z -pthread -s SAFE_HEAP=1 -s ASSERTIONS=2 -s DEMANGLE_SUPPORT=1 -g -s PTHREAD_POOL_SIZE=2 -s ALLOW_MEMORY_GROWTH   @CMakeFiles/AnyNEAT.dir/objects1.rsp  -o AnyNEAT.js 
