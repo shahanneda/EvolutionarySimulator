@@ -17,4 +17,9 @@ Written in pure C++, with no external dependencies relating to the neural networ
 GUI made using ImGUI/OpenGL/WebGL, can run both in the browser using web assembly, and locally. It is much faster when running natively compared to in web assembly.
 
 
+
+### Running
+
+Run the script `./full_build.sh` for a full native build, run `./emc_full_build.sh` for a webassembly build (which can be tested with `./run_test_web_server.sh`.
+
 <!-- ![image](https://user-images.githubusercontent.com/17485954/184552414-a5f3c04c-23a7-4d09-937a-49cc12e7f15d.png) -->
