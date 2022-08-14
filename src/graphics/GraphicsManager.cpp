@@ -140,7 +140,14 @@ void GraphicsManager::renderOptions(const ImGuiIO &io) {
         ImGui::Dummy(ImVec2(0.0f, 5.0f));
 
         ImGui::TextWrapped(
-                "Welcome to this evolutionary simulator by shahanneda. Take a look by clicking the 'Pause training button' and explroing the generations on the left!");
+                "Welcome to this evolutionary simulator by shahanneda. Take a look by clicking the 'Pause Training' button and exploring the generations on the left! Use the arrow keys to navigate the network viewer in the bottom.");
+
+        if (breedingManager && !breedingManager->shouldPauseTraining) {
+            ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
+            ImGui::TextWrapped(
+                    "Training Mode (Press 'Pause Training' Button)");
+            ImGui::PopStyleColor();
+        }
 
         if (networkRenderer.currentNetwork && GraphicsManager::RENDER_DEBUG_MODE) {
             std::lock_guard<std::mutex> lock(networkRenderer.currentNetworkMutex);
@@ -195,8 +202,8 @@ void GraphicsManager::initSDL() {
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-    SDL_WindowFlags window_flags = (SDL_WindowFlags) (SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE |
-                                                      SDL_WINDOW_ALLOW_HIGHDPI);
+    SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE |
+                                                     SDL_WINDOW_ALLOW_HIGHDPI);
     window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, window_flags);
     glContext = SDL_GL_CreateContext(window);
