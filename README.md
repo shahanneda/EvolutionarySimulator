@@ -1,6 +1,8 @@
 # Evolutionary Simulator
 ## An implementation of the NEAT (Neuroevolution of Augmenting Topologies) algorithm 
-[Run the simulator online running in assembly by clicking this link](https://shahan.ca/EvolutionarySimulator/)
+### [Run the simulator online running in assembly by clicking this link](https://shahan.ca/EvolutionarySimulator/)
+
+
 ![image](https://user-images.githubusercontent.com/17485954/184552404-6c99ba69-5545-4a8b-9515-2ff747309405.png)
 
 
