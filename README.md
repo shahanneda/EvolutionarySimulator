@@ -1,8 +1,9 @@
 # Evolutionary Simulator
 ## An implementation of the NEAT (Neuroevolution of Augmenting Topologies) algorithm 
+[Run the simulator online running in assembly by clicking this link](https://shahan.ca/EvolutionarySimulator/)
 ![image](https://user-images.githubusercontent.com/17485954/184552404-6c99ba69-5545-4a8b-9515-2ff747309405.png)
 
-[Run the simulator online running in assembly by clicking this link](https://shahan.ca/EvolutionarySimulator/)
+
 
 This project implements the NEAT algorithm, which is an evolutionary approeach to training neural networks, and provides a GUI that allows visualisation of the algorithm.
 
