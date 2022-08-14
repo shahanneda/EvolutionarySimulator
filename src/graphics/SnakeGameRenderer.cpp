@@ -18,7 +18,8 @@ void SnakeGameRenderer::renderWindow(const ImGuiIO &io) {
     if (game == nullptr) {
         return;
     }
-    ImColor snakeColor = ImColor(ImVec4(0, 0, 1, 1));
+    ImColor snakeColor = ImColor(ImVec4(0, 0, 0.9f, 1));
+    ImColor snakeHeadColor = ImColor(ImVec4(0, 0.5f, 0.8f, 1));
     ImColor backgroundColor = ImColor(ImVec4(0.86f, 0.86f, 0.86f, 1));
     ImColor foodColor = ImColor(ImVec4(1, 0, 0, 1));
 
@@ -45,6 +46,10 @@ void SnakeGameRenderer::renderWindow(const ImGuiIO &io) {
                         renderTile({x, y}, foodColor, windowPos, drawList);
                         break;
                     case SnakeGame::SNAKE:
+                        if (x == game->snakeHead.pos.x && y == game->snakeHead.pos.y) {
+                            renderTile({x, y}, snakeHeadColor, windowPos, drawList);
+                            break;
+                        }
                         renderTile({x, y}, snakeColor, windowPos, drawList);
                         break;
                 }
