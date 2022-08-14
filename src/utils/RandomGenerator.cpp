@@ -25,8 +25,9 @@ std::random_device dev;
 // 1 (6 / 30), 2 (18 / 30) , 10 (gen 15/24), 11 (6 / 14), 13 (9/30), 15, 16, 21, 22, 24, 29
 
 
-// I use c-style rand() since I don't want to effect the c++ randomness
-const int seeds[] = {1, 2, 10, 11, 13, 15, 22, 29};
+// Use c-style rand() for seed selection since I don't want to effect the c++ randomness
+
+const int seeds[] = {1, 2, 13, 15, 22, 29};
 int seedCount = sizeof(seeds) / sizeof(int);
 
 std::mt19937 RandomGenerator::rngGen(seeds[rand() % seedCount]);
