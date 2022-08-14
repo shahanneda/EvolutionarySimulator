@@ -36,7 +36,6 @@ void SnakeGame::setBoardPos(BoardPosition pos, SnakeGame::TileType type) {
 
 void SnakeGame::resetGame() {
     BoardPosition snakeStartingPosition = {4, 4};
-    BoardPosition foodStartingPosition = {2, 2};
 
     board.fill(SnakeGame::TileType::EMPTY);
 
@@ -180,6 +179,15 @@ bool SnakeGame::nextGameIteration() {
     bool hasAte = false;
 
     snakeHead.pos = moveOneStepInDirection(snakeHead.pos, headDirection);
+
+    secondLastBoardPosition = lastBoardPosition;
+    lastBoardPosition = oldPosition;
+
+    if (snakeHead.pos.x == secondLastBoardPosition.x && snakeHead.pos.y == secondLastBoardPosition.y) {
+        // Snake is in a short cycle, predict score and end early to save time
+        iterationCount += maximumIterationWithoutFoodCutoff;
+        return false;
+    }
 
     if (!isValidSnakeBoardPosition(snakeHead.pos)) {
         // snake has died;

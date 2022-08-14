@@ -63,10 +63,14 @@ namespace NeatSquared {
 
 
         constexpr const static int maximumIterationWithoutFoodCutoff = 100;
-        constexpr const static int slowGameDownDelay = 100;
+        constexpr const static int slowGameDownDelay = 50;
         constexpr const static float fitnessTimeMultiplier = 2.f;
         constexpr const static float fitnessScoreMultiplier = 100.f;
         constexpr const static float fitnessSizeMultiplier = -0.001;
+
+        // Used for detecting snakes stuck in a short cycle and killing them quickly to save time;
+        BoardPosition lastBoardPosition = {0, 0};
+        BoardPosition secondLastBoardPosition = {0, 0};
 
 
     public:

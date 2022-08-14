@@ -11,9 +11,26 @@ float RandomGenerator::getRandom() {
 
 std::random_device dev;
 
+/*
+ * Because the NEAT algorithm has a great deal of randomness, the amount of training time can vary between 10 - 200 generations, depending on the random seed.
+ * I've selected some random seeds which are on the lower side of the training time, so that demos are faster,
+ * (especially important for people viewing the browser with webassembly, since waiting 200 generations is hard
+ * */
+
+// Good seeds for 10 by 10
 // 0, 1
 
-std::mt19937 RandomGenerator::rngGen(1);
+// Good seeds for 15x15
+// seed format: seed (first above 300 fitness/above 1500)
+// 1 (6 / 30), 2 (18 / 30) , 10 (gen 15/24), 11 (6 / 14), 13 (9/30), 15, 16, 21, 22, 24, 29
+
+
+// I use c-style rand() since I don't want to effect the c++ randomness
+const int seeds[] = {1, 2, 10, 11, 13, 15, 22, 29};
+int seedCount = sizeof(seeds) / sizeof(int);
+
+std::mt19937 RandomGenerator::rngGen(seeds[rand() % seedCount]);
+
 std::uniform_int_distribution<std::mt19937::result_type> RandomGenerator::random1to100(1, 100);
 
 int RandomGenerator::getRandomInRange(int start, int end) {

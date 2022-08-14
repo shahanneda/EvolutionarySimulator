@@ -57,8 +57,8 @@ void SnakeGameRenderer::renderWindow(const ImGuiIO &io) {
 void
 SnakeGameRenderer::renderTile(SnakeGame::BoardPosition pos, ImColor color, ImVec2 windowPos, ImDrawList *drawList) {
     drawList->AddRectFilled(
-            ImVec2(windowPos.x + pos.x * boxSizing, windowPos.y + (pos.y + 1) * boxSizing),
-            ImVec2(windowPos.x + (pos.x + 1) * boxSizing, windowPos.y + (pos.y + 2) * boxSizing),
+            ImVec2(windowPos.x + pos.x * boxSizing, windowPos.y + (pos.y + 3) * boxSizing),
+            ImVec2(windowPos.x + (pos.x + 1) * boxSizing, windowPos.y + (pos.y + 4) * boxSizing),
             color);
 
 }
